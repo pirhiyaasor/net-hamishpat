@@ -198,6 +198,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 .rt-err-box{display:none;margin-top:10px;padding:10px 14px;background:var(--red-light);border:1px solid #FECACA;border-radius:var(--radius-sm)}
 .rt-err-box.show{display:block}
+.rt-err-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .rt-err-reason{font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px}
 .rt-err-action{font-size:12px;color:#9B1C1C}
 
@@ -758,11 +759,13 @@ function toggleR(row) {
 }
 
 // ===== REAL-TIME =====
-const STAGES = ['קליטה','OCR','סיווג','בדיקת תקנות','בדיקת סד"א','אישור'];
+const STAGES = ['קליטה','OCR','סיווג','בדיקת תקנות','בדיקת סד"א','תשלום','אישור'];
 const DOCS = [
   {name:'אישור תשלום.pdf', case:'1533230', court:'שלום תל אביב', scenario:'success', delay:0},
   {name:'חשבונית נספח ב.pdf', case:'1533231', court:'מחוזי חיפה', scenario:'error', failAt:2, delay:1,
-    errReason:'שגיאת OCR: הקובץ מוצפן או מוגן', errAction:'יש להגיש קובץ PDF שאינו מוגן בסיסמה ולסרוק מחדש באיכות גבוהה.'}
+    errReason:'שגיאת OCR: הקובץ מוצפן או מוגן', errAction:'יש להגיש קובץ PDF שאינו מוגן בסיסמה ולסרוק מחדש באיכות גבוהה.'},
+  {name:'כתב תביעה ראשי.pdf', case:'1533232', court:'מחוזי תל אביב', scenario:'error', failAt:5, delay:2,
+    errReason:'סירוב אשראי: העסקה נדחתה על ידי חברת האשראי', errAction:'יש לוודא שפרטי כרטיס האשראי תקינים ושיש מסגרת זמינה, ולנסות שוב.', errBtn:'לביצוע תשלום'}
 ];
 const LOG_MSGS = [
   ['קובץ התקבל לתור','בדיקת שלמות קובץ...','מפעיל מנוע OCR...'],
@@ -796,7 +799,7 @@ function buildRtCards() {
       <div class="rt-card-body">
         <div class="stage-track" id="stg-${i}"></div>
         <div class="rt-log" id="rtlog-${i}"><div class="rt-log-entry" style="color:var(--gray-400)">ממתין לתחילת עיבוד...</div></div>
-        <div class="rt-err-box" id="rterr-${i}"><div class="rt-err-reason"></div><div class="rt-err-action"></div></div>
+        <div class="rt-err-box" id="rterr-${i}"><div class="rt-err-top"><div><div class="rt-err-reason"></div><div class="rt-err-action"></div></div><div class="rt-err-btn-wrap"></div></div></div>
       </div>`;
     c.appendChild(el);
     buildStageTrack(i);
@@ -866,6 +869,9 @@ function doTick() {
       errBox.classList.add('show');
       errBox.querySelector('.rt-err-reason').textContent = doc.errReason;
       errBox.querySelector('.rt-err-action').textContent = doc.errAction;
+      if (doc.errBtn) {
+        errBox.querySelector('.rt-err-btn-wrap').innerHTML = `<button class="btn btn-primary" style="white-space:nowrap;font-size:13px;padding:8px 14px" onclick="alert('מעבר לעמוד תשלום...')">${doc.errBtn}</button>`;
+      }
       addLog(di, 'שגיאה: '+doc.errReason, true);
       stagesDone += next;
       return;
@@ -877,7 +883,7 @@ function doTick() {
     stagesDone += next;
 
     const badge = document.getElementById('rtb-'+di);
-    const activeLabels = ['סורק','מזהה OCR','מסווג','מאמת','בודק סד"א','מסיים'];
+    const activeLabels = ['סורק','מזהה OCR','מסווג','מאמת','בודק סד"א','מעבד תשלום','מסיים'];
     badge.className='rt-badge rtb-active'; badge.textContent=activeLabels[next]||'עובד...';
 
     // log
