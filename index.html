@@ -175,7 +175,18 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .rtb-done{background:var(--green-light);color:var(--green)}
 .rtb-err{background:var(--red-light);color:var(--red)}
 
-.rt-card-body{padding:16px 18px}
+.rt-card-body{padding:0 18px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+.rt-card.expanded .rt-card-body{max-height:500px;padding:16px 18px}
+.rt-chev{width:28px;height:28px;border-radius:50%;border:1px solid var(--gray-200);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:transform .3s,background .2s;color:var(--gray-400)}
+.rt-card.expanded .rt-chev{transform:rotate(180deg);background:var(--gray-50)}
+.rt-card-header{cursor:pointer}
+.rt-card-header:hover .rt-chev{background:var(--gray-50)}
+
+/* filter bar */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-chip{font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;border:1px solid var(--gray-200);background:white;cursor:pointer;color:var(--gray-500);transition:all .18s;white-space:nowrap}
+.filter-chip.active{background:var(--blue);border-color:var(--blue);color:white}
+.filter-chip:hover:not(.active){background:var(--gray-50)}
 
 /* stage track */
 .stage-track{display:flex;align-items:center}
@@ -419,6 +430,14 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
+    <div class="filter-bar" id="rt-filter-bar">
+      <span style="font-size:12px;color:var(--gray-500);margin-left:4px">סינון:</span>
+      <button class="filter-chip active" onclick="filterRT('all',this)">הכל</button>
+      <button class="filter-chip" onclick="filterRT('active',this)">פעיל</button>
+      <button class="filter-chip" onclick="filterRT('done',this)">הושלם</button>
+      <button class="filter-chip" onclick="filterRT('err',this)">נכשל</button>
+    </div>
+
     <div id="rt-cards-container"></div>
 
     <div style="text-align:center;margin-top:1rem">
@@ -439,7 +458,15 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div style="font-size:13px;color:var(--gray-500);background:white;border:1px solid var(--gray-200);padding:4px 12px;border-radius:99px" id="rc-count">3 הגשות</div>
     </div>
 
-    <div class="receipt-card">
+    <div class="filter-bar">
+      <span style="font-size:12px;color:var(--gray-500);margin-left:4px">סינון:</span>
+      <button class="filter-chip active" onclick="filterReceipts('all',this)">הכל</button>
+      <button class="filter-chip" onclick="filterReceipts('פתיחת תיק',this)">פתיחת תיק</button>
+      <button class="filter-chip" onclick="filterReceipts('הגשת מסמכים',this)">הגשת מסמכים</button>
+      <button class="filter-chip" onclick="filterReceipts('תשלום',this)">תשלום</button>
+    </div>
+
+    <div class="receipt-card" data-rtype="פתיחת תיק">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
         <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533225</div><div class="receipt-meta">פתיחת תיק · 3 מסמכים</div></div>
@@ -459,7 +486,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="receipt-card">
+    <div class="receipt-card" data-rtype="הגשת מסמכים">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
         <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533226</div><div class="receipt-meta">הגשת מסמכים · 2 מסמכים</div></div>
@@ -478,7 +505,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="receipt-card">
+    <div class="receipt-card" data-rtype="תשלום">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
         <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533227</div><div class="receipt-meta">בקשה לתשלום · 1 מסמך</div></div>
@@ -775,6 +802,24 @@ const LOG_MSGS = [
 let rtTimer = null, rtTick = 0, rtRunning = false;
 let rtDocState = [];
 
+function toggleRtCard(i) {
+  document.getElementById('rtc-'+i).classList.toggle('expanded');
+}
+function filterRT(val, btn) {
+  document.querySelectorAll('#rt-filter-bar .filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#rt-cards-container .rt-card').forEach(c => {
+    const s = c.dataset.rtStatus || 'wait';
+    c.style.display = (val === 'all' || s === val) ? '' : 'none';
+  });
+}
+function filterReceipts(val, btn) {
+  document.querySelectorAll('.filter-bar .filter-chip').forEach(b => { if(b.closest('.filter-bar') === btn.closest('.filter-bar')) b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.receipt-card[data-rtype]').forEach(c => {
+    c.style.display = (val === 'all' || c.dataset.rtype === val) ? '' : 'none';
+  });
+}
 function initRealtime() {
   if (rtRunning) return;
   buildRtCards();
@@ -788,13 +833,14 @@ function buildRtCards() {
   DOCS.forEach((d, i) => {
     const el = document.createElement('div'); el.className = 'rt-card'; el.id = 'rtc-'+i;
     el.innerHTML = `
-      <div class="rt-card-header">
+      <div class="rt-card-header" onclick="toggleRtCard(${i})">
         <div class="rt-file-badge">PDF</div>
         <div class="rt-card-info">
           <div class="rt-card-name">${d.name}</div>
           <div class="rt-card-case">תיק ${d.case} · ${d.court}</div>
         </div>
         <span class="rt-badge rtb-wait" id="rtb-${i}">ממתין</span>
+        <div class="rt-chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
       </div>
       <div class="rt-card-body">
         <div class="stage-track" id="stg-${i}"></div>
@@ -827,7 +873,10 @@ function resetRealtime() {
     buildStageTrack(i);
     document.getElementById('rtb-'+i).className='rt-badge rtb-wait'; document.getElementById('rtb-'+i).textContent='ממתין';
     document.getElementById('rterr-'+i).classList.remove('show');
-    document.getElementById('rtc-'+i).style.borderColor='';
+    const resetCard = document.getElementById('rtc-'+i);
+    resetCard.style.borderColor='';
+    resetCard.classList.remove('expanded');
+    resetCard.dataset.rtStatus='wait';
     document.getElementById('rtlog-'+i).innerHTML='<div class="rt-log-entry" style="color:var(--gray-400)">ממתין לתחילת עיבוד...</div>';
   });
   document.getElementById('rt-bar').style.width='0%';
@@ -864,7 +913,10 @@ function doTick() {
       markStage(di, next, 'err');
       const badge = document.getElementById('rtb-'+di);
       badge.className='rt-badge rtb-err'; badge.textContent='נכשל';
-      document.getElementById('rtc-'+di).style.borderColor='var(--red)';
+      const failCard = document.getElementById('rtc-'+di);
+      failCard.style.borderColor='var(--red)';
+      failCard.dataset.rtStatus='err';
+      if(!failCard.classList.contains('expanded')) failCard.classList.add('expanded');
       const errBox = document.getElementById('rterr-'+di);
       errBox.classList.add('show');
       errBox.querySelector('.rt-err-reason').textContent = doc.errReason;
@@ -885,6 +937,9 @@ function doTick() {
     const badge = document.getElementById('rtb-'+di);
     const activeLabels = ['סורק','מזהה OCR','מסווג','מאמת','בודק סד"א','מעבד תשלום','מסיים'];
     badge.className='rt-badge rtb-active'; badge.textContent=activeLabels[next]||'עובד...';
+    const activeCard = document.getElementById('rtc-'+di);
+    activeCard.dataset.rtStatus='active';
+    if(!activeCard.classList.contains('expanded')) activeCard.classList.add('expanded');
 
     // log
     const allMsgs = [...LOG_MSGS[0],...LOG_MSGS[1]];
@@ -894,7 +949,9 @@ function doTick() {
       markStage(di, next, 'done');
       doc.done = true; docsDone++;
       badge.className='rt-badge rtb-done'; badge.textContent='הושלם';
-      document.getElementById('rtc-'+di).style.borderColor='var(--green)';
+      const doneCard = document.getElementById('rtc-'+di);
+      doneCard.style.borderColor='var(--green)';
+      doneCard.dataset.rtStatus='done';
       addLog(di, 'הבדיקה הושלמה בהצלחה');
     }
   });
