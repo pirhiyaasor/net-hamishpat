@@ -366,6 +366,29 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 </div>
 
+<!-- ===== PAYMENT RETURN ===== -->
+<div class="page" id="page-payment">
+<div class="container" style="max-width:520px">
+  <div style="text-align:center;margin-bottom:2rem;margin-top:1rem">
+    <div style="width:64px;height:64px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#057A55" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div style="font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:8px">ההגשה והתשלום התבצעו בהצלחה!</div>
+    <div style="font-size:14px;color:var(--gray-500)">יש להזין את מספר האסמכתא שקיבלת בעת ההגשה כדי שנוכל לזהות אותך</div>
+  </div>
+  <div class="card">
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>מספר אסמכתא</label>
+      <input type="text" id="payment-ref-input" placeholder="לדוגמה: 1535631" style="font-size:16px;text-align:center;letter-spacing:.05em">
+    </div>
+    <button onclick="goToHistory()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      למעקב הגשות
+    </button>
+  </div>
+</div>
+</div>
+
 <!-- ===== HISTORY (מצב בדיקה + אסמכתאות) ===== -->
 <div class="page" id="page-history">
 <div class="container">
@@ -491,7 +514,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div style="font-size:20px;font-weight:800;color:var(--blue)" id="modal-ref"></div>
     </div>
     <p style="font-size:13px;color:var(--gray-500);margin-bottom:1.4rem;line-height:1.6">יש לשמור את מספר האסמכתא שמופיע כאן ולהזין אותו במסך החזרה לתיק לאחר התשלום.</p>
-    <button onclick="document.getElementById('payment-modal').style.display='none'" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+    <button onclick="goToPaymentReturn()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
       מעבר לאתר התשלומים
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
     </button>
@@ -500,6 +523,19 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 <script>
 // ===== NAV =====
+function goToPaymentReturn() {
+  document.getElementById('payment-modal').style.display = 'none';
+  const ref = document.getElementById('modal-ref').textContent;
+  document.getElementById('payment-ref-input').value = ref;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-payment').classList.add('active');
+}
+function goToHistory() {
+  const historyBtn = document.querySelector('.nav-btn:nth-child(2)');
+  showPage('history', historyBtn);
+  initRealtime();
+}
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
