@@ -61,11 +61,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .tile-label{font-size:14px;font-weight:600;color:var(--gray-800)}
 .tile-hint{font-size:12px;color:var(--gray-500);margin-top:3px}
 
-.payment-opts{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-100)}
-.payment-opts.show{display:grid}
-.pay-chip{padding:9px 8px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);text-align:center;font-size:13px;color:var(--gray-600);cursor:pointer;transition:all .15s;font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50)}
-.pay-chip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
-.pay-chip.selected{border-color:var(--blue);color:var(--blue);background:var(--blue-light);font-weight:600}
 
 .case-field-wrap{
   overflow:hidden;
@@ -100,6 +95,10 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   from{transform:scale(.97);opacity:.6}
   to{transform:scale(1);opacity:1}
 }
+.docs-info{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--gray-100);font-size:13px;color:var(--gray-600);line-height:1.7}
+.docs-info.show{display:block}
+.docs-info a{color:var(--blue);font-weight:600;cursor:pointer;white-space:nowrap}
+.docs-info a:hover{text-decoration:underline}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
@@ -107,6 +106,8 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .field input,.field select{padding:9px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;color:var(--gray-900);background:white;transition:border .15s;width:100%}
 .field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
 .field input::placeholder{color:var(--gray-400)}
+.field input.field-invalid{border-color:var(--red)}
+.field input.field-invalid:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,30,30,.1)}
 
 /* multi-case */
 .case-block{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
@@ -144,6 +145,15 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 .info-box{background:var(--blue-light);border:1px solid #BFDBFE;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--blue);display:flex;align-items:flex-start;gap:8px}
 
+.pay-method-opt{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gray-800);cursor:pointer}
+.pay-method-opt input[type=radio]{accent-color:var(--blue);width:16px;height:16px;cursor:pointer}
+.info-tip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;cursor:pointer;color:var(--gray-400)}
+.info-tip svg{width:14px;height:14px;stroke:var(--gray-400);display:block}
+.info-tip:hover svg,.info-tip:focus svg{stroke:var(--blue)}
+.info-tip-bubble{display:none;position:absolute;bottom:calc(100% + 8px);right:50%;transform:translateX(50%);background:var(--gray-900);color:white;font-size:12px;font-weight:400;line-height:1.6;padding:10px 12px;border-radius:8px;width:260px;text-align:right;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.info-tip-bubble::after{content:'';position:absolute;top:100%;right:50%;transform:translateX(50%);border:6px solid transparent;border-top-color:var(--gray-900)}
+.info-tip:hover .info-tip-bubble,.info-tip:focus .info-tip-bubble,.info-tip:focus-within .info-tip-bubble{display:block}
+
 .toast{display:none;background:var(--green-light);border:1px solid #84E1BC;border-radius:var(--radius);padding:14px 18px;margin-bottom:1.5rem;align-items:center;gap:12px;animation:slideIn .3s ease}
 .toast.show{display:flex}
 .toast-icon{color:var(--green);display:flex;align-items:center;flex-shrink:0}
@@ -159,9 +169,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes ripple{0%{transform:scale(.8);opacity:.5}100%{transform:scale(1.4);opacity:0}}
 
-.rt-overall{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:1.2rem 1.5rem;margin-bottom:1rem;box-shadow:var(--shadow)}
-.overall-bar-track{height:8px;background:var(--gray-200);border-radius:99px;overflow:hidden;margin:10px 0 6px}
-.overall-bar-fill{height:100%;border-radius:99px;background:linear-gradient(to left,#1A56DB,#10B981);transition:width .7s ease}
 
 .rt-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);transition:border-color .4s;overflow:hidden}
 .rt-card-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--gray-100)}
@@ -250,7 +257,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 @media(max-width:620px){
   .action-grid,.two-col{grid-template-columns:1fr}
-  .payment-opts{grid-template-columns:1fr}
   .topbar{padding:0 1rem}
   .topbar-subtitle{display:none}
 }
@@ -287,9 +293,11 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <div class="wizard">
     <div class="wizard-step active" id="ws1"><div class="step-circle">1</div> סוג הגשה</div>
     <div class="wizard-line" id="wl1"></div>
-    <div class="wizard-step" id="ws2"><div class="step-circle">2</div> מסמכים</div>
+    <div class="wizard-step" id="ws2"><div class="step-circle">2</div> הגשת מסמכים</div>
     <div class="wizard-line" id="wl2"></div>
-    <div class="wizard-step" id="ws3"><div class="step-circle">3</div> פרטים נוספים</div>
+    <div class="wizard-step" id="ws3"><div class="step-circle">3</div> חישוב אגרה ופרטי קשר</div>
+    <div class="wizard-line" id="wl3"></div>
+    <div class="wizard-step" id="ws4"><div class="step-circle">4</div> תשלום וסיום</div>
   </div>
 
   <!-- Step 1 -->
@@ -300,30 +308,36 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div class="action-grid">
         <div class="action-tile" onclick="pickAction(this,'file')">
           <div class="tile-icon"><i data-lucide="folder-plus"></i></div>
-          <div class="tile-label">פתיחת תיק</div>
-          <div class="tile-hint">תיק חדש בבית המשפט</div>
+          <div class="tile-label">פתיחת תיק חדש</div>
+          <div class="tile-hint">בקשה לפתיחת תיק בבית המשפט</div>
         </div>
         <div class="action-tile" onclick="pickAction(this,'docs')">
           <div class="tile-icon"><i data-lucide="file-text"></i></div>
-          <div class="tile-label">הגשת מסמכים</div>
-          <div class="tile-hint">לתיק קיים</div>
+          <div class="tile-label">הגשות לתיק קיים</div>
+          <div class="tile-hint">מסמכים ובקשות לתיק קיים בהליך</div>
         </div>
         <div class="action-tile" onclick="pickAction(this,'payment')">
           <div class="tile-icon"><i data-lucide="credit-card"></i></div>
-          <div class="tile-label">הגשות נוספות</div>
-          <div class="tile-hint">אגרות ועמלות</div>
+          <div class="tile-label">הגשות לרשות</div>
+          <div class="tile-hint">פניות להנהלת בתי המשפט</div>
         </div>
       </div>
       <div class="case-field-wrap" id="case-field-wrap">
         <div class="field" style="margin-bottom:0">
           <label>מספר תיק</label>
-          <input type="text" id="inp-case" placeholder="לדוגמה: 7234/26">
+          <input type="text" id="inp-case" placeholder="לדוגמה: 7234/26" oninput="validateCaseNum(this)">
+        </div>
+        <div id="case-num-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red)">
+          אין לך הרשאות להגשה בתיק הזה, <a href="#" onclick="event.preventDefault()" style="color:var(--red);font-weight:700;text-decoration:underline">להגשה חריגה ›</a>
         </div>
       </div>
-      <div class="payment-opts" id="pay-opts">
-        <button class="pay-chip" onclick="pickPay(this,'credit')">תשלום באשראי</button>
-        <button class="pay-chip" onclick="pickPay(this,'debit')">הרשאה לחיוב חשבון</button>
-        <button class="pay-chip" onclick="pickPay(this,'exempt')">הגשה כללית</button>
+      <div class="docs-info" id="docs-info">
+        <b>סוגי הגשות שניתן להגיש:</b> בקשה / פניה באמצעות המזכירות, מועד דיון / מקום דיון, הארכת מועד, מתן צו / סעד זמני, מהות / גישור, בנושאים כספיים, בעניין ייצוג, בעניין מומחה, בבית משפט לענייני משפחה, הזמנת מתורגמן / הקלטה / תמלול, ביטול הוצאות / הוצאות לאוצר המדינה, בקשה לעדכון פרטי חשבון בנק לזיכוי, בקשה לפסיקת הוצאות, החזר אגרה, החזר פקדון, השבת אגרה, פטור מאגרה
+        <a onclick="openReqTypesModal()">לכל סוגי הבקשות ›</a>
+      </div>
+      <div class="docs-info" id="reshut-info">
+        <b>סוגי בקשות שניתן להגיש:</b> ייפוי כוח, חוזר היתכנות לפיקוח טכנולוגי – אלמ"ב, חוזר הממונה על עבודות שירות, חוזר הערכת מסוכנות, חוזר וג"ע – ועדות שחרורים
+        <a onclick="openAuthorityTypesModal()">לכל סוגי הבקשות ›</a>
       </div>
     </div>
     <div class="form-footer">
@@ -344,7 +358,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     </div>
     <div id="case-blocks-container" data-area="case-blocks-container" data-src="index.html"></div>
     <div class="form-footer" style="margin-top:1rem">
-      <button class="btn btn-ghost" onclick="goTo(1)">← חזור</button>
+      <button class="btn btn-ghost" onclick="goTo(1)">→ חזור</button>
       <button class="btn btn-primary" id="step2-next" onclick="goTo(3)">המשך ←</button>
     </div>
   </div>
@@ -355,9 +369,39 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
           <div class="card-title" style="color:var(--blue)">אגרת בית משפט</div>
-          <div class="card-desc" id="fee-desc" style="margin-top:3px"></div>
+          <div class="card-desc" id="fee-desc" style="margin-top:3px">סכום אגרת בית המשפט יחושב לפי חוק על ידי בית המשפט בהתאם למסמכי ההגשה. אם אתם רוצים לדעת מה סכום האגרה בו יחויב התיק, בחרו באפשרות "מחשבון אגרה".</div>
+          <button type="button" onclick="openFeeCalcModal()" style="margin-top:8px;padding:6px 14px;background:white;color:var(--blue);border:1.5px solid var(--blue-mid);border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:12px;font-weight:700;cursor:pointer">מחשבון אגרה</button>
         </div>
         <div style="font-size:24px;font-weight:700;color:var(--blue)" id="fee-amount"></div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--blue-mid)">
+        <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:10px">אופן ביצוע התשלום:</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label class="pay-method-opt">
+            <input type="radio" name="pay-method" value="credit">
+            <span>אשראי</span>
+            <span class="info-tip" tabindex="0">
+              <i data-lucide="info"></i>
+              <span class="info-tip-bubble">לאחר סיום, תעבור למערכת "ממשל זמין" הממשלתית להשארת פרטי אשראי. חיוב האגרה מתבצע בפועל רק לאחר אישור ההגשה.</span>
+            </span>
+          </label>
+          <label class="pay-method-opt">
+            <input type="radio" name="pay-method" value="debit">
+            <span>הרשאה לחיוב חשבון בנק</span>
+            <span class="info-tip" tabindex="0">
+              <i data-lucide="info"></i>
+              <span class="info-tip-bubble">חיוב האגרה יתבצע באמצעות חשבון הבנק לחיוב, השמורים במערכת נט המשפט. חיוב האגרה מתבצע בפועל רק לאחר אישור ההגשה. ניתן להוסיף למסמכי ההגשה פרטי חשבון בנק חדשים באמצעותם יתבצע חיוב האגרה.</span>
+            </span>
+          </label>
+          <label class="pay-method-opt">
+            <input type="radio" name="pay-method" value="voucher">
+            <span>שובר תשלום</span>
+          </label>
+          <label class="pay-method-opt">
+            <input type="radio" name="pay-method" value="exempt">
+            <span>פטור מאגרה</span>
+          </label>
+        </div>
       </div>
     </div>
     <div class="card">
@@ -370,7 +414,20 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div class="info-box"><i data-lucide="info" style="width:15px;height:15px;stroke:var(--blue);flex-shrink:0;margin-top:1px"></i> <span>עדכונים יישלחו אוטומטית עם כל שינוי בסטטוס — ניתן לבטל בכל עת</span></div>
     </div>
     <div class="form-footer">
-      <button class="btn btn-ghost" onclick="goTo(2)">← חזור</button>
+      <button class="btn btn-ghost" onclick="goTo(2)">→ חזור</button>
+      <button class="btn btn-primary" onclick="goTo(4)">המשך ←</button>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step-panel" id="panel4" data-area="step4-panel" data-src="index.html">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:4px">תשלום וסיום</div>
+      <div class="card-desc" id="step4-desc" style="margin-bottom:1rem">בדקי את פרטי ההגשה ולחצי על הגשה כדי לסיים</div>
+      <div class="info-box"><i data-lucide="info" style="width:15px;height:15px;stroke:var(--blue);flex-shrink:0;margin-top:1px"></i> <span id="step4-info">לאחר לחיצה על הגשה תועברי לאתר התשלומים הממשלתי להשלמת התשלום</span></div>
+    </div>
+    <div class="form-footer">
+      <button class="btn btn-ghost" onclick="goTo(3)">→ חזור</button>
       <button class="btn btn-primary" onclick="submitForm()" style="display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> הגשה</button>
     </div>
   </div>
@@ -385,15 +442,10 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     <div style="width:64px;height:64px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
       <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#057A55" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
-    <div style="font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:8px">ההגשה והתשלום התבצעו בהצלחה!</div>
-    <div style="font-size:14px;color:var(--gray-500)">יש להזין את מספר האסמכתא שקיבלת בעת ההגשה כדי שנוכל לזהות אותך</div>
+    <div style="font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:8px">האשראי נשמר והמסמכים הוגשו בהצלחה!</div>
   </div>
-  <div class="card">
-    <div class="field" style="margin-bottom:1.2rem">
-      <label>מספר אסמכתא</label>
-      <input type="text" id="payment-ref-input" placeholder="לדוגמה: 1535631" style="font-size:16px;text-align:center;letter-spacing:.05em">
-    </div>
-    <button onclick="goToHistory()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+  <div style="text-align:center">
+    <button onclick="goToHistory()" style="padding:12px 24px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       למעקב הגשות
     </button>
@@ -409,24 +461,12 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <div style="margin-bottom:2rem" data-area="realtime-status" data-src="index.html">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div>
-        <div style="font-size:18px;font-weight:700;color:var(--gray-900)">מצב בדיקה בזמן אמת</div>
+        <div style="font-size:18px;font-weight:700;color:var(--gray-900)">הגשות בתהליך</div>
         <div style="font-size:13px;color:var(--gray-500);margin-top:2px">תהליכים פעילים</div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;background:var(--green-light);border:1px solid #84E1BC;border-radius:99px;padding:5px 14px">
         <div style="width:8px;height:8px;border-radius:50%;background:#10B981;animation:pulse 1.5s infinite"></div>
         <span style="font-size:12px;font-weight:700;color:var(--green)">עדכון חי</span>
-      </div>
-    </div>
-
-    <div class="rt-overall" data-area="rt-progress" data-src="index.html">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:14px;font-weight:600">התקדמות כללית</span>
-        <span style="font-size:15px;font-weight:700;color:var(--blue)" id="rt-pct">0%</span>
-      </div>
-      <div class="overall-bar-track"><div class="overall-bar-fill" id="rt-bar" style="width:0%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gray-500)">
-        <span id="rt-done-txt">0 מסמכים הושלמו</span>
-        <span id="rt-eta">ממתין לתחילת עיבוד...</span>
       </div>
     </div>
 
@@ -527,6 +567,86 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 </div>
 
+<!-- Fee Calculation Modal -->
+<div id="fee-calc-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="fee-calc-modal" data-src="index.html">
+  <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">מחשבון אגרה</div>
+      <button onclick="closeFeeCalcModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:22px;line-height:1;padding:0">×</button>
+    </div>
+    <div class="field">
+      <label>הליך</label>
+      <select id="fc-proc" onchange="const c=document.getElementById('fc-claim');c.disabled=this.value!=='small_claims';c.style.opacity=this.value==='small_claims'?'1':'.45';c.style.cursor=this.value==='small_claims'?'text':'not-allowed';if(this.value!=='small_claims')c.value='';">
+        <option value="">בחר הליך...</option>
+        <option value="civil">תביעה אזרחית</option>
+        <option value="small_claims">תביעות קטנות</option>
+        <option value="family">ענייני משפחה</option>
+        <option value="labor">דיני עבודה</option>
+        <option value="admin">עתירה מנהלית</option>
+        <option value="commercial">סכסוך מסחרי</option>
+        <option value="bankruptcy">פשיטת רגל</option>
+        <option value="land">מקרקעין</option>
+        <option value="criminal">פלילי</option>
+        <option value="appeal">ערעור</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>סכום תביעה</label>
+      <input type="text" id="fc-claim" placeholder="₪" disabled style="opacity:.45;cursor:not-allowed">
+    </div>
+    <button onclick="calcFeeFromModal()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer">חשב אגרה</button>
+    <div style="text-align:center;margin-top:1rem">
+      <a href="#" onclick="event.preventDefault()" style="color:var(--blue);font-weight:600;font-size:13px;cursor:pointer">לכל המחשבונים ›</a>
+    </div>
+  </div>
+</div>
+
+<!-- Authority Request Types Modal -->
+<div id="authority-types-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="authority-types-modal" data-src="index.html">
+  <div style="background:white;border-radius:14px;padding:2rem;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">כל סוגי הבקשות להגשה לרשות</div>
+      <button onclick="closeAuthorityTypesModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:22px;line-height:1;padding:0">×</button>
+    </div>
+    <ul style="margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--gray-700);line-height:1.6">
+      <li>ייפוי כוח</li>
+      <li>חוזר היתכנות לפיקוח טכנולוגי – אלמ"ב</li>
+      <li>חוזר הממונה על עבודות שירות</li>
+      <li>חוזר הערכת מסוכנות</li>
+      <li>חוזר וג"ע – ועדות שחרורים</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Request Types Modal -->
+<div id="req-types-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="req-types-modal" data-src="index.html">
+  <div style="background:white;border-radius:14px;padding:2rem;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">כל סוגי הבקשות להגשה לתיק קיים</div>
+      <button onclick="closeReqTypesModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:22px;line-height:1;padding:0">×</button>
+    </div>
+    <ul style="margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--gray-700);line-height:1.6">
+      <li>בקשה / פניה באמצעות המזכירות</li>
+      <li>מועד דיון / מקום דיון</li>
+      <li>הארכת מועד</li>
+      <li>מתן צו / סעד זמני</li>
+      <li>מהות / גישור</li>
+      <li>בנושאים כספיים</li>
+      <li>בעניין ייצוג</li>
+      <li>בעניין מומחה</li>
+      <li>בבית משפט לענייני משפחה</li>
+      <li>הזמנת מתורגמן / הקלטה / תמלול</li>
+      <li>ביטול הוצאות / הוצאות לאוצר המדינה</li>
+      <li>בקשה לעדכון פרטי חשבון בנק לזיכוי</li>
+      <li>בקשה לפסיקת הוצאות</li>
+      <li>החזר אגרה</li>
+      <li>החזר פקדון</li>
+      <li>השבת אגרה</li>
+      <li>פטור מאגרה</li>
+    </ul>
+  </div>
+</div>
+
 <!-- Payment Modal -->
 <div id="payment-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="payment-modal" data-src="index.html">
   <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
@@ -536,12 +656,12 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
       <div style="font-size:16px;font-weight:700;color:var(--gray-900)">ההגשה לפתיחת תיק התקבלה בהצלחה!</div>
     </div>
-    <p style="font-size:14px;color:var(--gray-600);margin-bottom:1.2rem;line-height:1.7">כעת יתבצע מעבר לעמוד התשלום בשרת התשלומים הממשלתי.</p>
+    <p style="font-size:14px;color:var(--gray-600);margin-bottom:1.2rem;line-height:1.7">כעת יתבצע מעבר לעמוד התשלום בשרת התשלומים הממשלתי.<br><br>בעמוד התשלום יש להשאיר את פרטי האשראי. חשבונך יחוייב בסכום האגרה לפי חוק מיד לאחר אישור בקשתך ע"י בית המשפט.<br>במידה ובקשתך תדחה, חשבונך לא יחוייב.<br>במידה ואתה זכאי לפטור מאגרה, יש להגיש את בקשת הפטור יחד עם מסמכי ההגשה. חשבונך יחוייב / לא יחוייב בהתאם להחלטה שיפוטית לעניין הפטור.</p>
     <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:8px;padding:12px 16px;margin-bottom:1.2rem">
       <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:4px">מספר אסמכתא להגשה</div>
       <div style="font-size:20px;font-weight:800;color:var(--blue)" id="modal-ref"></div>
     </div>
-    <p style="font-size:13px;color:var(--gray-500);margin-bottom:1.4rem;line-height:1.6">יש לשמור את מספר האסמכתא שמופיע כאן ולהזין אותו במסך החזרה לתיק לאחר התשלום.</p>
+    <p style="font-size:13px;color:var(--gray-500);margin-bottom:1.4rem;line-height:1.6">מספר האסמכתא הוא מספר המעקב שלך אחרי ההגשה. לאחר ביצוע התשלום תועבר לעמוד סטטוס ההגשות לצפיה בהתקדמות הטיפול בהגשה.</p>
     <button onclick="goToPaymentReturn()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
       מעבר לאתר התשלומים
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -553,8 +673,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 // ===== NAV =====
 function goToPaymentReturn() {
   document.getElementById('payment-modal').style.display = 'none';
-  const ref = document.getElementById('modal-ref').textContent;
-  document.getElementById('payment-ref-input').value = ref;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-payment').classList.add('active');
@@ -576,13 +694,13 @@ function showPage(id, btn) {
 function goTo(n) {
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel' + n).classList.add('active');
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 4; i++) {
     const ws = document.getElementById('ws' + i);
     ws.classList.remove('active','done');
     ws.querySelector('.step-circle').textContent = i;
     if (i < n) { ws.classList.add('done'); ws.querySelector('.step-circle').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'; }
     else if (i === n) ws.classList.add('active');
-    if (i < 3) document.getElementById('wl' + i).classList.toggle('done', i < n);
+    if (i < 4) document.getElementById('wl' + i).classList.toggle('done', i < n);
   }
   if (n === 2 && document.getElementById('case-blocks-container').children.length === 0) {
     const caseVal = selAction === 'file' ? '' : (document.getElementById('inp-case')?.value || '');
@@ -592,71 +710,109 @@ function goTo(n) {
   const nextBtn = document.getElementById('step2-next');
   if (nextBtn) nextBtn.textContent = selAction === 'file' ? 'לחישוב אגרה ←' : 'המשך ←';
 
-  // update submit button label
-  const submitBtn = document.querySelector('#panel3 button[onclick="submitForm()"]');
+  // update submit button label + step4 info text
+  const submitBtn = document.querySelector('#panel4 button[onclick="submitForm()"]');
+  const step4Info = document.getElementById('step4-info');
   if (submitBtn) {
     if (selAction === 'file') {
       submitBtn.innerHTML = 'מעבר לתשלום <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+      if (step4Info) step4Info.textContent = 'לאחר לחיצה על מעבר לתשלום תועברי לאתר התשלומים הממשלתי להשלמת התשלום';
     } else {
       submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> הגשה';
+      if (step4Info) step4Info.textContent = 'בדקי את פרטי ההגשה ולחצי על הגשה כדי לסיים';
     }
   }
 
-  // calculate fee when entering step 3
+  // show fee card when entering step 3 (amount is only set once the user runs the fee calculator)
   if (n === 3 && selAction === 'file') {
-    const feeCard = document.getElementById('fee-card');
-    const procSel = document.querySelector('#case-blocks-container select[id^="proc"]');
-    const claimInp = document.querySelector('#case-blocks-container input[id^="claim"]');
-    const proc = procSel ? procSel.value : '';
-    let fee, desc;
-    if (proc === 'small_claims') {
-      const claim = parseFloat((claimInp?.value || '0').replace(/[^0-9.]/g,'')) || 0;
-      fee = Math.round(claim * 0.01);
-      desc = '1% מסכום התביעה';
-    } else {
-      fee = Math.floor(Math.random() * 421) + 30;
-      const procLabels = {civil:'תביעה אזרחית',family:'ענייני משפחה',labor:'דיני עבודה',admin:'עתירה מנהלית',commercial:'סכסוך מסחרי',bankruptcy:'פשיטת רגל',land:'מקרקעין',criminal:'פלילי',appeal:'ערעור'};
-      desc = procLabels[proc] || 'אגרה קבועה';
-    }
-    document.getElementById('fee-amount').textContent = '₪' + fee.toLocaleString();
-    document.getElementById('fee-desc').textContent = desc;
-    feeCard.style.display = 'block';
+    document.getElementById('fee-card').style.display = 'block';
   } else if (n === 3) {
     document.getElementById('fee-card').style.display = 'none';
   }
 
-  const titles = { file: 'פתיחת תיק', docs: 'העלאת מסמכים לפי תיק', payment: 'הגשות נוספות' };
-  const descs  = { file: 'פתיחת תיק חדש בבית משפט', docs: 'ניתן להגיש מסמכים שונים לאותו תיק בהגשה אחת', payment: 'ניתן להגיש מסמכים שונים לאותו תיק בהגשה אחת' };
+  const titles = { file: 'פתיחת תיק חדש', docs: 'העלאת מסמכים לפי תיק', payment: 'הגשות נוספות' };
+  const descs  = { file: 'במסגרת הגשת הבקשה לפתיחת תיק, פרטי ההגשה וסכום האגרה נקבעים בהתאם לאמור במסמכי ההגשה. אין צורך במילוי פרטי ההגשה והמגיש באתר. מסמכי ההגשה צריכים להיות קריאים, ללא כתב יד ובהתאם לחוק ולתקנות. להנחיות הגשת המסמכים <a href="#" onclick="event.preventDefault()">לחץ כאן</a>.', docs: 'במסגרת ההגשה לתיק קיים פרטי ההגשה נקבעים בהתאם למסמכי ההגשה. אין צורך במילוי פרטי ההגשה והמגיש באתר.<br>מסמכי ההגשה צריכים להיות קריאים, ללא כתב יד ובהתאם לחוק ולתקנות. להנחיות הגשת המסמכים <a href="#" onclick="event.preventDefault()">לחץ כאן</a>.', payment: 'ניתן להגיש מסמכים שונים לאותו תיק בהגשה אחת' };
   if (n === 2) {
     document.querySelector('#panel2 .card-title').textContent = titles[selAction] || titles.docs;
-    document.querySelector('#panel2 .card-desc').textContent  = descs[selAction]  || descs.docs;
+    document.querySelector('#panel2 .card-desc').innerHTML    = descs[selAction]  || descs.docs;
+    if (selAction === 'file' && !currentRef) {
+      currentRef = '153' + Math.floor(1000 + Math.random() * 9000);
+    }
   }
   const tag = document.getElementById('case-num-tag');
   if (tag) {
-    const val = document.getElementById('inp-case')?.value?.trim();
-    if (n === 2 && val) {
-      tag.textContent = 'תיק ' + val;
+    if (n === 2 && selAction === 'file' && currentRef) {
+      tag.textContent = 'אסמכתא ' + currentRef;
       tag.style.display = 'inline-block';
     } else {
-      tag.style.display = 'none';
+      const val = document.getElementById('inp-case')?.value?.trim();
+      if (n === 2 && val) {
+        tag.textContent = 'תיק ' + val;
+        tag.style.display = 'inline-block';
+      } else {
+        tag.style.display = 'none';
+      }
     }
   }
 }
 
 // ===== STEP 1 =====
 let selAction = null;
+let currentRef = null;
 function pickAction(el, type) {
   document.querySelectorAll('.action-tile').forEach(t => t.classList.remove('selected'));
   el.classList.add('selected'); selAction = type;
-  const caseWrap = document.getElementById('case-field-wrap');
-  const payOpts  = document.getElementById('pay-opts');
+  const caseWrap   = document.getElementById('case-field-wrap');
+  const docsInfo   = document.getElementById('docs-info');
+  const reshutInfo = document.getElementById('reshut-info');
   caseWrap.classList.toggle('show', type === 'docs');
-  payOpts.classList.toggle('show', type === 'payment');
-  if (type !== 'docs') document.getElementById('inp-case').value = '';
+  docsInfo.classList.toggle('show', type === 'docs');
+  reshutInfo.classList.toggle('show', type === 'payment');
+  if (type !== 'docs') {
+    const caseInp = document.getElementById('inp-case');
+    caseInp.value = '';
+    validateCaseNum(caseInp);
+  }
 }
-function pickPay(el) {
-  document.querySelectorAll('.pay-chip').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
+function validateCaseNum(el) {
+  const invalid = el.value.includes('1234');
+  el.classList.toggle('field-invalid', invalid);
+  document.getElementById('case-num-error').style.display = invalid ? 'block' : 'none';
+}
+function openReqTypesModal() {
+  document.getElementById('req-types-modal').style.display = 'flex';
+}
+function closeReqTypesModal() {
+  document.getElementById('req-types-modal').style.display = 'none';
+}
+function openAuthorityTypesModal() {
+  document.getElementById('authority-types-modal').style.display = 'flex';
+}
+function closeAuthorityTypesModal() {
+  document.getElementById('authority-types-modal').style.display = 'none';
+}
+function openFeeCalcModal() {
+  document.getElementById('fee-calc-modal').style.display = 'flex';
+}
+function closeFeeCalcModal() {
+  document.getElementById('fee-calc-modal').style.display = 'none';
+}
+function calcFeeFromModal() {
+  const proc = document.getElementById('fc-proc').value;
+  const claimInp = document.getElementById('fc-claim');
+  let fee, desc;
+  if (proc === 'small_claims') {
+    const claim = parseFloat((claimInp.value || '0').replace(/[^0-9.]/g, '')) || 0;
+    fee = Math.round(claim * 0.01);
+    desc = '1% מסכום התביעה';
+  } else {
+    fee = Math.floor(Math.random() * 421) + 30;
+    const procLabels = {civil:'תביעה אזרחית',family:'ענייני משפחה',labor:'דיני עבודה',admin:'עתירה מנהלית',commercial:'סכסוך מסחרי',bankruptcy:'פשיטת רגל',land:'מקרקעין',criminal:'פלילי',appeal:'ערעור'};
+    desc = procLabels[proc] || 'אגרה קבועה';
+  }
+  document.getElementById('fee-amount').textContent = '₪' + fee.toLocaleString();
+  document.getElementById('fee-desc').textContent = desc;
+  closeFeeCalcModal();
 }
 
 // ===== MULTI-CASE UPLOAD =====
@@ -672,27 +828,7 @@ function addCaseBlock(prefill) {
   el.innerHTML = `
     <div class="cb-body">
       <div class="two-col" style="margin-bottom:14px" id="cb-fields-${id}">
-        ${selAction === 'file' ? `
-        <div class="field" style="margin-bottom:0">
-          <label>הליך</label>
-          <select id="proc-${id}" onchange="(function(s){var c=document.getElementById('claim-${id}');c.disabled=s.value!=='small_claims';c.style.opacity=s.value==='small_claims'?'1':'.45';c.style.cursor=s.value==='small_claims'?'text':'not-allowed';})(this)">
-            <option value="">בחר הליך...</option>
-            <option value="civil">תביעה אזרחית</option>
-            <option value="small_claims">תביעות קטנות</option>
-            <option value="family">ענייני משפחה</option>
-            <option value="labor">דיני עבודה</option>
-            <option value="admin">עתירה מנהלית</option>
-            <option value="commercial">סכסוך מסחרי</option>
-            <option value="bankruptcy">פשיטת רגל</option>
-            <option value="land">מקרקעין</option>
-            <option value="criminal">פלילי</option>
-            <option value="appeal">ערעור</option>
-          </select>
-        </div>
-        <div class="field" style="margin-bottom:0">
-          <label>סכום התביעה</label>
-          <input type="text" id="claim-${id}" placeholder="₪" disabled style="opacity:.45;cursor:not-allowed" oninput="">
-        </div>` : selAction === 'payment' ? `
+        ${selAction === 'payment' ? `
         <div class="field" style="margin-bottom:0">
           <label>מספר תיק</label>
           <input type="text" placeholder="לדוגמה: 7234/26" value="${prefill||''}" oninput="document.getElementById('lbl-${id}').textContent=this.value||'הגשה ${caseCount}'">
@@ -710,11 +846,11 @@ function addCaseBlock(prefill) {
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
-          <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px">קובץ עיקרי</div>
+          <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px">מסמך עיקרי</div>
           <div class="upload-zone sm" onclick="addFileTo('m${id}')">
             <div class="upload-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
             <div class="upload-label" style="font-size:13px">לחץ לבחירת קובץ</div>
-            <div class="upload-hint">PDF, DOC — עד 50MB</div>
+            <div class="upload-hint">ניתן לצרף קבצי pdf, doc, mp4, png, mp3, jpg<br>עד 50 MB</div>
           </div>
           <div class="file-list" id="m${id}"></div>
         </div>
@@ -723,7 +859,7 @@ function addCaseBlock(prefill) {
           <div class="upload-zone sm" onclick="addFileTo('e${id}')">
             <div class="upload-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></div>
             <div class="upload-label" style="font-size:13px">הוספת נספחים</div>
-            <div class="upload-hint">ניתן לצרף מספר קבצים</div>
+            <div class="upload-hint">ניתן לצרף קבצי pdf, doc, mp4, png, mp3, jpg<br>עד 50 MB</div>
           </div>
           <div class="file-list" id="e${id}"></div>
         </div>
@@ -751,7 +887,7 @@ function addFileTo(listId) {
 // ===== SUBMIT =====
 let subCount = 3;
 function submitForm() {
-  const ref = '153' + Math.floor(1000+Math.random()*9000);
+  const ref = (selAction === 'file' && currentRef) ? currentRef : ('153' + Math.floor(1000+Math.random()*9000));
 
   if (selAction === 'file') {
     document.getElementById('modal-ref').textContent = ref;
@@ -771,11 +907,12 @@ function submitForm() {
   document.getElementById('rc-count').textContent = subCount + ' הגשות';
   goTo(1);
   document.querySelectorAll('.action-tile').forEach(t=>t.classList.remove('selected'));
-  document.getElementById('pay-opts').classList.remove('show');
+  document.getElementById('docs-info').classList.remove('show');
+  document.getElementById('reshut-info').classList.remove('show');
   ['docs','payment'].forEach(t => { const el = document.getElementById('fields-'+t); if(el) el.classList.remove('show'); });
   document.getElementById('case-blocks-container').innerHTML = '';
   document.getElementById('inp-email').value='';document.getElementById('inp-phone').value='';document.getElementById('inp-case').value='';
-  caseCount=0; selAction=null;
+  caseCount=0; selAction=null; currentRef=null;
 }
 
 // ===== RECEIPTS =====
@@ -881,10 +1018,10 @@ function resetRealtime() {
     resetCard.dataset.rtStatus='wait';
     document.getElementById('rtlog-'+i).innerHTML='<div class="rt-log-entry" style="color:var(--gray-400)">ממתין לתחילת עיבוד...</div>';
   });
-  document.getElementById('rt-bar').style.width='0%';
-  document.getElementById('rt-pct').textContent='0%';
-  document.getElementById('rt-done-txt').textContent='0 מסמכים הושלמו';
-  document.getElementById('rt-eta').textContent='ממתין לתחילת עיבוד...';
+  document.getElementById('rt-bar')?.style.setProperty('width','0%');
+  const rtPct0 = document.getElementById('rt-pct'); if (rtPct0) rtPct0.textContent='0%';
+  const rtDone0 = document.getElementById('rt-done-txt'); if (rtDone0) rtDone0.textContent='0 מסמכים הושלמו';
+  const rtEta0 = document.getElementById('rt-eta'); if (rtEta0) rtEta0.textContent='ממתין לתחילת עיבוד...';
   rtRunning = true;
   rtTimer = setInterval(doTick, 1000);
 }
@@ -959,16 +1096,17 @@ function doTick() {
   });
 
   const pct = Math.min(100, Math.round((stagesDone/totalStages)*100));
-  document.getElementById('rt-bar').style.width = pct+'%';
-  document.getElementById('rt-pct').textContent = pct+'%';
-  document.getElementById('rt-done-txt').textContent = docsDone + ' מסמכים הושלמו';
+  document.getElementById('rt-bar')?.style.setProperty('width', pct+'%');
+  const rtPct = document.getElementById('rt-pct'); if (rtPct) rtPct.textContent = pct+'%';
+  const rtDone = document.getElementById('rt-done-txt'); if (rtDone) rtDone.textContent = docsDone + ' מסמכים הושלמו';
 
   const remaining = DOCS.length - docsDone - rtDocState.filter(d=>d.failed).length;
+  const rtEta = document.getElementById('rt-eta');
   if (remaining <= 0 && rtDocState.every(d=>d.done||d.failed)) {
-    document.getElementById('rt-eta').textContent = 'העיבוד הסתיים';
+    if (rtEta) rtEta.textContent = 'העיבוד הסתיים';
     clearInterval(rtTimer); rtRunning=false;
   } else {
-    document.getElementById('rt-eta').textContent = remaining + ' מסמכים בתהליך';
+    if (rtEta) rtEta.textContent = remaining + ' מסמכים בתהליך';
   }
 }
 
