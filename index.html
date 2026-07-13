@@ -258,7 +258,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </head>
 <body>
 
-<div class="topbar">
+<div class="topbar" data-area="topbar" data-src="index.html">
   <a class="topbar-logo" href="#">
     <div class="topbar-logo-icon">
       <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1z"/></svg>
@@ -276,7 +276,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 
 <!-- ===== SUBMIT ===== -->
-<div class="page active" id="page-submit">
+<div class="page active" id="page-submit" data-area="page-submit" data-src="index.html">
 <div class="container">
 
   <div class="toast" id="success-toast">
@@ -293,7 +293,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   </div>
 
   <!-- Step 1 -->
-  <div class="step-panel active" id="panel1">
+  <div class="step-panel active" id="panel1" data-area="step1-panel" data-src="index.html">
     <div class="card">
       <div class="card-title">סוג הגשה</div>
       <div class="card-desc" style="margin-bottom:1rem">בחרי את סוג הבקשה שברצונך להגיש</div>
@@ -332,7 +332,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   </div>
 
   <!-- Step 2 -->
-  <div class="step-panel" id="panel2">
+  <div class="step-panel" id="panel2" data-area="step2-panel" data-src="index.html">
     <div class="card" style="padding:1rem 1.5rem .8rem">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
@@ -342,7 +342,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
         <span id="case-num-tag" style="display:none;font-size:13px;font-weight:700;color:var(--blue);background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:99px;padding:3px 14px"></span>
       </div>
     </div>
-    <div id="case-blocks-container"></div>
+    <div id="case-blocks-container" data-area="case-blocks-container" data-src="index.html"></div>
     <div class="form-footer" style="margin-top:1rem">
       <button class="btn btn-ghost" onclick="goTo(1)">← חזור</button>
       <button class="btn btn-primary" id="step2-next" onclick="goTo(3)">המשך ←</button>
@@ -350,7 +350,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   </div>
 
   <!-- Step 3 -->
-  <div class="step-panel" id="panel3">
+  <div class="step-panel" id="panel3" data-area="step3-panel" data-src="index.html">
     <div class="card" id="fee-card" style="display:none;background:var(--blue-light);border-color:var(--blue-mid)">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div>
@@ -379,7 +379,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 
 <!-- ===== PAYMENT RETURN ===== -->
-<div class="page" id="page-payment">
+<div class="page" id="page-payment" data-area="page-payment" data-src="index.html">
 <div class="container" style="max-width:520px">
   <div style="text-align:center;margin-bottom:2rem;margin-top:1rem">
     <div style="width:64px;height:64px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">
@@ -402,11 +402,11 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 
 <!-- ===== HISTORY (מצב בדיקה + אסמכתאות) ===== -->
-<div class="page" id="page-history">
+<div class="page" id="page-history" data-area="page-history" data-src="index.html">
 <div class="container">
 
   <!-- SECTION 1: מצב בדיקה -->
-  <div style="margin-bottom:2rem">
+  <div style="margin-bottom:2rem" data-area="realtime-status" data-src="index.html">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div>
         <div style="font-size:18px;font-weight:700;color:var(--gray-900)">מצב בדיקה בזמן אמת</div>
@@ -418,7 +418,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="rt-overall">
+    <div class="rt-overall" data-area="rt-progress" data-src="index.html">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:14px;font-weight:600">התקדמות כללית</span>
         <span style="font-size:15px;font-weight:700;color:var(--blue)" id="rt-pct">0%</span>
@@ -430,7 +430,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="filter-bar" id="rt-filter-bar">
+    <div class="filter-bar" id="rt-filter-bar" data-area="rt-filters" data-src="index.html">
       <span style="font-size:12px;color:var(--gray-500);margin-left:4px">סינון:</span>
       <button class="filter-chip active" onclick="filterRT('all',this)">הכל</button>
       <button class="filter-chip" onclick="filterRT('active',this)">פעיל</button>
@@ -438,7 +438,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <button class="filter-chip" onclick="filterRT('err',this)">נכשל</button>
     </div>
 
-    <div id="rt-cards-container"></div>
+    <div id="rt-cards-container" data-area="rt-cards-container" data-src="index.html"></div>
 
     <div style="text-align:center;margin-top:1rem">
       <button class="btn btn-ghost" onclick="resetRealtime()" style="display:inline-flex;align-items:center;gap:6px"><i data-lucide="rotate-ccw" style="width:14px;height:14px;stroke:currentColor"></i> הפעל סימולציה מחדש</button>
@@ -449,7 +449,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <div style="border-top:2px solid var(--gray-200);margin:2rem 0"></div>
 
   <!-- SECTION 2: אסמכתאות -->
-  <div>
+  <div data-area="receipts-section" data-src="index.html">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div>
         <div style="font-size:18px;font-weight:700;color:var(--gray-900)">אסמכתאות</div>
@@ -466,7 +466,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <button class="filter-chip" onclick="filterReceipts('תשלום',this)">תשלום</button>
     </div>
 
-    <div class="receipt-card" data-rtype="פתיחת תיק">
+    <div class="receipt-card" data-rtype="פתיחת תיק" data-area="receipt-card" data-src="index.html">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
         <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533225</div><div class="receipt-meta">פתיחת תיק · 3 מסמכים</div></div>
@@ -486,7 +486,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="receipt-card" data-rtype="הגשת מסמכים">
+    <div class="receipt-card" data-rtype="הגשת מסמכים" data-area="receipt-card" data-src="index.html">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
         <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533226</div><div class="receipt-meta">הגשת מסמכים · 2 מסמכים</div></div>
@@ -505,7 +505,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="receipt-card" data-rtype="תשלום">
+    <div class="receipt-card" data-rtype="תשלום" data-area="receipt-card" data-src="index.html">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
         <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533227</div><div class="receipt-meta">בקשה לתשלום · 1 מסמך</div></div>
@@ -528,7 +528,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 
 <!-- Payment Modal -->
-<div id="payment-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center">
+<div id="payment-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="payment-modal" data-src="index.html">
   <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
       <div style="width:36px;height:36px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -668,6 +668,7 @@ function addCaseBlock(prefill) {
   const id = 'cb' + Date.now();
   const el = document.createElement('div');
   el.className = 'case-block'; el.id = id;
+  el.dataset.area = 'case-block'; el.dataset.src = 'index.html';
   el.innerHTML = `
     <div class="cb-body">
       <div class="two-col" style="margin-bottom:14px" id="cb-fields-${id}">
@@ -832,6 +833,7 @@ function buildRtCards() {
   if (c.children.length > 0) return;
   DOCS.forEach((d, i) => {
     const el = document.createElement('div'); el.className = 'rt-card'; el.id = 'rtc-'+i;
+    el.dataset.area = 'rt-card'; el.dataset.src = 'index.html';
     el.innerHTML = `
       <div class="rt-card-header" onclick="toggleRtCard(${i})">
         <div class="rt-file-badge">PDF</div>
