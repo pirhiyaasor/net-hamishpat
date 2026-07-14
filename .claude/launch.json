@@ -12,6 +12,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "-p", "3000", "."],
       "port": 3000
+    },
+    {
+      "name": "Fix Engine",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["fix-engine/server.js"],
+      "port": 3737
     }
   ]
 }

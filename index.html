@@ -172,7 +172,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 .rt-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:12px;box-shadow:var(--shadow);transition:border-color .4s;overflow:hidden}
 .rt-card-header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--gray-100)}
-.rt-file-badge{width:34px;height:34px;border-radius:6px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--blue);flex-shrink:0}
 .rt-card-info{flex:1}
 .rt-card-name{font-size:14px;font-weight:600;color:var(--gray-900)}
 .rt-card-case{font-size:12px;color:var(--gray-500);margin-top:1px}
@@ -195,6 +194,30 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .filter-chip.active{background:var(--blue);border-color:var(--blue);color:white}
 .filter-chip:hover:not(.active){background:var(--gray-50)}
 
+.rt-filter-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-inline-start:auto}
+
+.rt-date-filter{position:relative}
+.rt-date-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 14px;border-radius:99px;border:1px solid var(--gray-200);background:white;cursor:pointer;color:var(--gray-700);transition:all .18s;white-space:nowrap;font-family:inherit}
+.rt-date-btn:hover{background:var(--gray-50)}
+.rt-date-chev{width:12px;height:12px;flex-shrink:0;transition:transform .2s}
+.rt-date-filter.open .rt-date-chev{transform:rotate(180deg)}
+.rt-date-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;background:white;border:1px solid var(--gray-200);border-radius:var(--radius-sm);box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:190px;padding:6px;z-index:20}
+.rt-date-filter.open .rt-date-menu{display:block}
+.rt-date-opt{display:block;width:100%;text-align:right;padding:8px 10px;border-radius:6px;border:none;background:none;font-size:13px;color:var(--gray-700);cursor:pointer;font-family:inherit}
+.rt-date-opt:hover{background:var(--gray-50)}
+.rt-date-opt.active{background:var(--blue-light);color:var(--blue);font-weight:700}
+.rt-date-sep{height:1px;background:var(--gray-100);margin:6px 2px}
+.rt-date-range{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 6px 2px}
+.rt-date-range.show{display:flex}
+.rt-date-range input[type=date]{border:1px solid var(--gray-200);border-radius:6px;padding:5px 6px;font-size:12px;font-family:inherit;color:var(--gray-900)}
+.rt-date-range span{font-size:12px;color:var(--gray-500)}
+
+.rt-search-wrap{position:relative;flex:1;min-width:220px;max-width:320px}
+.rt-search-input{width:100%;padding:6px 32px 6px 12px;border:1px solid var(--gray-200);border-radius:99px;font-size:12px;font-family:inherit;color:var(--gray-900);background:white;transition:border .15s}
+.rt-search-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+.rt-search-input::placeholder{color:var(--gray-400)}
+.rt-search-icon{position:absolute;top:50%;transform:translateY(-50%);right:12px;width:14px;height:14px;color:var(--gray-400);pointer-events:none}
+
 /* stage track */
 .stage-track{display:flex;align-items:center}
 .stg{display:flex;flex-direction:column;align-items:center;flex:1}
@@ -209,16 +232,28 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .stg-line.done{background:var(--green)}
 .stg-line.running{background:linear-gradient(to left,var(--gray-200) 0%,var(--blue) 100%)}
 
-.rt-log{margin-top:12px;padding:10px 12px;background:var(--gray-50);border:1px solid var(--gray-100);border-radius:var(--radius-sm);max-height:72px;overflow:hidden}
-.rt-log-entry{font-size:11px;color:var(--gray-500);line-height:1.8}
-.rt-log-entry .ts{color:var(--gray-400);font-variant-numeric:tabular-nums;margin-left:6px}
-.rt-log-entry.new{color:var(--blue);font-weight:600}
+.rt-meta{margin-top:12px;padding:10px 12px;background:var(--gray-50);border:1px solid var(--gray-100);border-radius:var(--radius-sm)}
+.rt-meta-row{font-size:12px;color:var(--gray-600);line-height:1.9;display:flex;gap:5px}
+.rt-meta-row .rt-meta-lbl{color:var(--gray-500);flex-shrink:0}
+.rt-meta-row .rt-meta-val{color:var(--gray-800);font-weight:600}
+
+.rt-doc-link{cursor:pointer;text-decoration:underline;text-decoration-color:transparent;transition:text-decoration-color .15s}
+.rt-doc-link:hover{text-decoration-color:currentColor}
+.rt-file-list{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rt-file-sep{color:var(--gray-300);font-weight:400}
 
 .rt-err-box{display:none;margin-top:10px;padding:10px 14px;background:var(--red-light);border:1px solid #FECACA;border-radius:var(--radius-sm)}
 .rt-err-box.show{display:block}
-.rt-err-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rt-err-title{font-size:13px;font-weight:800;color:var(--red);margin-bottom:6px}
 .rt-err-reason{font-size:12px;font-weight:700;color:var(--red);margin-bottom:3px}
 .rt-err-action{font-size:12px;color:#9B1C1C}
+.rt-err-intro{font-size:12px;font-weight:700;color:#9B1C1C;margin-bottom:4px}
+.rt-err-sub{font-size:12px;font-weight:700;color:var(--red);margin-bottom:2px}
+.rt-err-detail{font-size:12px;color:#9B1C1C;margin-bottom:2px;line-height:1.6}
+.rt-err-explain{font-size:12px;color:#9B1C1C;margin-top:6px;margin-bottom:2px;line-height:1.6}
+.rt-err-list{margin:0;padding-inline-start:18px;font-size:12px;color:#9B1C1C;line-height:1.7}
+.rt-err-list li{margin-bottom:2px}
+.rt-err-btn-wrap:not(:empty){margin-top:10px}
 
 /* receipts */
 .receipts-title{font-size:20px;font-weight:700;color:var(--gray-900)}
@@ -230,10 +265,15 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .receipt-info{flex:1}
 .receipt-ref{font-size:15px;font-weight:600;color:var(--gray-900)}
 .receipt-meta{font-size:12px;color:var(--gray-500);margin-top:2px}
+.rc-pagination{display:flex;align-items:center;gap:4px}
+.rc-page-btn{width:26px;height:26px;border-radius:50%;border:1px solid var(--gray-200);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-500)}
+.rc-page-btn:hover{background:var(--gray-50)}
+.rc-page-num{width:26px;height:26px;border-radius:50%;border:1px solid transparent;background:none;font-size:13px;font-weight:600;color:var(--gray-500);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.rc-page-num.active{background:white;border-color:var(--blue);color:var(--blue)}
 .badge{padding:4px 12px;border-radius:99px;font-size:12px;font-weight:600}
 .b-s{background:var(--green-light);color:var(--green)}.b-e{background:var(--red-light);color:var(--red)}.b-p{background:var(--yellow-light);color:var(--yellow)}
 .receipt-date{font-size:12px;color:var(--gray-400);flex-shrink:0}
-.chev{font-size:12px;color:var(--gray-400);transition:transform .2s}.chev.open{transform:rotate(180deg)}
+.chev{width:28px;height:28px;border-radius:50%;border:1px solid var(--gray-200);background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gray-400);transition:transform .3s,background .2s}.chev.open{transform:rotate(180deg);background:var(--gray-50)}
 .r-body{display:none;border-top:1px solid var(--gray-100)}.r-body.open{display:block}
 .r-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px 18px;background:var(--gray-50);border-bottom:1px solid var(--gray-100)}
 .s-lbl{font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em}
@@ -462,27 +502,54 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div>
         <div style="font-size:18px;font-weight:700;color:var(--gray-900)">הגשות בתהליך</div>
-        <div style="font-size:13px;color:var(--gray-500);margin-top:2px">תהליכים פעילים</div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;background:var(--green-light);border:1px solid #84E1BC;border-radius:99px;padding:5px 14px">
-        <div style="width:8px;height:8px;border-radius:50%;background:#10B981;animation:pulse 1.5s infinite"></div>
-        <span style="font-size:12px;font-weight:700;color:var(--green)">עדכון חי</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:#10B981"></div>
+        <span id="rt-last-update" style="font-size:12px;font-weight:700;color:var(--green)"></span>
       </div>
     </div>
 
+    <div style="font-size:12px;color:var(--gray-500);margin-bottom:1rem;line-height:1.6">עדכון סטטוס התהליכים הינו אוטומטי ומתבצע כל שעה עגולה,<br>הבדיקה נעשית באמצעות בינה מלאכותית. ניתן להגיש ערעור על דחיית בקשות.</div>
+
     <div class="filter-bar" id="rt-filter-bar" data-area="rt-filters" data-src="index.html">
-      <span style="font-size:12px;color:var(--gray-500);margin-left:4px">סינון:</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;flex-shrink:0"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
       <button class="filter-chip active" onclick="filterRT('all',this)">הכל</button>
-      <button class="filter-chip" onclick="filterRT('active',this)">פעיל</button>
-      <button class="filter-chip" onclick="filterRT('done',this)">הושלם</button>
-      <button class="filter-chip" onclick="filterRT('err',this)">נכשל</button>
+      <button class="filter-chip" onclick="filterRT('פתיחת תיק',this)">פתיחת תיק</button>
+      <button class="filter-chip" onclick="filterRT('הגשת מסמכים לתיק',this)">הגשת מסמכים לתיק</button>
+      <button class="filter-chip" onclick="filterRT('הגשות לרשות',this)">הגשות לרשות</button>
+
+      <div class="rt-filter-right">
+        <div class="rt-date-filter" id="rt-date-filter">
+          <button class="rt-date-btn" onclick="toggleRTDateMenu()">
+            <span id="rt-date-label">הוגש היום</span>
+            <svg class="rt-date-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="rt-date-menu" id="rt-date-menu">
+            <button class="rt-date-opt active" onclick="selectRTDate('today','הוגש היום',this)">הוגש היום</button>
+            <button class="rt-date-opt" onclick="selectRTDate('yesterday','הוגש אתמול',this)">הוגש אתמול</button>
+            <button class="rt-date-opt" onclick="selectRTDate('week','הוגש השבוע',this)">הוגש השבוע</button>
+            <button class="rt-date-opt" onclick="selectRTDate('month','הוגש החודש',this)">הוגש החודש</button>
+            <button class="rt-date-opt" onclick="selectRTDate('year','השנה',this)">השנה</button>
+            <button class="rt-date-opt" onclick="selectRTDate('range','טווח תאריכים',this)">טווח תאריכים</button>
+            <div class="rt-date-range" id="rt-date-range">
+              <input type="date" id="rt-date-from">
+              <span>עד</span>
+              <input type="date" id="rt-date-to">
+              <button class="btn btn-primary" style="font-size:12px;padding:5px 10px" onclick="applyRTDateRange()">החל</button>
+            </div>
+            <div class="rt-date-sep"></div>
+            <button class="rt-date-opt" onclick="selectRTDate('all','הצג הכל',this)">הצג הכל</button>
+            <button class="rt-date-opt" onclick="selectRTDate('none','ללא',this)">ללא</button>
+          </div>
+        </div>
+        <div class="rt-search-wrap">
+          <svg class="rt-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="rt-search-input" class="rt-search-input" placeholder="חיפוש: מספר אסמכתא, מספר תיק, תאריך הגשה, שם קובץ..." oninput="filterRTSearch(this.value)">
+        </div>
+      </div>
     </div>
 
     <div id="rt-cards-container" data-area="rt-cards-container" data-src="index.html"></div>
-
-    <div style="text-align:center;margin-top:1rem">
-      <button class="btn btn-ghost" onclick="resetRealtime()" style="display:inline-flex;align-items:center;gap:6px"><i data-lucide="rotate-ccw" style="width:14px;height:14px;stroke:currentColor"></i> הפעל סימולציה מחדש</button>
-    </div>
   </div>
 
   <!-- DIVIDER -->
@@ -492,25 +559,32 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <div data-area="receipts-section" data-src="index.html">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <div>
-        <div style="font-size:18px;font-weight:700;color:var(--gray-900)">אסמכתאות</div>
-        <div style="font-size:13px;color:var(--gray-500);margin-top:2px">הגשות שהושלמו</div>
+        <div style="font-size:18px;font-weight:700;color:var(--gray-900)">הגשות שהושלמו</div>
       </div>
-      <div style="font-size:13px;color:var(--gray-500);background:white;border:1px solid var(--gray-200);padding:4px 12px;border-radius:99px" id="rc-count">3 הגשות</div>
+      <div class="rc-pagination" id="rc-pagination">
+        <button class="rc-page-btn" onclick="rcChangePage(1)" aria-label="הקודם">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="rc-page-num active" onclick="rcChangePage(0)">1</button>
+        <button class="rc-page-btn" onclick="rcChangePage(-1)" aria-label="הבא">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      </div>
     </div>
 
     <div class="filter-bar">
-      <span style="font-size:12px;color:var(--gray-500);margin-left:4px">סינון:</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;flex-shrink:0"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
       <button class="filter-chip active" onclick="filterReceipts('all',this)">הכל</button>
       <button class="filter-chip" onclick="filterReceipts('פתיחת תיק',this)">פתיחת תיק</button>
-      <button class="filter-chip" onclick="filterReceipts('הגשת מסמכים',this)">הגשת מסמכים</button>
-      <button class="filter-chip" onclick="filterReceipts('תשלום',this)">תשלום</button>
+      <button class="filter-chip" onclick="filterReceipts('הגשת מסמכים לתיק',this)">הגשת מסמכים לתיק</button>
+      <button class="filter-chip" onclick="filterReceipts('הגשות לרשות',this)">הגשות לרשות</button>
     </div>
 
     <div class="receipt-card" data-rtype="פתיחת תיק" data-area="receipt-card" data-src="index.html">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
-        <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533225</div><div class="receipt-meta">פתיחת תיק · 3 מסמכים</div></div>
-        <span class="badge b-s">הושלם</span><span class="receipt-date">03/05/2026</span><span class="chev">▼</span>
+        <div class="receipt-info"><div class="receipt-ref">דויד אבשלום נ' רועי ברכה [תיק: 5989-02-26]</div><div class="receipt-meta">אסמכתא: 1533225</div></div>
+        <span class="badge b-s">התקבל</span><span class="receipt-date">03/05/2026</span><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
       <div class="r-body">
         <div class="r-summary">
@@ -526,11 +600,11 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="receipt-card" data-rtype="הגשת מסמכים" data-area="receipt-card" data-src="index.html">
+    <div class="receipt-card" data-rtype="הגשת מסמכים לתיק" data-area="receipt-card" data-src="index.html">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
-        <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533226</div><div class="receipt-meta">הגשת מסמכים · 2 מסמכים</div></div>
-        <span class="badge b-s">הושלם</span><span class="receipt-date">03/05/2026</span><span class="chev">▼</span>
+        <div class="receipt-info"><div class="receipt-ref">בקשה לדחיית מועד דיון [אסמכתא: 1533226]</div><div class="receipt-meta">רונית שגיא נ' דוד כהן [תיק: 5521/25]</div></div>
+        <span class="badge b-s">התקבל</span><span class="receipt-date">03/05/2026</span><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
       <div class="r-body">
         <div class="r-summary">
@@ -545,11 +619,11 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
     </div>
 
-    <div class="receipt-card" data-rtype="תשלום" data-area="receipt-card" data-src="index.html">
+    <div class="receipt-card" data-rtype="הגשות לרשות" data-area="receipt-card" data-src="index.html">
       <div class="receipt-row" onclick="toggleR(this)">
         <div class="receipt-ind ind-s"></div>
-        <div class="receipt-info"><div class="receipt-ref">אסמכתא 1533227</div><div class="receipt-meta">בקשה לתשלום · 1 מסמך</div></div>
-        <span class="badge b-s">הושלם</span><span class="receipt-date">04/05/2026</span><span class="chev">▼</span>
+        <div class="receipt-info"><div class="receipt-ref">בקשה לתשלום [אסמכתא: 1533227]</div><div class="receipt-meta">אלמוג פרץ נ' חברת ביטוח כלל [תיק: 1288-07-25]</div></div>
+        <span class="badge b-s">התקבל</span><span class="receipt-date">04/05/2026</span><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
       <div class="r-body">
         <div class="r-summary">
@@ -904,7 +978,6 @@ function submitForm() {
   }, 7000);
   subCount++;
   document.getElementById('receipts-count').textContent = subCount;
-  document.getElementById('rc-count').textContent = subCount + ' הגשות';
   goTo(1);
   document.querySelectorAll('.action-tile').forEach(t=>t.classList.remove('selected'));
   document.getElementById('docs-info').classList.remove('show');
@@ -924,21 +997,49 @@ function toggleR(row) {
 }
 
 // ===== REAL-TIME =====
-const STAGES = ['קליטה','OCR','סיווג','בדיקת תקנות','בדיקת סד"א','תשלום','אישור'];
+const STAGES = ['קליטה','תקינות קבצים','בדיקת מסמכים','בדיקת מזכירות','תשלום','אישור'];
 const DOCS = [
-  {name:'אישור תשלום.pdf', case:'1533230', court:'שלום תל אביב', scenario:'success', delay:0},
-  {name:'חשבונית נספח ב.pdf', case:'1533231', court:'מחוזי חיפה', scenario:'error', failAt:2, delay:1,
-    errReason:'שגיאת OCR: הקובץ מוצפן או מוגן', errAction:'יש להגיש קובץ PDF שאינו מוגן בסיסמה ולסרוק מחדש באיכות גבוהה.'},
-  {name:'כתב תביעה ראשי.pdf', case:'1533232', court:'מחוזי תל אביב', scenario:'error', failAt:5, delay:2,
+  {name:'אישור תשלום.pdf', ref:'1533230', scenario:'success', delay:0, type:'הגשות לרשות',
+    submissionType:'הגשת מסמך לתיק', caseName:'מיכל אברהמי נ\' עיריית תל אביב', caseNumber:'22841-04-26',
+    submitterName:'יוני דויד', submitterRole:'בא כוח התובע',
+    files:['אישור תשלום.pdf','קבלת תשלום מקורית.pdf']},
+  {name:'חשבונית נספח ב.pdf', ref:'1533231', scenario:'error', failAt:1, delay:1, type:'הגשת מסמכים לתיק',
+    submissionType:'הגשת מסמכים לתיק', caseName:'עיריית חיפה נ\' חברת בינוי בע"מ', caseNumber:'41287-09-25',
+    submitterName:'עו"ד מיכל לוי', submitterRole:'באת כוח הנתבעת',
+    submittedAt: new Date(Date.now() - 24*60*60*1000),
+    files:['חשבונית נספח ב.pdf','אסמכתא העברה בנקאית.pdf'],
+    errTitle:'נדחה מהמרשם: בקשתך לפתיחת תיק נדחתה',
+    errHtml:`<div class="rt-err-intro">הסיבות לדחיית הבקשה להלן:</div>
+      <div class="rt-err-sub">אי עמידה בתקנות סדר דין אזרחי:</div>
+      <div class="rt-err-detail">כתובת הדואר האלקטרוני של עורך הדין לא נמצאה במסמך.</div>
+      <div class="rt-err-detail">בתקנה <span class="rt-doc-link" onclick="event.stopPropagation()">12(א) לתקנות סדר הדין האזרחי, התשע"ט-2018 (התקנות החדשות)</span>.</div>
+      <div class="rt-err-explain">התקנה קובעת כי בחלקו הראשון של כתב הטענות (הנקרא "הכותרת") יש לציין את הפרטים הבאים לגבי עורך הדין המייצג:</div>
+      <ul class="rt-err-list">
+        <li>שמו של עורך הדין.</li>
+        <li>מענו (כתובתו ומען להמצאת כתבי בית-דין).</li>
+        <li>מספרי הטלפון, הפקס וכתובת הדואר האלקטרוני שלו.</li>
+      </ul>`,
+    errBtn:'להגשה חוזרת'},
+  {name:'כתב תביעה ראשי.pdf', ref:'1533232', scenario:'error', failAt:4, delay:2, type:'פתיחת תיק',
+    submissionType:'בקשה לפתיחת תיק', filesNote:'הוגש מסמך עיקרי ו-2 נספחים',
+    submitterName:'עו"ד דן ברק', submitterRole:'בא כוח התובע',
+    submittedAt: new Date(Date.now() - 10*24*60*60*1000),
+    files:['כתב תביעה ראשי.pdf','ייפוי כוח.pdf','תצהיר עדות.pdf'],
     errReason:'סירוב אשראי: העסקה נדחתה על ידי חברת האשראי', errAction:'יש לוודא שפרטי כרטיס האשראי תקינים ושיש מסגרת זמינה, ולנסות שוב.', errBtn:'לביצוע תשלום'}
 ];
-const LOG_MSGS = [
-  ['קובץ התקבל לתור','בדיקת שלמות קובץ...','מפעיל מנוע OCR...'],
-  ['זיהוי שפה: עברית','מסווג סוג מסמך...','בודק עמידה בתקנות...','בודק פרטי סד"א...','מסיים עיבוד...']
-];
+function fmtDT(d) {
+  const hh = String(d.getHours()).padStart(2,'0'), mm = String(d.getMinutes()).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0'), mo = String(d.getMonth()+1).padStart(2,'0');
+  return `${hh}:${mm} ${dd}/${mo}/${d.getFullYear()}`;
+}
+function openDocPreview(name) {
+  // תצוגה מקדימה של מסמכים תיושם בהמשך
+}
 
 let rtTimer = null, rtTick = 0, rtRunning = false;
 let rtDocState = [];
+let rtTypeFilter = 'all', rtDateFilter = 'today', rtSearchTerm = '';
+let rtDateRangeFrom = null, rtDateRangeTo = null;
 
 function toggleRtCard(i) {
   document.getElementById('rtc-'+i).classList.toggle('expanded');
@@ -946,9 +1047,71 @@ function toggleRtCard(i) {
 function filterRT(val, btn) {
   document.querySelectorAll('#rt-filter-bar .filter-chip').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  rtTypeFilter = val;
+  resetRealtime();
+}
+function toggleRTDateMenu() {
+  document.getElementById('rt-date-filter').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('rt-date-filter');
+  if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+});
+function selectRTDate(val, label, btn) {
+  rtDateFilter = val;
+  document.getElementById('rt-date-label').textContent = label;
+  document.querySelectorAll('#rt-date-menu .rt-date-opt').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const rangeBox = document.getElementById('rt-date-range');
+  if (val === 'range') {
+    rangeBox.classList.add('show');
+    return;
+  }
+  rangeBox.classList.remove('show');
+  document.getElementById('rt-date-filter').classList.remove('open');
+  applyRTFilters();
+}
+function applyRTDateRange() {
+  rtDateRangeFrom = document.getElementById('rt-date-from').value || null;
+  rtDateRangeTo = document.getElementById('rt-date-to').value || null;
+  if (rtDateRangeFrom && rtDateRangeTo) {
+    const f = rtDateRangeFrom.split('-').reverse().join('/');
+    const t = rtDateRangeTo.split('-').reverse().join('/');
+    document.getElementById('rt-date-label').textContent = `${f} – ${t}`;
+  }
+  document.getElementById('rt-date-filter').classList.remove('open');
+  applyRTFilters();
+}
+function matchesRTDate(submittedAtIso) {
+  if (rtDateFilter === 'all' || rtDateFilter === 'none') return true;
+  const now = new Date();
+  const d = new Date(submittedAtIso);
+  if (rtDateFilter === 'today') return d.toDateString() === now.toDateString();
+  if (rtDateFilter === 'yesterday') {
+    const y = new Date(now); y.setDate(y.getDate() - 1);
+    return d.toDateString() === y.toDateString();
+  }
+  if (rtDateFilter === 'week') return (now - d) / 86400000 <= 7;
+  if (rtDateFilter === 'month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  if (rtDateFilter === 'year') return d.getFullYear() === now.getFullYear();
+  if (rtDateFilter === 'range') {
+    if (!rtDateRangeFrom || !rtDateRangeTo) return true;
+    const from = new Date(rtDateRangeFrom);
+    const to = new Date(rtDateRangeTo); to.setHours(23, 59, 59, 999);
+    return d >= from && d <= to;
+  }
+  return true;
+}
+function filterRTSearch(term) {
+  rtSearchTerm = term.trim().toLowerCase();
+  applyRTFilters();
+}
+function applyRTFilters() {
   document.querySelectorAll('#rt-cards-container .rt-card').forEach(c => {
-    const s = c.dataset.rtStatus || 'wait';
-    c.style.display = (val === 'all' || s === val) ? '' : 'none';
+    const typeOk = rtTypeFilter === 'all' || c.dataset.rtype === rtTypeFilter;
+    const dateOk = matchesRTDate(c.dataset.submittedAt);
+    const searchOk = !rtSearchTerm || c.innerText.toLowerCase().includes(rtSearchTerm);
+    c.style.display = (typeOk && dateOk && searchOk) ? '' : 'none';
   });
 }
 function filterReceipts(val, btn) {
@@ -958,10 +1121,26 @@ function filterReceipts(val, btn) {
     c.style.display = (val === 'all' || c.dataset.rtype === val) ? '' : 'none';
   });
 }
+function rcChangePage(dir) {
+  // עמוד יחיד בדמו הנוכחי
+}
+function updateLastRoundHour() {
+  const el = document.getElementById('rt-last-update');
+  if (!el) return;
+  const now = new Date();
+  const last = new Date(now);
+  last.setMinutes(0, 0, 0);
+  const hh = String(last.getHours()).padStart(2, '0');
+  const dd = String(last.getDate()).padStart(2, '0');
+  const mm = String(last.getMonth() + 1).padStart(2, '0');
+  const yyyy = last.getFullYear();
+  el.textContent = `עודכן לאחרונה ${hh}:00 · ${dd}.${mm}.${yyyy}`;
+}
 function initRealtime() {
   if (rtRunning) return;
   buildRtCards();
   if (window.lucide) lucide.createIcons();
+  updateLastRoundHour();
   resetRealtime();
 }
 
@@ -970,21 +1149,33 @@ function buildRtCards() {
   if (c.children.length > 0) return;
   DOCS.forEach((d, i) => {
     const el = document.createElement('div'); el.className = 'rt-card'; el.id = 'rtc-'+i;
-    el.dataset.area = 'rt-card'; el.dataset.src = 'index.html';
+    el.dataset.area = 'rt-card'; el.dataset.src = 'index.html'; el.dataset.rtype = d.type;
+    const actionTime = d.submittedAt || new Date();
+    el.dataset.submittedAt = actionTime.toISOString();
+    const legalDeadline = new Date(actionTime.getTime() + 13*60000);
     el.innerHTML = `
       <div class="rt-card-header" onclick="toggleRtCard(${i})">
-        <div class="rt-file-badge">PDF</div>
         <div class="rt-card-info">
-          <div class="rt-card-name">${d.name}</div>
-          <div class="rt-card-case">תיק ${d.case} · ${d.court}</div>
+          <div class="rt-card-name">${d.submissionType} [אסמכתא: ${d.ref}]</div>
+          <div class="rt-card-case">${d.type === 'פתיחת תיק' ? d.filesNote : `${d.caseName} [תיק: ${d.caseNumber}]`}</div>
         </div>
-        <span class="rt-badge rtb-wait" id="rtb-${i}">ממתין</span>
+        <span class="rt-badge rtb-wait" id="rtb-${i}">בתהליך</span>
         <div class="rt-chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
       </div>
       <div class="rt-card-body">
         <div class="stage-track" id="stg-${i}"></div>
-        <div class="rt-log" id="rtlog-${i}"><div class="rt-log-entry" style="color:var(--gray-400)">ממתין לתחילת עיבוד...</div></div>
-        <div class="rt-err-box" id="rterr-${i}"><div class="rt-err-top"><div><div class="rt-err-reason"></div><div class="rt-err-action"></div></div><div class="rt-err-btn-wrap"></div></div></div>
+        <div class="rt-meta" id="rtmeta-${i}">
+          <div class="rt-meta-row"><span class="rt-meta-lbl">סוג ההגשה:</span><span class="rt-meta-val">${d.submissionType}</span></div>
+          <div class="rt-meta-row"><span class="rt-meta-lbl">זמן ביצוע הפעולה:</span><span class="rt-meta-val">${fmtDT(actionTime)}</span></div>
+          <div class="rt-meta-row"><span class="rt-meta-lbl">מועד ההגשה החוקי:</span><span class="rt-meta-val">${fmtDT(legalDeadline)}</span></div>
+          <div class="rt-meta-row"><span class="rt-meta-lbl">מגיש:</span><span class="rt-meta-val">${d.submitterName} [${d.submitterRole}]</span></div>
+          <div class="rt-meta-row"><span class="rt-meta-lbl">קבצים:</span><span class="rt-meta-val rt-file-list">${d.files.map(f => `<span class="rt-doc-link" onclick="event.stopPropagation();openDocPreview('${f}')">${f}</span>`).join('<span class="rt-file-sep">·</span>')}</span></div>
+        </div>
+        <div class="rt-err-box" id="rterr-${i}">
+          <div class="rt-err-title" id="rterrtitle-${i}" style="display:none"></div>
+          <div class="rt-err-body" id="rterrbody-${i}"></div>
+          <div class="rt-err-btn-wrap" id="rterrbtn-${i}"></div>
+        </div>
       </div>`;
     c.appendChild(el);
     buildStageTrack(i);
@@ -1007,16 +1198,15 @@ function buildStageTrack(di) {
 function resetRealtime() {
   if (rtTimer) clearInterval(rtTimer);
   rtRunning = false; rtTick = 0;
-  rtDocState = DOCS.map(d => ({...d, curStage:-1, done:false, failed:false, logIdx:0}));
+  rtDocState = DOCS.map(d => ({...d, curStage:-1, done:false, failed:false}));
   DOCS.forEach((d,i) => {
     buildStageTrack(i);
-    document.getElementById('rtb-'+i).className='rt-badge rtb-wait'; document.getElementById('rtb-'+i).textContent='ממתין';
+    document.getElementById('rtb-'+i).className='rt-badge rtb-wait'; document.getElementById('rtb-'+i).textContent='בתהליך';
     document.getElementById('rterr-'+i).classList.remove('show');
     const resetCard = document.getElementById('rtc-'+i);
     resetCard.style.borderColor='';
     resetCard.classList.remove('expanded');
     resetCard.dataset.rtStatus='wait';
-    document.getElementById('rtlog-'+i).innerHTML='<div class="rt-log-entry" style="color:var(--gray-400)">ממתין לתחילת עיבוד...</div>';
   });
   document.getElementById('rt-bar')?.style.setProperty('width','0%');
   const rtPct0 = document.getElementById('rt-pct'); if (rtPct0) rtPct0.textContent='0%';
@@ -1024,6 +1214,7 @@ function resetRealtime() {
   const rtEta0 = document.getElementById('rt-eta'); if (rtEta0) rtEta0.textContent='ממתין לתחילת עיבוד...';
   rtRunning = true;
   rtTimer = setInterval(doTick, 1000);
+  applyRTFilters();
 }
 
 function doTick() {
@@ -1051,19 +1242,21 @@ function doTick() {
       doc.failed = true; doc.curStage = next;
       markStage(di, next, 'err');
       const badge = document.getElementById('rtb-'+di);
-      badge.className='rt-badge rtb-err'; badge.textContent='נכשל';
+      badge.className='rt-badge rtb-err'; badge.textContent='נדחה';
       const failCard = document.getElementById('rtc-'+di);
       failCard.style.borderColor='var(--red)';
       failCard.dataset.rtStatus='err';
       if(!failCard.classList.contains('expanded')) failCard.classList.add('expanded');
       const errBox = document.getElementById('rterr-'+di);
       errBox.classList.add('show');
-      errBox.querySelector('.rt-err-reason').textContent = doc.errReason;
-      errBox.querySelector('.rt-err-action').textContent = doc.errAction;
+      const errTitleEl = document.getElementById('rterrtitle-'+di);
+      const errBodyEl = document.getElementById('rterrbody-'+di);
+      if (doc.errTitle) { errTitleEl.textContent = doc.errTitle; errTitleEl.style.display=''; }
+      else { errTitleEl.style.display='none'; }
+      errBodyEl.innerHTML = doc.errHtml || `<div class="rt-err-reason">${doc.errReason}</div><div class="rt-err-action">${doc.errAction}</div>`;
       if (doc.errBtn) {
-        errBox.querySelector('.rt-err-btn-wrap').innerHTML = `<button class="btn btn-primary" style="white-space:nowrap;font-size:13px;padding:8px 14px" onclick="alert('מעבר לעמוד תשלום...')">${doc.errBtn}</button>`;
+        document.getElementById('rterrbtn-'+di).innerHTML = `<button class="btn btn-primary" style="white-space:nowrap;font-size:13px;padding:8px 14px" onclick="alert('פעולה זו תמומש בהמשך')">${doc.errBtn}</button>`;
       }
-      addLog(di, 'שגיאה: '+doc.errReason, true);
       stagesDone += next;
       return;
     }
@@ -1074,24 +1267,18 @@ function doTick() {
     stagesDone += next;
 
     const badge = document.getElementById('rtb-'+di);
-    const activeLabels = ['סורק','מזהה OCR','מסווג','מאמת','בודק סד"א','מעבד תשלום','מסיים'];
-    badge.className='rt-badge rtb-active'; badge.textContent=activeLabels[next]||'עובד...';
+    badge.className='rt-badge rtb-active'; badge.textContent='בתהליך';
     const activeCard = document.getElementById('rtc-'+di);
     activeCard.dataset.rtStatus='active';
     if(!activeCard.classList.contains('expanded')) activeCard.classList.add('expanded');
 
-    // log
-    const allMsgs = [...LOG_MSGS[0],...LOG_MSGS[1]];
-    addLog(di, allMsgs[doc.logIdx++ % allMsgs.length]);
-
     if (next === STAGES.length-1) {
       markStage(di, next, 'done');
       doc.done = true; docsDone++;
-      badge.className='rt-badge rtb-done'; badge.textContent='הושלם';
+      badge.className='rt-badge rtb-done'; badge.textContent='התקבל';
       const doneCard = document.getElementById('rtc-'+di);
       doneCard.style.borderColor='var(--green)';
       doneCard.dataset.rtStatus='done';
-      addLog(di, 'הבדיקה הושלמה בהצלחה');
     }
   });
 
@@ -1126,15 +1313,6 @@ function markLine(di, si, state) {
   if (!line) return;
   line.className = 'stg-line '+(state==='done'?'done':'running');
 }
-function addLog(di, msg, isNew) {
-  const log = document.getElementById('rtlog-'+di);
-  const entry = document.createElement('div'); entry.className='rt-log-entry'+(isNew?' new':'');
-  const now = new Date(); const ts=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+':'+now.getSeconds().toString().padStart(2,'0');
-  entry.innerHTML=`<span class="ts">${ts}</span>${msg}`;
-  log.insertBefore(entry, log.firstChild);
-  while(log.children.length>3) log.removeChild(log.lastChild);
-}
-
 // Init Lucide icons
 document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
 </script>
