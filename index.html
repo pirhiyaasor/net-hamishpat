@@ -901,23 +901,6 @@ function addCaseBlock(prefill) {
   el.dataset.area = 'case-block'; el.dataset.src = 'index.html';
   el.innerHTML = `
     <div class="cb-body">
-      <div class="two-col" style="margin-bottom:14px" id="cb-fields-${id}">
-        ${selAction === 'payment' ? `
-        <div class="field" style="margin-bottom:0">
-          <label>מספר תיק</label>
-          <input type="text" placeholder="לדוגמה: 7234/26" value="${prefill||''}" oninput="document.getElementById('lbl-${id}').textContent=this.value||'הגשה ${caseCount}'">
-        </div>
-        <div class="field" style="margin-bottom:0">
-          <label>בית משפט</label>
-          <select>
-            <option value="">בחר בית משפט...</option>
-            <option>שלום תל אביב</option><option>שלום ירושלים</option>
-            <option>שלום חיפה</option><option>מחוזי תל אביב</option>
-            <option>מחוזי ירושלים</option><option>עליון</option>
-          </select>
-        </div>` : `
-        `}
-      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px">מסמך עיקרי</div>
