@@ -103,11 +103,12 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .field label{font-size:13px;font-weight:600;color:var(--gray-700)}
-.field input,.field select{padding:9px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;color:var(--gray-900);background:white;transition:border .15s;width:100%}
-.field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
-.field input::placeholder{color:var(--gray-400)}
-.field input.field-invalid{border-color:var(--red)}
-.field input.field-invalid:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,30,30,.1)}
+.field input,.field select,.field textarea{padding:9px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;color:var(--gray-900);background:white;transition:border .15s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+.field input::placeholder,.field textarea::placeholder{color:var(--gray-400)}
+.field textarea{resize:vertical;min-height:80px;font-family:'Noto Sans Hebrew',sans-serif}
+.field input.field-invalid,.field textarea.field-invalid{border-color:var(--red)}
+.field input.field-invalid:focus,.field textarea.field-invalid:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,30,30,.1)}
 
 /* multi-case */
 .case-block{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
@@ -314,7 +315,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 <body>
 
 <div class="topbar" data-area="topbar" data-src="index.html">
-  <a class="topbar-logo" href="#">
+  <a class="topbar-logo" href="#" onclick="event.preventDefault();startNewSubmission()">
     <div class="topbar-logo-icon">
       <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1z"/></svg>
     </div>
@@ -323,7 +324,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <div class="topbar-divider"></div>
   <span class="topbar-subtitle">פורטל הגשות דיגיטלי</span>
   <nav class="topbar-nav">
-    <button class="nav-btn active" onclick="showPage('submit',this);goTo(1)">הגשה חדשה</button>
+    <button class="nav-btn active" id="nav-new-submission" onclick="startNewSubmission()">הגשה חדשה</button>
     <button class="nav-btn" onclick="showPage('history',this)">
       <div class="live-dot-sm"></div> מעקב והגשות
     </button>
@@ -348,7 +349,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     <div class="wizard-line" id="wl3"></div>
     <div class="wizard-step" id="ws4"><div class="step-circle">4</div> אגרת בית משפט</div>
     <div class="wizard-line" id="wl4"></div>
-    <div class="wizard-step" id="ws5"><div class="step-circle">5</div> תשלום וסיום</div>
+    <div class="wizard-step" id="ws5"><div class="step-circle">5</div> <span id="ws5-label">תשלום וסיום</span></div>
   </div>
 
   <!-- Step 1 -->
@@ -462,7 +463,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
         <div class="field"><label>כתובת מייל</label><input type="email" id="inp-email" placeholder="name@mail.co.il"></div>
         <div class="field"><label>מספר טלפון</label><input type="tel" id="inp-phone" placeholder="050-0000000"></div>
       </div>
-      <div class="info-box"><i data-lucide="info" style="width:15px;height:15px;stroke:var(--blue);flex-shrink:0;margin-top:1px"></i> <span>עדכונים יישלחו אוטומטית עם כל שינוי בסטטוס — ניתן לבטל בכל עת</span></div>
     </div>
     <div class="form-footer">
       <button class="btn btn-ghost" onclick="goTo(2)">→ חזור</button>
@@ -496,9 +496,8 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <!-- Step 5 -->
   <div class="step-panel" id="panel5" data-area="step5-panel" data-src="index.html">
     <div class="card">
-      <div class="card-title" style="margin-bottom:4px">תשלום וסיום</div>
+      <div class="card-title" style="margin-bottom:4px" id="step5-title">תשלום וסיום</div>
       <div class="card-desc" id="step4-desc" style="margin-bottom:1rem">בדקי את פרטי ההגשה ולחצי על הגשה כדי לסיים</div>
-      <div class="info-box"><i data-lucide="info" style="width:15px;height:15px;stroke:var(--blue);flex-shrink:0;margin-top:1px"></i> <span id="step4-info">לאחר לחיצה על הגשה תועברי לאתר התשלומים הממשלתי להשלמת התשלום</span></div>
     </div>
     <div class="form-footer">
       <button class="btn btn-ghost" onclick="backFromFinal()">→ חזור</button>
@@ -650,15 +649,29 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
         <span class="badge b-s">התקבל</span><span class="receipt-date">03/05/2026</span><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
       <div class="r-body">
-        <div class="r-summary">
-          <div><div class="s-lbl">סוג הגשה</div><div class="s-val">פתיחת תיק</div></div>
-          <div><div class="s-lbl">שופט</div><div class="s-val">כב' השופט לוי</div></div>
-          <div><div class="s-lbl">תאריך</div><div class="s-val">03/05/26 11:10</div></div>
-        </div>
-        <div class="docs-check"><div class="dc-title">מצב בדיקת מסמכים</div>
-          <div class="doc-row"><div class="doc-top"><div class="doc-name">כתב תביעה.pdf</div><div class="pbar-wrap"><div class="pbar"><div class="pf pf-s" style="width:100%"></div></div><div class="dsl dsl-s">עבר ✓</div></div></div></div>
-          <div class="doc-row"><div class="doc-top"><div class="doc-name">נספח א – חוזה.pdf</div><div class="pbar-wrap"><div class="pbar"><div class="pf pf-s" style="width:100%"></div></div><div class="dsl dsl-s">עבר ✓</div></div></div></div>
-          <div class="doc-row"><div class="doc-top"><div class="doc-name">תצהיר עדות.pdf</div><div class="pbar-wrap"><div class="pbar"><div class="pf pf-s" style="width:100%"></div></div><div class="dsl dsl-s">עבר ✓</div></div></div></div>
+        <div style="padding:16px 18px">
+          <div class="stage-track">
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">קליטה</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">שמירת פרטי אשראי</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">תקינות קבצים</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">בדיקת מסמכים</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">בדיקת מזכירות</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">תשלום</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">אישור</div></div>
+          </div>
+          <div class="rt-meta">
+            <div class="rt-meta-row"><span class="rt-meta-lbl">סוג ההגשה:</span><span class="rt-meta-val">בקשה לפתיחת תיק</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">זמן ביצוע הפעולה:</span><span class="rt-meta-val">11:10 03/05/2026</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">מועד ההגשה החוקי:</span><span class="rt-meta-val">11:23 03/05/2026</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">מגיש:</span><span class="rt-meta-val">עו"ד דן ברק [בא כוח התובע]</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">קבצים:</span><span class="rt-meta-val rt-file-list"><span class="rt-doc-link">כתב תביעה.pdf</span><span class="rt-file-sep">·</span><span class="rt-doc-link">נספח א – חוזה.pdf</span><span class="rt-file-sep">·</span><span class="rt-doc-link">תצהיר עדות.pdf</span></span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -670,14 +683,29 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
         <span class="badge b-s">התקבל</span><span class="receipt-date">03/05/2026</span><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
       <div class="r-body">
-        <div class="r-summary">
-          <div><div class="s-lbl">סוג הגשה</div><div class="s-val">הגשת מסמכים</div></div>
-          <div><div class="s-lbl">תיק מספר</div><div class="s-val">5521/25</div></div>
-          <div><div class="s-lbl">תאריך</div><div class="s-val">03/05/26 14:30</div></div>
-        </div>
-        <div class="docs-check"><div class="dc-title">מצב בדיקת מסמכים</div>
-          <div class="doc-row"><div class="doc-top"><div class="doc-name">בקשה לדחיית דיון.pdf</div><div class="pbar-wrap"><div class="pbar"><div class="pf pf-s" style="width:100%"></div></div><div class="dsl dsl-s">עבר ✓</div></div></div></div>
-          <div class="doc-row"><div class="doc-top"><div class="doc-name">נספח ב – אסמכתא.pdf</div><div class="pbar-wrap"><div class="pbar"><div class="pf pf-s" style="width:100%"></div></div><div class="dsl dsl-s">עבר ✓</div></div></div></div>
+        <div style="padding:16px 18px">
+          <div class="stage-track">
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">קליטה</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">שמירת פרטי אשראי</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">תקינות קבצים</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">בדיקת מסמכים</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">בדיקת מזכירות</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">תשלום</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">אישור</div></div>
+          </div>
+          <div class="rt-meta">
+            <div class="rt-meta-row"><span class="rt-meta-lbl">סוג ההגשה:</span><span class="rt-meta-val">הגשת מסמכים לתיק</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">זמן ביצוע הפעולה:</span><span class="rt-meta-val">14:30 03/05/2026</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">מועד ההגשה החוקי:</span><span class="rt-meta-val">14:43 03/05/2026</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">מגיש:</span><span class="rt-meta-val">עו"ד רונית שגיא [באת כוח התובעת]</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">קבצים:</span><span class="rt-meta-val rt-file-list"><span class="rt-doc-link">בקשה לדחיית דיון.pdf</span><span class="rt-file-sep">·</span><span class="rt-doc-link">נספח ב – אסמכתא.pdf</span></span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -689,13 +717,29 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
         <span class="badge b-s">התקבל</span><span class="receipt-date">04/05/2026</span><span class="chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
       <div class="r-body">
-        <div class="r-summary">
-          <div><div class="s-lbl">סוג הגשה</div><div class="s-val">תשלום באשראי</div></div>
-          <div><div class="s-lbl">סכום</div><div class="s-val">₪840</div></div>
-          <div><div class="s-lbl">תאריך</div><div class="s-val">04/05/26 09:05</div></div>
-        </div>
-        <div class="docs-check"><div class="dc-title">מצב בדיקת מסמכים</div>
-          <div class="doc-row"><div class="doc-top"><div class="doc-name">אישור תשלום.pdf</div><div class="pbar-wrap"><div class="pbar"><div class="pf pf-s" style="width:100%"></div></div><div class="dsl dsl-s">עבר ✓</div></div></div></div>
+        <div style="padding:16px 18px">
+          <div class="stage-track">
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">קליטה</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">שמירת פרטי אשראי</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">תקינות קבצים</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">בדיקת מסמכים</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">בדיקת מזכירות</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">תשלום</div></div>
+            <div class="stg-line done"></div>
+            <div class="stg"><div class="stg-dot s-done"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stg-lbl done">אישור</div></div>
+          </div>
+          <div class="rt-meta">
+            <div class="rt-meta-row"><span class="rt-meta-lbl">סוג ההגשה:</span><span class="rt-meta-val">הגשה לרשות</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">זמן ביצוע הפעולה:</span><span class="rt-meta-val">09:05 04/05/2026</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">מועד ההגשה החוקי:</span><span class="rt-meta-val">09:18 04/05/2026</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">מגיש:</span><span class="rt-meta-val">אלמוג פרץ [מגיש עצמאי]</span></div>
+            <div class="rt-meta-row"><span class="rt-meta-lbl">קבצים:</span><span class="rt-meta-val rt-file-list"><span class="rt-doc-link">אישור תשלום.pdf</span></span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -849,6 +893,21 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   </div>
 </div>
 
+<!-- Resubmit Reason Modal -->
+<div id="resubmit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="resubmit-modal" data-src="index.html">
+  <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">הגשה חוזרת</div>
+      <button onclick="closeResubmitModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:22px;line-height:1;padding:0">×</button>
+    </div>
+    <div class="field" style="margin-bottom:1.2rem">
+      <label>סיבת ההגשה החוזרת</label>
+      <textarea id="resubmit-reason" placeholder="נא לפרט את הסיבה להגשה החוזרת..." oninput="this.classList.remove('field-invalid')"></textarea>
+    </div>
+    <button onclick="confirmResubmit()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer">הגשה חוזרת</button>
+  </div>
+</div>
+
 <script>
 // ===== NAV =====
 function goToPaymentReturn() {
@@ -868,6 +927,22 @@ function showPage(id, btn) {
   document.getElementById('page-' + id).classList.add('active');
   btn.classList.add('active');
   if (id === 'history') initRealtime();
+}
+function resetSubmitForm() {
+  document.querySelectorAll('.action-tile').forEach(t=>t.classList.remove('selected'));
+  document.getElementById('docs-info').classList.remove('show');
+  document.getElementById('reshut-info').classList.remove('show');
+  ['docs','payment'].forEach(t => { const el = document.getElementById('fields-'+t); if(el) el.classList.remove('show'); });
+  document.getElementById('case-blocks-container').innerHTML = '';
+  document.getElementById('inp-email').value='';document.getElementById('inp-phone').value='';document.getElementById('inp-case').value='';
+  document.getElementById('chk-non-party').checked = false;
+  document.getElementById('chk-has-fee').checked = false;
+  caseCount=0; selAction=null; currentRef=null;
+}
+function startNewSubmission() {
+  showPage('submit', document.getElementById('nav-new-submission'));
+  goTo(1);
+  resetSubmitForm();
 }
 
 // ===== WIZARD =====
@@ -911,16 +986,22 @@ function goTo(n) {
     document.getElementById('pay-method-card').style.display = 'none';
   }
 
-  // update submit button label + step5 info text
+  // update submit button label + step5 title/description text
   const submitBtn = document.querySelector('#panel5 button[onclick="submitForm()"]');
-  const step4Info = document.getElementById('step4-info');
+  const step4Desc = document.getElementById('step4-desc');
+  const step5Title = document.getElementById('step5-title');
+  const ws5Label = document.getElementById('ws5-label');
   if (submitBtn) {
     if (hasFeeStep()) {
-      submitBtn.innerHTML = 'מעבר לתשלום <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-      if (step4Info) step4Info.textContent = 'לאחר לחיצה על מעבר לתשלום תועברי לאתר התשלומים הממשלתי להשלמת התשלום';
+      submitBtn.innerHTML = 'מעבר לתשלום <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>';
+      if (step4Desc) step4Desc.textContent = 'בלחיצה על ״מעבר לתשלום״ תתבצע הפניה לאתר התשלומים הממשלתי להשלמת התשלום';
+      if (step5Title) step5Title.textContent = 'תשלום וסיום';
+      if (ws5Label) ws5Label.textContent = 'תשלום וסיום';
     } else {
       submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> הגשה';
-      if (step4Info) step4Info.textContent = 'בדקי את פרטי ההגשה ולחצי על הגשה כדי לסיים';
+      if (step4Desc) step4Desc.textContent = 'יש לבדוק את פרטי ההגשה וללחוץ על הגשה כדי לסיים';
+      if (step5Title) step5Title.textContent = 'סיום';
+      if (ws5Label) ws5Label.textContent = 'סיום';
     }
   }
 
@@ -996,6 +1077,45 @@ function openFeeCalcModal() {
 }
 function closeFeeCalcModal() {
   document.getElementById('fee-calc-modal').style.display = 'none';
+}
+let resubmitDocIndex = null;
+function openResubmitModal(di) {
+  resubmitDocIndex = di;
+  document.getElementById('resubmit-reason').value = '';
+  document.getElementById('resubmit-modal').style.display = 'flex';
+}
+function closeResubmitModal() {
+  document.getElementById('resubmit-modal').style.display = 'none';
+  resubmitDocIndex = null;
+}
+function confirmResubmit() {
+  const reason = document.getElementById('resubmit-reason').value.trim();
+  if (!reason) {
+    document.getElementById('resubmit-reason').classList.add('field-invalid');
+    return;
+  }
+  const di = resubmitDocIndex;
+  document.getElementById('resubmit-modal').style.display = 'none';
+  resubmitDocIndex = null;
+  if (di === null || di === undefined) return;
+
+  const doc = rtDocState[di];
+  doc.curStage = -1; doc.done = false; doc.failed = false; delete doc.failAt;
+  buildStageTrack(di);
+  const badge = document.getElementById('rtb-'+di);
+  badge.className = 'rt-badge rtb-wait'; badge.textContent = 'בתהליך';
+  document.getElementById('rterr-'+di).classList.remove('show');
+  const card = document.getElementById('rtc-'+di);
+  card.style.borderColor = '';
+  card.dataset.rtStatus = 'wait';
+  if (!rtRunning) { rtRunning = true; rtTimer = setInterval(doTick, 1000); }
+
+  showSuccessToast('ההגשה החוזרת נשלחה בהצלחה!', doc.ref);
+  setTimeout(() => document.getElementById('success-toast').classList.remove('show'), 5000);
+}
+function showSuccessToast(message, ref) {
+  document.querySelector('#success-toast .toast-text').innerHTML = `${message} מספר אסמכתא: <span class="toast-ref" id="toast-ref">${ref}</span> — יש לשמור את מספר האסמכתא.`;
+  document.getElementById('success-toast').classList.add('show');
 }
 function calcFeeFromModal() {
   const proc = document.getElementById('fc-proc').value;
@@ -1108,8 +1228,7 @@ function submitForm() {
     return;
   }
 
-  document.getElementById('toast-ref').textContent = ref;
-  document.getElementById('success-toast').classList.add('show');
+  showSuccessToast('ההגשה בוצעה בהצלחה!', ref);
   setTimeout(() => {
     document.getElementById('success-toast').classList.remove('show');
     const historyBtn = document.querySelector('.nav-btn:not(.active)');
@@ -1118,15 +1237,7 @@ function submitForm() {
   subCount++;
   document.getElementById('receipts-count').textContent = subCount;
   goTo(1);
-  document.querySelectorAll('.action-tile').forEach(t=>t.classList.remove('selected'));
-  document.getElementById('docs-info').classList.remove('show');
-  document.getElementById('reshut-info').classList.remove('show');
-  ['docs','payment'].forEach(t => { const el = document.getElementById('fields-'+t); if(el) el.classList.remove('show'); });
-  document.getElementById('case-blocks-container').innerHTML = '';
-  document.getElementById('inp-email').value='';document.getElementById('inp-phone').value='';document.getElementById('inp-case').value='';
-  document.getElementById('chk-non-party').checked = false;
-  document.getElementById('chk-has-fee').checked = false;
-  caseCount=0; selAction=null; currentRef=null;
+  resetSubmitForm();
 }
 
 // ===== RECEIPTS =====
@@ -1138,13 +1249,13 @@ function toggleR(row) {
 }
 
 // ===== REAL-TIME =====
-const STAGES = ['קליטה','תקינות קבצים','בדיקת מסמכים','בדיקת מזכירות','תשלום','אישור'];
+const STAGES = ['קליטה','שמירת פרטי אשראי','תקינות קבצים','בדיקת מסמכים','בדיקת מזכירות','תשלום','אישור'];
 const DOCS = [
   {name:'אישור תשלום.pdf', ref:'1533230', scenario:'success', delay:0, type:'הגשות לרשות',
     submissionType:'הגשת מסמך לתיק', caseName:'מיכל אברהמי נ\' עיריית תל אביב', caseNumber:'22841-04-26',
     submitterName:'יוני דויד', submitterRole:'בא כוח התובע',
     files:['אישור תשלום.pdf','קבלת תשלום מקורית.pdf']},
-  {name:'חשבונית נספח ב.pdf', ref:'1533231', scenario:'error', failAt:1, delay:1, type:'הגשת מסמכים לתיק',
+  {name:'חשבונית נספח ב.pdf', ref:'1533231', scenario:'error', failAt:2, delay:1, type:'הגשת מסמכים לתיק',
     submissionType:'הגשת מסמכים לתיק', caseName:'עיריית חיפה נ\' חברת בינוי בע"מ', caseNumber:'41287-09-25',
     submitterName:'עו"ד מיכל לוי', submitterRole:'באת כוח הנתבעת',
     submittedAt: new Date(Date.now() - 24*60*60*1000),
@@ -1161,7 +1272,7 @@ const DOCS = [
         <li>מספרי הטלפון, הפקס וכתובת הדואר האלקטרוני שלו.</li>
       </ul>`,
     errBtn:'להגשה חוזרת'},
-  {name:'כתב תביעה ראשי.pdf', ref:'1533232', scenario:'error', failAt:4, delay:2, type:'פתיחת תיק',
+  {name:'כתב תביעה ראשי.pdf', ref:'1533232', scenario:'error', failAt:5, delay:2, type:'פתיחת תיק',
     submissionType:'בקשה לפתיחת תיק', filesNote:'הוגש מסמך עיקרי ו-2 נספחים',
     submitterName:'עו"ד דן ברק', submitterRole:'בא כוח התובע',
     submittedAt: new Date(Date.now() - 10*24*60*60*1000),
@@ -1479,7 +1590,8 @@ function doTick() {
       else { errTitleEl.style.display='none'; }
       errBodyEl.innerHTML = doc.errHtml || `<div class="rt-err-reason">${doc.errReason}</div><div class="rt-err-action">${doc.errAction}</div>`;
       if (doc.errBtn) {
-        document.getElementById('rterrbtn-'+di).innerHTML = `<button class="btn btn-primary" style="white-space:nowrap;font-size:13px;padding:8px 14px" onclick="alert('פעולה זו תמומש בהמשך')">${doc.errBtn}</button>`;
+        const errAction = doc.errBtn === 'להגשה חוזרת' ? `openResubmitModal(${di})` : `alert('פעולה זו תמומש בהמשך')`;
+        document.getElementById('rterrbtn-'+di).innerHTML = `<button class="btn btn-primary" style="white-space:nowrap;font-size:13px;padding:8px 14px" onclick="${errAction}">${doc.errBtn}</button>`;
       }
       stagesDone += next;
       return;
@@ -1538,7 +1650,7 @@ function markLine(di, si, state) {
   line.className = 'stg-line '+(state==='done'?'done':'running');
 }
 // Init Lucide icons
-document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); goTo(1); });
 </script>
 </body>
 </html>
