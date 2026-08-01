@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>הוספה ועדכון הזמנת תרגום לדיון · נט המשפט</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;500;600;700&family=Assistant:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: '#ffffff',
+          'bg-muted': '#f8fafc',
+          border: '#e5e7eb',
+          text: '#111827',
+          'text-muted': '#4b5563',
+          'text-subtle': '#6b7280',
+          primary: '#1b5bbe',
+          'primary-hover': '#174ea6',
+          'primary-soft': '#eaf2ff',
+          field: '#cbd5e1',
+        },
+        fontFamily: {
+          base: ['"Noto Sans Hebrew"', '"Assistant"', 'Arial', 'sans-serif'],
+        },
+        borderRadius: {
+          sm: '8px',
+          md: '12px',
+          lg: '16px',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { font-family: "Noto Sans Hebrew", "Assistant", Arial, sans-serif; }
+  .field-label { font-size: 13px; font-weight: 500; color: #4b5563; }
+  input[type="text"], input[type="time"], select {
+    height: 42px;
+  }
+  input:focus, select:focus, textarea:focus, button:focus-visible {
+    outline: 2px solid #1b5bbe;
+    outline-offset: 1px;
+  }
+  input[type="radio"] {
+    accent-color: #1b5bbe;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+</style>
+</head>
+<body class="bg-bg-muted min-h-screen flex items-center justify-center p-4 sm:p-8">
+
+  <main
+    role="dialog"
+    aria-labelledby="dialog-title"
+    class="w-full max-w-[860px] bg-bg border border-border rounded-lg shadow-xl overflow-hidden"
+  >
+    <!-- Title bar -->
+    <header class="flex items-center justify-between border-b border-border bg-primary-soft px-4 py-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <h1 id="dialog-title" class="text-[15px] sm:text-base font-semibold text-text truncate">
+          הוספה ועדכון הזמנת תרגום לדיון
+        </h1>
+      </div>
+
+      <div class="flex items-center gap-1 shrink-0">
+        <button type="button" aria-label="מזער חלון" class="w-8 h-8 rounded-sm flex items-center justify-center text-text-subtle hover:bg-bg-muted cursor-pointer transition-colors duration-150">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M1 6H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" aria-label="שחזר / הגדל חלון" class="w-8 h-8 rounded-sm flex items-center justify-center text-text-subtle hover:bg-bg-muted cursor-pointer transition-colors duration-150">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+        <button type="button" aria-label="סגור חלון" class="w-8 h-8 rounded-sm flex items-center justify-center text-text-subtle hover:bg-primary-soft hover:text-primary-hover cursor-pointer transition-colors duration-150">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M1 1L11 11M11 1L1 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable content -->
+    <div class="max-h-[80vh] overflow-y-auto">
+
+      <!-- Top selectors -->
+      <section class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+        <div class="flex flex-col gap-1.5">
+          <label for="company" class="field-label">חברת תרגום:</label>
+          <select id="company" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text cursor-pointer">
+            <option>אולטקסט-ממונה תרגומים-מחוז מרכז</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="order-type" class="field-label">סוג הזמנה:</label>
+          <select id="order-type" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text cursor-pointer">
+            <option>רגיל</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1.5 sm:col-span-1">
+          <label for="lang" class="field-label">שפת תרגום:</label>
+          <select id="lang" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text cursor-pointer">
+            <option>ערבית</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="border-t border-border"></div>
+
+      <!-- Interpreter section -->
+      <section class="px-6 py-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-[15px] font-semibold text-text">מתורגמן</h2>
+          <div class="flex items-center gap-2">
+            <button type="button" class="rounded-md border border-field bg-bg px-4 py-2 text-[13px] font-medium text-text-muted hover:bg-bg-muted cursor-pointer transition-colors duration-150">
+              נקה
+            </button>
+            <button type="button" class="rounded-md border border-field bg-bg px-4 py-2 text-[13px] font-medium text-text-muted hover:bg-bg-muted cursor-pointer transition-colors duration-150">
+              בחירה ממאגר
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+          <div class="flex flex-col gap-1.5">
+            <label for="id-num" class="field-label">זיהוי:</label>
+            <div class="flex gap-2">
+              <select aria-label="סוג זיהוי" class="w-20 rounded-md border border-field bg-bg px-2 text-[14px] text-text cursor-pointer">
+                <option>ת"ז</option>
+              </select>
+              <input id="id-num" type="text" class="flex-1 min-w-0 rounded-md border border-field bg-bg px-3 text-[14px] text-text" />
+            </div>
+          </div>
+          <div class="hidden sm:block" aria-hidden="true"></div>
+          <div class="flex flex-col gap-1.5">
+            <label for="first-name" class="field-label">שם פרטי:</label>
+            <input id="first-name" type="text" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text" />
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="family-name" class="field-label">שם משפחה:</label>
+            <input id="family-name" type="text" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text" />
+          </div>
+        </div>
+      </section>
+
+      <div class="border-t border-border"></div>
+
+      <!-- Time section -->
+      <section class="px-6 py-5 grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4">
+        <div class="flex flex-col gap-1.5">
+          <label for="start-time" class="field-label">שעת התחלת תרגום:</label>
+          <input id="start-time" type="time" value="08:30" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text" />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="end-time" class="field-label">שעת סיום תרגום:</label>
+          <input id="end-time" type="time" class="w-full rounded-md border border-field bg-bg px-3 text-[14px] text-text" />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label for="total-hours" class="field-label">סה"כ שעות תרגום:</label>
+          <input id="total-hours" type="text" value="0.00" disabled class="w-full rounded-md border border-border bg-bg-muted px-3 text-[14px] text-text-subtle cursor-not-allowed" />
+        </div>
+      </section>
+
+      <div class="border-t border-border"></div>
+
+      <!-- Notes -->
+      <section class="px-6 py-5">
+        <label for="notes" class="field-label block mb-1.5">הערות</label>
+        <textarea
+          id="notes"
+          rows="4"
+          class="w-full min-h-[96px] rounded-md border border-field bg-bg px-3 py-2.5 text-[14px] leading-[1.6] text-text resize-y"
+          placeholder="הוספת הערה..."
+        ></textarea>
+      </section>
+
+      <div class="border-t border-border"></div>
+
+      <!-- Status section -->
+      <section class="px-6 py-5">
+        <h2 class="text-[15px] font-semibold text-text mb-4">מצב הזמנת תרגום</h2>
+
+        <fieldset class="mb-4">
+          <legend class="sr-only">מצב הזמנת תרגום</legend>
+          <div class="flex items-center gap-6">
+            <label class="flex items-center gap-2 cursor-pointer text-[14px] text-text">
+              <input type="radio" name="status" checked class="w-4 h-4 cursor-pointer" />
+              פעילה
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-[14px] text-text-muted">
+              <input type="radio" name="status" class="w-4 h-4 cursor-pointer" />
+              מבוטלת
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="rounded-md bg-bg-muted border border-border px-4 py-3 flex flex-col gap-2 text-[13px]">
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-text-subtle">עדכון אחרון של מצב תרגום:</span>
+            <span class="text-text-muted font-medium">סימונה גנץ · 13:47:20 07/07/2026</span>
+          </div>
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-text-subtle">פתיחה:</span>
+            <span class="text-text-muted font-medium">סימונה גנץ · 13:47:20 07/07/2026</span>
+          </div>
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-text-subtle">עדכון:</span>
+            <span class="text-text-muted font-medium">סימונה גנץ · 13:47:20 07/07/2026</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer actions -->
+    <footer class="border-t border-border bg-bg-muted px-6 py-4 flex items-center justify-between gap-3">
+      <button
+        type="button"
+        class="inline-flex items-center gap-1.5 rounded-md border border-field bg-bg px-4 py-2.5 text-[13px] font-medium text-text-muted hover:bg-primary-soft hover:text-primary-hover hover:border-primary cursor-pointer transition-colors duration-150"
+      >
+        הפקת מסמך
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          class="rounded-md border border-field bg-bg px-5 py-2.5 text-[14px] font-medium text-text-muted hover:bg-bg-muted cursor-pointer transition-colors duration-150"
+        >
+          יציאה
+        </button>
+        <button
+          type="button"
+          class="rounded-md bg-primary px-5 py-2.5 text-[14px] font-semibold text-white hover:bg-primary-hover cursor-pointer transition-colors duration-150"
+        >
+          אישור
+        </button>
+      </div>
+    </footer>
+  </main>
+
+</body>
+</html>
