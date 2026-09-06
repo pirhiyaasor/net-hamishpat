@@ -78,7 +78,8 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     padding-top .3s ease;
 }
 .case-field-wrap.show{
-  max-height:220px;
+  max-height:640px;
+  overflow:visible;
   opacity:1;
   transform:translateY(0);
   margin-top:16px;
@@ -110,6 +111,20 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .field input.field-invalid,.field textarea.field-invalid{border-color:var(--red)}
 .field input.field-invalid:focus,.field textarea.field-invalid:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,30,30,.1)}
 
+.inline-info{width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-inline-end:5px;color:var(--blue)}
+
+/* case combobox */
+.case-combo{position:relative}
+.case-combo>input{padding-inline-start:34px}
+.case-combo-chev{position:absolute;left:12px;top:19px;width:14px;height:14px;color:var(--gray-400);pointer-events:none;transition:transform .2s}
+.case-combo.open .case-combo-chev{transform:rotate(180deg)}
+.case-combo-menu{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:1px solid var(--gray-200);border-radius:var(--radius-sm);box-shadow:0 8px 24px rgba(0,0,0,.12);max-height:244px;overflow-y:auto;z-index:30;padding:4px}
+.case-combo.open .case-combo-menu{display:block}
+.case-combo-opt{display:block;width:100%;text-align:right;padding:9px 10px;border-radius:6px;border:none;background:none;font-size:13px;color:var(--gray-700);cursor:pointer;font-family:inherit;line-height:1.55}
+.case-combo-opt:hover,.case-combo-opt.hl{background:var(--blue-light);color:var(--blue)}
+.case-combo-opt .cc-num{font-weight:700;margin-inline-end:6px}
+.case-combo-empty{padding:10px;font-size:12px;color:var(--gray-400);text-align:center}
+
 /* multi-case */
 .case-block{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
 .cb-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--gray-50);border-bottom:1px solid var(--gray-100)}
@@ -122,6 +137,8 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .upload-zone{border:2px dashed var(--gray-300);border-radius:var(--radius);padding:1.4rem;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px}
 .upload-zone:hover{border-color:var(--blue);background:var(--blue-light)}
 .upload-zone.sm{padding:.9rem 1rem}
+.upload-zone.invalid{border-color:var(--red);background:rgba(200,30,30,.04)}
+.primary-doc-error{display:none;margin-top:6px;font-size:12px;color:var(--red)}
 .upload-icon{display:flex;justify-content:center;color:var(--gray-400);margin-bottom:5px}
 .upload-icon svg{width:30px;height:30px;stroke:var(--gray-400);stroke-width:1.5}
 .upload-label{font-size:13px;font-weight:600;color:var(--gray-700)}
@@ -376,17 +393,19 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       </div>
       <div class="case-field-wrap" id="case-field-wrap">
         <div class="field" style="margin-bottom:0">
-          <label>מספר תיק</label>
-          <input type="text" id="inp-case" placeholder="לדוגמה: 7234/26" oninput="validateCaseNum(this)">
+          <label for="inp-case">מספר תיק</label>
+          <div class="case-combo" id="case-combo">
+            <input type="text" id="inp-case" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="case-combo-menu" aria-autocomplete="list"
+              placeholder="הקלד/י מספר תיק או שם צד"
+              oninput="onCaseInput()" onfocus="openCaseMenu()" onkeydown="onCaseKeydown(event)">
+            <svg class="case-combo-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <div class="case-combo-menu" id="case-combo-menu" role="listbox"></div>
+          </div>
         </div>
         <div id="case-num-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red)">
           אין לך הרשאות להגשה בתיק הזה, <a href="#" onclick="event.preventDefault()" style="color:var(--red);font-weight:700;text-decoration:underline">להגשה חריגה ›</a>
         </div>
         <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
-          <label class="case-checkbox-opt">
-            <input type="checkbox" id="chk-non-party">
-            <span>הגשה לתיק קיים ע״י מי שאינו גורם בתיק</span>
-          </label>
           <label class="case-checkbox-opt">
             <input type="checkbox" id="chk-has-fee">
             <span>ההגשה לתיק כרוכה בתשלום אגרה</span>
@@ -409,6 +428,9 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
   <!-- Step 2 -->
   <div class="step-panel" id="panel2" data-area="step2-panel" data-src="index.html">
+    <div id="resubmit-disclaimer" style="display:none;margin-bottom:12px;padding:12px 16px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);line-height:1.7">
+      יש לצרף את המסמכים מחדש. האגרה תחושב מחדש בהתאם למסמכים שיצורפו ולנתוני הבקשה, ללא צורך בהזנה חוזרת של פרטי האשראי.
+    </div>
     <div class="card" style="padding:1rem 1.5rem .8rem">
       <div style="display:flex;align-items:flex-start;justify-content:space-between">
         <div>
@@ -421,7 +443,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     <div id="case-blocks-container" data-area="case-blocks-container" data-src="index.html"></div>
     <div class="form-footer" style="margin-top:1rem">
       <button class="btn btn-ghost" onclick="goTo(1)">→ חזור</button>
-      <button class="btn btn-primary" id="step2-next" onclick="goTo(3)">המשך ←</button>
+      <button class="btn btn-primary" id="step2-next" onclick="continueFromDocs()">המשך ←</button>
     </div>
   </div>
 
@@ -431,15 +453,48 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:10px">אופן ביצוע התשלום:</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <label class="pay-method-opt">
-          <input type="radio" name="pay-method" value="credit">
+          <input type="radio" name="pay-method" value="credit" onchange="onPayMethodChange()">
           <span>אשראי</span>
           <span class="info-tip" tabindex="0">
             <i data-lucide="info"></i>
             <span class="info-tip-bubble">לאחר סיום, תעבור למערכת "ממשל זמין" הממשלתית להשארת פרטי אשראי. חיוב האגרה מתבצע בפועל רק לאחר אישור ההגשה.</span>
           </span>
         </label>
+        <div id="credit-info" style="display:none;margin:2px 24px 4px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm)">
+          <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px">תהליך התשלום באשראי - איך זה עובד?</div>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
+            בסיום התהליך תועברו לאתר התשלומים הממשלתי לתשלום האגרה שחושבה עבור הבקשה.
+          </p>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
+            <b>חשוב לדעת:</b> כרטיס האשראי לא יחויב בשלב זה. הבקשה והתשלום יעברו לבדיקה, והחיוב יתבצע רק אם הבקשה תאושר.
+          </p>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
+            אם הבקשה תידחה, לא תחויבו. סיבת הדחייה תוצג לכם.
+          </p>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 4px">
+            <b>אם סכום האגרה ישתנה לאחר הבדיקה –</b>
+          </p>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
+            אם יתברר שהאגרה נמוכה יותר – תחויבו בסכום הנמוך.
+          </p>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 10px">
+            אם יתברר שיש להוסיף עד 100 ₪ לאגרה, בחרו כיצד לפעול:
+          </p>
+          <label class="case-checkbox-opt" style="align-items:flex-start;margin-bottom:10px">
+            <input type="checkbox" id="chk-credit-delta-up" onchange="creditDeltaPick(this)">
+            <span style="font-size:12.5px;color:var(--gray-800)"><b>כן, אני מאשר/ת חיוב בסכום המעודכן</b><br>הבקשה תאושר, תחויבו בסכום האגרה המעודכן והבקשה תתויק בתיק.</span>
+          </label>
+          <label class="case-checkbox-opt" style="align-items:flex-start">
+            <input type="checkbox" id="chk-credit-delta-up-no" onchange="creditDeltaPick(this)">
+            <span style="font-size:12.5px;color:var(--gray-800)"><b>לא, אני לא מאשר/ת חיוב נוסף</b><br>אם יהיה צורך להוסיף סכום כלשהו לאגרה, הבקשה תידחה ולא תחויבו.</span>
+          </label>
+          <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:10px 0 0">
+            אם יהיה צורך להוסיף יותר מ־100 ₪, הבקשה תידחה בכל מקרה ולא תחויבו.
+          </p>
+          <div id="credit-delta-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red)">יש לבחור אחת מהאפשרויות כדי להמשיך</div>
+        </div>
         <label class="pay-method-opt">
-          <input type="radio" name="pay-method" value="debit">
+          <input type="radio" name="pay-method" value="debit" onchange="onPayMethodChange()">
           <span>הרשאה לחיוב חשבון בנק</span>
           <span class="info-tip" tabindex="0">
             <i data-lucide="info"></i>
@@ -447,11 +502,18 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
           </span>
         </label>
         <label class="pay-method-opt">
-          <input type="radio" name="pay-method" value="voucher">
+          <input type="radio" name="pay-method" value="voucher" onchange="onPayMethodChange()">
           <span>שובר תשלום</span>
         </label>
+        <div class="field" id="voucher-field" style="display:none;margin:0 24px 4px">
+          <label>מספר השובר</label>
+          <input type="text" id="inp-voucher" inputmode="numeric" maxlength="8" placeholder="8 ספרות" oninput="validateVoucher(this)">
+          <div id="voucher-error" style="display:none;margin-top:6px;font-size:12px;color:var(--red)">
+            מספר השובר חייב להיות בן 8 ספרות ואינו יכול להתחיל בספרה 1 או 9
+          </div>
+        </div>
         <label class="pay-method-opt">
-          <input type="radio" name="pay-method" value="exempt">
+          <input type="radio" name="pay-method" value="exempt" onchange="onPayMethodChange()">
           <span>פטור מאגרה</span>
         </label>
       </div>
@@ -460,7 +522,11 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div class="card-title" style="margin-bottom:4px">פרטי קשר לעדכונים</div>
       <div class="card-desc" style="margin-bottom:1rem">נשלח לך עדכונים בכל שינוי בסטטוס הבדיקה</div>
       <div class="two-col">
-        <div class="field"><label>כתובת מייל</label><input type="email" id="inp-email" placeholder="name@mail.co.il"></div>
+        <div class="field">
+          <label>כתובת מייל <span style="color:var(--red)">*</span></label>
+          <input type="email" id="inp-email" placeholder="name@mail.co.il" oninput="clearEmailError()">
+          <div id="email-error" style="display:none;margin-top:6px;font-size:12px;color:var(--red)">יש להזין כתובת מייל</div>
+        </div>
         <div class="field"><label>מספר טלפון</label><input type="tel" id="inp-phone" placeholder="050-0000000"></div>
       </div>
     </div>
@@ -473,18 +539,102 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   <!-- Step 4 -->
   <div class="step-panel" id="panel4" data-area="step4-panel" data-src="index.html">
     <div class="card" id="fee-card" style="display:none;background:var(--blue-light);border-color:var(--blue-mid)">
-      <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
         <div>
           <div class="card-title" style="color:var(--blue)">אגרת בית משפט</div>
           <div class="card-desc" id="fee-desc" style="margin-top:3px">האגרה נקבעת ע״פ בית המשפט, ככל ויימצאו פערים בין המסמכים והפרמטרים שהוזנו האגרה תיגבה לפי בית המשפט.</div>
-          <button type="button" onclick="openFeeCalcModal()" style="margin-top:8px;padding:6px 14px;background:white;color:var(--blue);border:1.5px solid var(--blue-mid);border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:12px;font-weight:700;cursor:pointer">מחשבון אגרה</button>
         </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <div style="font-size:24px;font-weight:700;color:var(--blue)" id="fee-amount"></div>
-          <button type="button" onclick="openFeeCalcModal()" title="עריכת סכום האגרה" style="background:none;border:none;cursor:pointer;color:var(--blue);padding:2px;display:flex;align-items:center;flex-shrink:0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-          </button>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <label for="fee-amount" style="font-size:12px;font-weight:600;color:var(--blue)">סכום האגרה (₪)</label>
+          <div style="display:flex;align-items:center;gap:4px">
+            <span style="font-size:24px;font-weight:700;color:var(--blue)">₪</span>
+            <input type="text" id="fee-amount" inputmode="decimal" dir="ltr" value="0.00"
+              onfocus="this.select()" oninput="onFeeAmountInput(this)" onblur="formatFeeAmount(this)"
+              style="width:108px;font-size:24px;font-weight:700;color:var(--blue);background:white;border:1.5px solid var(--blue-mid);border-radius:var(--radius-sm);padding:3px 8px;text-align:left;font-family:'Noto Sans Hebrew',sans-serif">
+          </div>
+          <span style="font-size:11px;color:var(--blue);opacity:.8">ניתן ללחוץ על הסכום ולהקליד סכום אחר</span>
         </div>
+      </div>
+    </div>
+    <div class="card" id="fee-calc-card" style="display:none">
+      <div class="card-title" style="margin-bottom:4px">מחשבון אגרה</div>
+      <div class="card-desc" style="margin-bottom:1rem">מילוי הפרמטרים יעדכן את סכום האגרה שלמעלה</div>
+      <div class="two-col">
+        <div class="field">
+          <label>עיר</label>
+          <input type="text" id="fc-city" placeholder="הזן עיר">
+        </div>
+        <div class="field">
+          <label>בית משפט</label>
+          <select id="fc-court">
+            <option value="">בחר בית משפט...</option>
+            <option value="shalom">בית משפט השלום</option>
+            <option value="mechozi">בית המשפט המחוזי</option>
+            <option value="elyon">בית המשפט העליון</option>
+            <option value="labor">בית הדין לעבודה</option>
+            <option value="family">בית המשפט לענייני משפחה</option>
+            <option value="small_claims">בית משפט לתביעות קטנות</option>
+          </select>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="field">
+          <label>הליך</label>
+          <select id="fc-proc" onchange="const c=document.getElementById('fc-claim');c.disabled=this.value!=='small_claims';c.style.opacity=this.value==='small_claims'?'1':'.45';c.style.cursor=this.value==='small_claims'?'text':'not-allowed';if(this.value!=='small_claims')c.value='';">
+            <option value="">בחר הליך...</option>
+            <option value="civil">תביעה אזרחית</option>
+            <option value="small_claims">תביעות קטנות</option>
+            <option value="family">ענייני משפחה</option>
+            <option value="labor">דיני עבודה</option>
+            <option value="admin">עתירה מנהלית</option>
+            <option value="commercial">סכסוך מסחרי</option>
+            <option value="bankruptcy">פשיטת רגל</option>
+            <option value="land">מקרקעין</option>
+            <option value="criminal">פלילי</option>
+            <option value="appeal">ערעור</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>סוג תיק</label>
+          <select id="fc-case-type">
+            <option value="">בחר סוג תיק...</option>
+            <option value="civil">אזרחי</option>
+            <option value="criminal">פלילי</option>
+            <option value="admin">מנהלי</option>
+            <option value="family">משפחה</option>
+            <option value="appeal">ערעור</option>
+            <option value="interim">ביניים</option>
+          </select>
+        </div>
+      </div>
+      <div class="two-col" style="margin-bottom:1.2rem">
+        <div class="field" style="margin-bottom:0">
+          <label>סוג עניין</label>
+          <select id="fc-matter-type">
+            <option value="">בחר סוג עניין...</option>
+            <option value="financial">כספי</option>
+            <option value="realestate">מקרקעין</option>
+            <option value="contracts">חוזים</option>
+            <option value="torts">נזיקין</option>
+            <option value="family">משפחה</option>
+            <option value="labor">עבודה</option>
+            <option value="criminal">פלילי</option>
+            <option value="admin">מנהלי</option>
+            <option value="other">אחר</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>סכום תביעה</label>
+          <input type="text" id="fc-claim" placeholder="₪" disabled style="opacity:.45;cursor:not-allowed">
+        </div>
+      </div>
+      <button onclick="calcFeeFromModal()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer">לחישוב אגרה</button>
+      <div id="fc-result" style="display:none;margin-top:1rem;padding:12px 16px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm);align-items:center;justify-content:space-between">
+        <span style="font-size:13px;font-weight:600;color:var(--blue)">סכום האגרה שחושב</span>
+        <span id="fc-result-amount" style="font-size:20px;font-weight:700;color:var(--blue)"></span>
+      </div>
+      <div style="text-align:center;margin-top:1rem">
+        <a href="#" onclick="event.preventDefault()" style="color:var(--blue);font-weight:600;font-size:13px;cursor:pointer">לכל המחשבונים ›</a>
       </div>
     </div>
     <div class="form-footer">
@@ -495,13 +645,31 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
   <!-- Step 5 -->
   <div class="step-panel" id="panel5" data-area="step5-panel" data-src="index.html">
-    <div class="card">
+    <div class="card" id="panel5-review">
       <div class="card-title" style="margin-bottom:4px" id="step5-title">תשלום וסיום</div>
       <div class="card-desc" id="step4-desc" style="margin-bottom:1rem">בדקי את פרטי ההגשה ולחצי על הגשה כדי לסיים</div>
     </div>
+    <div class="card" id="panel5-payment" style="display:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
+        <div style="width:36px;height:36px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#057A55" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="font-size:16px;font-weight:700;color:var(--gray-900)">ההגשה לפתיחת תיק התקבלה בהצלחה!</div>
+      </div>
+      <p style="font-size:14px;color:var(--gray-600);margin-bottom:1.2rem;line-height:1.7">כעת יתבצע מעבר לעמוד התשלום בשרת התשלומים הממשלתי.<br><br>בעמוד התשלום יש להשאיר את פרטי האשראי. חשבונך יחוייב בסכום האגרה לפי חוק מיד לאחר אישור בקשתך ע"י בית המשפט.<br>במידה ובקשתך תדחה, חשבונך לא יחוייב.<br>במידה ואתה זכאי לפטור מאגרה, יש להגיש את בקשת הפטור יחד עם מסמכי ההגשה. חשבונך יחוייב / לא יחוייב בהתאם להחלטה שיפוטית לעניין הפטור.</p>
+      <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:8px;padding:12px 16px;margin-bottom:1.2rem">
+        <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:4px">מספר אסמכתא להגשה</div>
+        <div style="font-size:20px;font-weight:800;color:var(--blue)" id="panel5-ref"></div>
+      </div>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:1.4rem;line-height:1.6">מספר האסמכתא הוא מספר המעקב שלך אחרי ההגשה. לאחר ביצוע התשלום תועבר לעמוד סטטוס ההגשות לצפיה בהתקדמות הטיפול בהגשה.</p>
+      <button onclick="submitForm()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        מעבר לאתר התשלומים
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </button>
+    </div>
     <div class="form-footer">
       <button class="btn btn-ghost" onclick="backFromFinal()">→ חזור</button>
-      <button class="btn btn-primary" onclick="submitForm()" style="display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> הגשה</button>
+      <button class="btn btn-primary" id="panel5-submit" onclick="submitForm()" style="display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> הגשה</button>
     </div>
   </div>
 
@@ -571,11 +739,11 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
       <div class="rt-filter-right">
         <div class="rt-date-filter" id="rt-date-filter">
           <button class="rt-date-btn" onclick="toggleRTDateMenu()">
-            <span id="rt-date-label">הוגש היום</span>
+            <span id="rt-date-label">ללא</span>
             <svg class="rt-date-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="rt-date-menu" id="rt-date-menu">
-            <button class="rt-date-opt active" onclick="selectRTDate('today','הוגש היום',this)">הוגש היום</button>
+            <button class="rt-date-opt" onclick="selectRTDate('today','הוגש היום',this)">הוגש היום</button>
             <button class="rt-date-opt" onclick="selectRTDate('yesterday','הוגש אתמול',this)">הוגש אתמול</button>
             <button class="rt-date-opt" onclick="selectRTDate('week','הוגש השבוע',this)">הוגש השבוע</button>
             <button class="rt-date-opt" onclick="selectRTDate('month','הוגש החודש',this)">הוגש החודש</button>
@@ -589,7 +757,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
             </div>
             <div class="rt-date-sep"></div>
             <button class="rt-date-opt" onclick="selectRTDate('all','הצג הכל',this)">הצג הכל</button>
-            <button class="rt-date-opt" onclick="selectRTDate('none','ללא',this)">ללא</button>
+            <button class="rt-date-opt active" onclick="selectRTDate('none','ללא',this)">ללא</button>
           </div>
         </div>
         <div class="rt-search-wrap">
@@ -748,82 +916,6 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 </div>
 </div>
 
-<!-- Fee Calculation Modal -->
-<div id="fee-calc-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="fee-calc-modal" data-src="index.html">
-  <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">מחשבון אגרה</div>
-      <button onclick="closeFeeCalcModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:22px;line-height:1;padding:0">×</button>
-    </div>
-    <div class="field">
-      <label>עיר</label>
-      <input type="text" id="fc-city" placeholder="הזן עיר">
-    </div>
-    <div class="field">
-      <label>בית משפט</label>
-      <select id="fc-court">
-        <option value="">בחר בית משפט...</option>
-        <option value="shalom">בית משפט השלום</option>
-        <option value="mechozi">בית המשפט המחוזי</option>
-        <option value="elyon">בית המשפט העליון</option>
-        <option value="labor">בית הדין לעבודה</option>
-        <option value="family">בית המשפט לענייני משפחה</option>
-        <option value="small_claims">בית משפט לתביעות קטנות</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>הליך</label>
-      <select id="fc-proc" onchange="const c=document.getElementById('fc-claim');c.disabled=this.value!=='small_claims';c.style.opacity=this.value==='small_claims'?'1':'.45';c.style.cursor=this.value==='small_claims'?'text':'not-allowed';if(this.value!=='small_claims')c.value='';">
-        <option value="">בחר הליך...</option>
-        <option value="civil">תביעה אזרחית</option>
-        <option value="small_claims">תביעות קטנות</option>
-        <option value="family">ענייני משפחה</option>
-        <option value="labor">דיני עבודה</option>
-        <option value="admin">עתירה מנהלית</option>
-        <option value="commercial">סכסוך מסחרי</option>
-        <option value="bankruptcy">פשיטת רגל</option>
-        <option value="land">מקרקעין</option>
-        <option value="criminal">פלילי</option>
-        <option value="appeal">ערעור</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>סוג תיק</label>
-      <select id="fc-case-type">
-        <option value="">בחר סוג תיק...</option>
-        <option value="civil">אזרחי</option>
-        <option value="criminal">פלילי</option>
-        <option value="admin">מנהלי</option>
-        <option value="family">משפחה</option>
-        <option value="appeal">ערעור</option>
-        <option value="interim">ביניים</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>סוג עניין</label>
-      <select id="fc-matter-type">
-        <option value="">בחר סוג עניין...</option>
-        <option value="financial">כספי</option>
-        <option value="realestate">מקרקעין</option>
-        <option value="contracts">חוזים</option>
-        <option value="torts">נזיקין</option>
-        <option value="family">משפחה</option>
-        <option value="labor">עבודה</option>
-        <option value="criminal">פלילי</option>
-        <option value="admin">מנהלי</option>
-        <option value="other">אחר</option>
-      </select>
-    </div>
-    <div class="field" style="margin-bottom:1.2rem">
-      <label>סכום תביעה</label>
-      <input type="text" id="fc-claim" placeholder="₪" disabled style="opacity:.45;cursor:not-allowed">
-    </div>
-    <button onclick="calcFeeFromModal()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer">לחישוב אגרה</button>
-    <div style="text-align:center;margin-top:1rem">
-      <a href="#" onclick="event.preventDefault()" style="color:var(--blue);font-weight:600;font-size:13px;cursor:pointer">לכל המחשבונים ›</a>
-    </div>
-  </div>
-</div>
 
 <!-- Authority Request Types Modal -->
 <div id="authority-types-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="authority-types-modal" data-src="index.html">
@@ -871,47 +963,10 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
   </div>
 </div>
 
-<!-- Payment Modal -->
-<div id="payment-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="payment-modal" data-src="index.html">
-  <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
-      <div style="width:36px;height:36px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#057A55" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">ההגשה לפתיחת תיק התקבלה בהצלחה!</div>
-    </div>
-    <p style="font-size:14px;color:var(--gray-600);margin-bottom:1.2rem;line-height:1.7">כעת יתבצע מעבר לעמוד התשלום בשרת התשלומים הממשלתי.<br><br>בעמוד התשלום יש להשאיר את פרטי האשראי. חשבונך יחוייב בסכום האגרה לפי חוק מיד לאחר אישור בקשתך ע"י בית המשפט.<br>במידה ובקשתך תדחה, חשבונך לא יחוייב.<br>במידה ואתה זכאי לפטור מאגרה, יש להגיש את בקשת הפטור יחד עם מסמכי ההגשה. חשבונך יחוייב / לא יחוייב בהתאם להחלטה שיפוטית לעניין הפטור.</p>
-    <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:8px;padding:12px 16px;margin-bottom:1.2rem">
-      <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:4px">מספר אסמכתא להגשה</div>
-      <div style="font-size:20px;font-weight:800;color:var(--blue)" id="modal-ref"></div>
-    </div>
-    <p style="font-size:13px;color:var(--gray-500);margin-bottom:1.4rem;line-height:1.6">מספר האסמכתא הוא מספר המעקב שלך אחרי ההגשה. לאחר ביצוע התשלום תועבר לעמוד סטטוס ההגשות לצפיה בהתקדמות הטיפול בהגשה.</p>
-    <button onclick="goToPaymentReturn()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-      מעבר לאתר התשלומים
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-    </button>
-  </div>
-</div>
-
-<!-- Resubmit Reason Modal -->
-<div id="resubmit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center" data-area="resubmit-modal" data-src="index.html">
-  <div style="background:white;border-radius:14px;padding:2rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:slideIn .3s ease">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-      <div style="font-size:16px;font-weight:700;color:var(--gray-900)">הגשה חוזרת</div>
-      <button onclick="closeResubmitModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:22px;line-height:1;padding:0">×</button>
-    </div>
-    <div class="field" style="margin-bottom:1.2rem">
-      <label>סיבת ההגשה החוזרת</label>
-      <textarea id="resubmit-reason" placeholder="נא לפרט את הסיבה להגשה החוזרת..." oninput="this.classList.remove('field-invalid')"></textarea>
-    </div>
-    <button onclick="confirmResubmit()" style="width:100%;padding:12px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer">הגשה חוזרת</button>
-  </div>
-</div>
 
 <script>
 // ===== NAV =====
 function goToPaymentReturn() {
-  document.getElementById('payment-modal').style.display = 'none';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-payment').classList.add('active');
@@ -935,9 +990,16 @@ function resetSubmitForm() {
   ['docs','payment'].forEach(t => { const el = document.getElementById('fields-'+t); if(el) el.classList.remove('show'); });
   document.getElementById('case-blocks-container').innerHTML = '';
   document.getElementById('inp-email').value='';document.getElementById('inp-phone').value='';document.getElementById('inp-case').value='';
-  document.getElementById('chk-non-party').checked = false;
+  if (typeof clearEmailError === 'function') clearEmailError();
+  if (typeof closeCaseMenu === 'function') closeCaseMenu();
   document.getElementById('chk-has-fee').checked = false;
-  caseCount=0; selAction=null; currentRef=null;
+  const fa = document.getElementById('fee-amount'); if (fa) fa.value = '0.00';
+  const fcr = document.getElementById('fc-result'); if (fcr) fcr.style.display = 'none';
+  const ci = document.getElementById('credit-info'); if (ci) ci.style.display = 'none';
+  ['chk-credit-delta-up','chk-credit-delta-up-no'].forEach(id => { const c = document.getElementById(id); if (c) c.checked = false; });
+  const cde = document.getElementById('credit-delta-error'); if (cde) cde.style.display = 'none';
+  const rd = document.getElementById('resubmit-disclaimer'); if (rd) rd.style.display = 'none';
+  caseCount=0; selAction=null; currentRef=null; finalRef=null;
 }
 function startNewSubmission() {
   showPage('submit', document.getElementById('nav-new-submission'));
@@ -949,18 +1011,111 @@ function startNewSubmission() {
 function hasFeeStep() {
   return selAction === 'file' || (selAction === 'docs' && !!document.getElementById('chk-has-fee')?.checked);
 }
+// true when "פטור מאגרה" is chosen in step 3 — the court-fee step is then skipped
+function feeExemptSelected() {
+  const card = document.getElementById('pay-method-card');
+  return !!card && card.style.display !== 'none'
+    && document.querySelector('input[name="pay-method"]:checked')?.value === 'exempt';
+}
+// whether step 4 (court fee) should actually be shown
+function feeStepActive() {
+  return hasFeeStep() && !feeExemptSelected();
+}
+function creditDeltaPick(el) {
+  document.getElementById('credit-delta-error').style.display = 'none';
+  // "מאשר" and "לא מאשר" for the delta-up case are mutually exclusive
+  if (el.checked && el.id === 'chk-credit-delta-up') document.getElementById('chk-credit-delta-up-no').checked = false;
+  if (el.checked && el.id === 'chk-credit-delta-up-no') document.getElementById('chk-credit-delta-up').checked = false;
+}
+function onPayMethodChange() {
+  toggleVoucherField();
+  const isCredit = document.querySelector('input[name="pay-method"]:checked')?.value === 'credit';
+  const creditInfo = document.getElementById('credit-info');
+  if (creditInfo) creditInfo.style.display = isCredit ? 'block' : 'none';
+  goTo(3); // refresh step indicators + submit-button label for the exempt case
+}
+function toggleVoucherField() {
+  const isVoucher = document.querySelector('input[name="pay-method"]:checked')?.value === 'voucher';
+  document.getElementById('voucher-field').style.display = isVoucher ? 'block' : 'none';
+  if (!isVoucher) {
+    document.getElementById('inp-voucher').classList.remove('field-invalid');
+    document.getElementById('voucher-error').style.display = 'none';
+  }
+}
+function isVoucherValid(v) {
+  return /^[023-8]\d{7}$/.test(v);
+}
+function validateVoucher(el) {
+  el.value = el.value.replace(/\D/g, '').slice(0, 8);
+  const invalid = el.value.length > 0 && !isVoucherValid(el.value);
+  el.classList.toggle('field-invalid', invalid);
+  document.getElementById('voucher-error').style.display = invalid ? 'block' : 'none';
+}
+// step 2 → step 3: block unless every case block has a primary document uploaded
+function continueFromDocs() {
+  let firstInvalid = null;
+  document.querySelectorAll('#case-blocks-container .case-block').forEach(block => {
+    const id = block.id;
+    const list = document.getElementById('m' + id);
+    const zone = document.getElementById('mz' + id);
+    const err = document.getElementById('me' + id);
+    const empty = !list || list.children.length === 0;
+    if (zone) zone.classList.toggle('invalid', empty);
+    if (err) err.style.display = empty ? 'block' : 'none';
+    if (empty && !firstInvalid) firstInvalid = zone || block;
+  });
+  if (firstInvalid) {
+    firstInvalid.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    return;
+  }
+  goTo(3);
+}
+function clearEmailError() {
+  document.getElementById('inp-email').classList.remove('field-invalid');
+  document.getElementById('email-error').style.display = 'none';
+}
 function continueFromContact() {
-  goTo(hasFeeStep() ? 4 : 5);
+  const emailEl = document.getElementById('inp-email');
+  const emailVal = emailEl.value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+    const emailErr = document.getElementById('email-error');
+    emailErr.textContent = emailVal ? 'כתובת המייל אינה תקינה' : 'יש להזין כתובת מייל';
+    emailErr.style.display = 'block';
+    emailEl.classList.add('field-invalid');
+    emailEl.focus();
+    return;
+  }
+  const payCard = document.getElementById('pay-method-card');
+  const payMethod = document.querySelector('input[name="pay-method"]:checked')?.value;
+  if (payCard && payCard.style.display !== 'none' && payMethod === 'credit'
+      && !(document.getElementById('chk-credit-delta-up').checked
+        || document.getElementById('chk-credit-delta-up-no').checked)) {
+    const err = document.getElementById('credit-delta-error');
+    err.style.display = 'block';
+    err.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    return;
+  }
+  if (payCard && payCard.style.display !== 'none'
+      && document.querySelector('input[name="pay-method"]:checked')?.value === 'voucher') {
+    const el = document.getElementById('inp-voucher');
+    if (!isVoucherValid(el.value)) {
+      el.classList.add('field-invalid');
+      document.getElementById('voucher-error').style.display = 'block';
+      el.focus();
+      return;
+    }
+  }
+  goTo(feeStepActive() ? 4 : 5);
 }
 function backFromFinal() {
-  goTo(hasFeeStep() ? 4 : 3);
+  goTo(feeStepActive() ? 4 : 3);
 }
 function goTo(n) {
-  if (n === 4 && !hasFeeStep()) n = 5;
+  if (n === 4 && !feeStepActive()) n = 5;
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel' + n).classList.add('active');
 
-  const showFee = hasFeeStep();
+  const showFee = feeStepActive();
   document.getElementById('ws4').style.display = showFee ? 'flex' : 'none';
   document.getElementById('wl4').style.display = showFee ? 'block' : 'none';
   const displayNum = showFee ? {1:1,2:2,3:3,4:4,5:5} : {1:1,2:2,3:3,5:4};
@@ -987,12 +1142,12 @@ function goTo(n) {
   }
 
   // update submit button label + step5 title/description text
-  const submitBtn = document.querySelector('#panel5 button[onclick="submitForm()"]');
+  const submitBtn = document.getElementById('panel5-submit');
   const step4Desc = document.getElementById('step4-desc');
   const step5Title = document.getElementById('step5-title');
   const ws5Label = document.getElementById('ws5-label');
   if (submitBtn) {
-    if (hasFeeStep()) {
+    if (feeStepActive()) {
       submitBtn.innerHTML = 'מעבר לתשלום <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>';
       if (step4Desc) step4Desc.textContent = 'בלחיצה על ״מעבר לתשלום״ תתבצע הפניה לאתר התשלומים הממשלתי להשלמת התשלום';
       if (step5Title) step5Title.textContent = 'תשלום וסיום';
@@ -1005,19 +1160,41 @@ function goTo(n) {
     }
   }
 
-  // show fee card when entering step 4, seeded with a provisional amount until the calculator is used
+  // step 5: fee flow shows the inline "submission received / go to payment" content;
+  // otherwise the plain review card + הגשה button
+  if (n === 5) {
+    const payBlock = document.getElementById('panel5-payment');
+    const reviewBlock = document.getElementById('panel5-review');
+    if (feeStepActive()) {
+      if (!finalRef) finalRef = (selAction === 'file' && currentRef) ? currentRef : ('153' + Math.floor(1000 + Math.random() * 9000));
+      document.getElementById('panel5-ref').textContent = finalRef;
+      payBlock.style.display = 'block';
+      reviewBlock.style.display = 'none';
+      if (submitBtn) submitBtn.style.display = 'none';
+    } else {
+      finalRef = null;
+      payBlock.style.display = 'none';
+      reviewBlock.style.display = 'block';
+      if (submitBtn) submitBtn.style.display = '';
+    }
+  }
+
+  // show fee card + calculator when entering step 4, seeded with a provisional amount
   if (n === 4 && hasFeeStep()) {
     document.getElementById('fee-card').style.display = 'block';
+    document.getElementById('fee-calc-card').style.display = 'block';
     const feeAmountEl = document.getElementById('fee-amount');
-    if (!feeAmountEl.textContent) {
-      feeAmountEl.textContent = '₪' + (Math.floor(Math.random() * 421) + 30).toLocaleString();
+    if (!feeAmountEl.value || feeAmountEl.value === '0.00') {
+      setFeeAmount(Math.floor(Math.random() * 421) + 30);
     }
   } else if (n === 4) {
     document.getElementById('fee-card').style.display = 'none';
+    document.getElementById('fee-calc-card').style.display = 'none';
   }
 
   const titles = { file: 'פתיחת תיק חדש', docs: 'העלאת מסמכים לפי תיק', payment: 'הגשות נוספות' };
-  const descs  = { file: 'במסגרת הגשת הבקשה לפתיחת תיק, פרטי ההגשה וסכום האגרה נקבעים בהתאם לאמור במסמכי ההגשה. אין צורך במילוי פרטי ההגשה והמגיש באתר. מסמכי ההגשה צריכים להיות קריאים, ללא כתב יד ובהתאם לחוק ולתקנות. להנחיות הגשת המסמכים <a href="#" onclick="event.preventDefault()">לחץ כאן</a>.', docs: 'במסגרת ההגשה לתיק קיים פרטי ההגשה נקבעים בהתאם למסמכי ההגשה.<br>אין צורך במילוי פרטי ההגשה והמגיש באתר.<br>מסמכי ההגשה צריכים להיות קריאים, ללא כתב יד ובהתאם לחוק ולתקנות.<br>להנחיות הגשת המסמכים <a href="#" onclick="event.preventDefault()">לחץ כאן</a>.', payment: 'ניתן להגיש מסמכים שונים לאותו תיק בהגשה אחת' };
+  const infoIcon = '<svg class="inline-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>';
+  const descs  = { file: 'במסגרת הגשת הבקשה לפתיחת תיק, פרטי ההגשה וסכום האגרה נקבעים בהתאם לאמור במסמכי ההגשה. אין צורך במילוי פרטי ההגשה והמגיש באתר. מסמכי ההגשה צריכים להיות קריאים, ללא כתב יד ובהתאם לחוק ולתקנות. ' + infoIcon + 'להנחיות הגשת המסמכים.', docs: 'במסגרת ההגשה לתיק קיים פרטי ההגשה נקבעים בהתאם למסמכי ההגשה.<br>אין צורך במילוי פרטי ההגשה והמגיש באתר.<br>מסמכי ההגשה צריכים להיות קריאים, ללא כתב יד ובהתאם לחוק ולתקנות.<br>' + infoIcon + 'להנחיות הגשת המסמכים.', payment: 'ניתן להגיש מסמכים שונים לאותו תיק בהגשה אחת' };
   if (n === 2) {
     document.querySelector('#panel2 .card-title').textContent = titles[selAction] || titles.docs;
     document.querySelector('#panel2 .card-desc').innerHTML    = descs[selAction]  || descs.docs;
@@ -1029,7 +1206,7 @@ function goTo(n) {
   if (tag) {
     const val = document.getElementById('inp-case')?.value?.trim();
     if (n === 2 && selAction !== 'file' && val) {
-      tag.textContent = 'תיק ' + val;
+      tag.textContent = 'תיק ' + (val.match(/\d+-\d+-\d+/)?.[0] || val);
       tag.style.display = 'inline-block';
     } else {
       tag.style.display = 'none';
@@ -1040,6 +1217,7 @@ function goTo(n) {
 // ===== STEP 1 =====
 let selAction = null;
 let currentRef = null;
+let finalRef = null; // אסמכתא shown on step 5 in the fee flow
 function pickAction(el, type) {
   document.querySelectorAll('.action-tile').forEach(t => t.classList.remove('selected'));
   el.classList.add('selected'); selAction = type;
@@ -1060,6 +1238,84 @@ function validateCaseNum(el) {
   el.classList.toggle('field-invalid', invalid);
   document.getElementById('case-num-error').style.display = invalid ? 'block' : 'none';
 }
+
+// ===== מספר תיק — custom autocomplete dropdown =====
+const MY_CASES = [
+  { num: '22841-04-26', name: 'מיכל אברהמי נ׳ עיריית תל אביב' },
+  { num: '41287-09-25', name: 'עיריית חיפה נ׳ חברת בינוי בע״מ' },
+  { num: '1288-07-25',  name: 'אלמוג פרץ נ׳ חברת ביטוח כלל' },
+  { num: '5643-02-26',  name: 'דוד כהן נ׳ בנק לאומי לישראל בע״מ' },
+  { num: '8921-11-25',  name: 'רונית לוי נ׳ מדינת ישראל' },
+  { num: '3092-06-26',  name: 'חברת טק-נובה בע״מ נ׳ שחר אבני' }
+];
+const caseLabel = c => `ת״א ${c.num} ${c.name}`;
+let caseHlIndex = -1;
+
+function caseComboEls() {
+  return {
+    wrap: document.getElementById('case-combo'),
+    input: document.getElementById('inp-case'),
+    menu: document.getElementById('case-combo-menu')
+  };
+}
+function renderCaseOptions() {
+  const { input, menu } = caseComboEls();
+  const q = input.value.trim().toLowerCase();
+  const matches = MY_CASES.filter(c => !q || caseLabel(c).toLowerCase().includes(q));
+  caseHlIndex = -1;
+  if (!matches.length) {
+    menu.innerHTML = '<div class="case-combo-empty">לא נמצאו תיקים תואמים</div>';
+    return;
+  }
+  menu.innerHTML = matches.map(c =>
+    `<button type="button" class="case-combo-opt" role="option" data-label="${caseLabel(c).replace(/"/g, '&quot;')}" onclick="pickCase(this.dataset.label)">` +
+    `<span class="cc-num">ת״א ${c.num}</span>${c.name}</button>`
+  ).join('');
+}
+function openCaseMenu() {
+  const { wrap } = caseComboEls();
+  renderCaseOptions();
+  wrap.classList.add('open');
+  caseComboEls().input.setAttribute('aria-expanded', 'true');
+}
+function closeCaseMenu() {
+  const { wrap, input } = caseComboEls();
+  wrap.classList.remove('open');
+  input.setAttribute('aria-expanded', 'false');
+  caseHlIndex = -1;
+}
+function onCaseInput() {
+  const { input } = caseComboEls();
+  validateCaseNum(input);
+  openCaseMenu();
+}
+function pickCase(label) {
+  const { input } = caseComboEls();
+  input.value = label;
+  validateCaseNum(input);
+  closeCaseMenu();
+}
+function onCaseKeydown(e) {
+  const { wrap, menu } = caseComboEls();
+  if (!wrap.classList.contains('open') && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+    openCaseMenu(); e.preventDefault(); return;
+  }
+  const opts = [...menu.querySelectorAll('.case-combo-opt')];
+  if (e.key === 'ArrowDown') { e.preventDefault(); caseHlIndex = Math.min(caseHlIndex + 1, opts.length - 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); caseHlIndex = Math.max(caseHlIndex - 1, 0); }
+  else if (e.key === 'Enter') {
+    if (caseHlIndex >= 0 && opts[caseHlIndex]) { e.preventDefault(); pickCase(opts[caseHlIndex].dataset.label); }
+    return;
+  }
+  else if (e.key === 'Escape') { closeCaseMenu(); return; }
+  else return;
+  opts.forEach((o, i) => o.classList.toggle('hl', i === caseHlIndex));
+  if (opts[caseHlIndex]) opts[caseHlIndex].scrollIntoView({ block: 'nearest' });
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('case-combo');
+  if (wrap && !wrap.contains(e.target)) closeCaseMenu();
+});
 function openReqTypesModal() {
   document.getElementById('req-types-modal').style.display = 'flex';
 }
@@ -1072,46 +1328,35 @@ function openAuthorityTypesModal() {
 function closeAuthorityTypesModal() {
   document.getElementById('authority-types-modal').style.display = 'none';
 }
-function openFeeCalcModal() {
-  document.getElementById('fee-calc-modal').style.display = 'flex';
+// ===== FEE AMOUNT (editable, always two decimals) =====
+function onFeeAmountInput(el) {
+  let v = el.value.replace(/[^0-9.]/g, '');
+  const dot = v.indexOf('.');
+  if (dot !== -1) v = v.slice(0, dot + 1) + v.slice(dot + 1).replace(/\./g, '').slice(0, 2);
+  el.value = v;
 }
-function closeFeeCalcModal() {
-  document.getElementById('fee-calc-modal').style.display = 'none';
+function formatFeeAmount(el) {
+  let n = parseFloat((el.value || '').replace(/[^0-9.]/g, ''));
+  if (!isFinite(n)) n = 0;
+  el.value = n.toFixed(2);
 }
-let resubmitDocIndex = null;
-function openResubmitModal(di) {
-  resubmitDocIndex = di;
-  document.getElementById('resubmit-reason').value = '';
-  document.getElementById('resubmit-modal').style.display = 'flex';
+function setFeeAmount(n) {
+  const el = document.getElementById('fee-amount');
+  if (el) el.value = (Number(n) || 0).toFixed(2);
 }
-function closeResubmitModal() {
-  document.getElementById('resubmit-modal').style.display = 'none';
-  resubmitDocIndex = null;
-}
-function confirmResubmit() {
-  const reason = document.getElementById('resubmit-reason').value.trim();
-  if (!reason) {
-    document.getElementById('resubmit-reason').classList.add('field-invalid');
-    return;
+// "להגשה חוזרת" — send the user back to the document-attachment step with a disclaimer
+function startResubmit(di) {
+  const doc = (typeof rtDocState !== 'undefined' && rtDocState[di]) || DOCS[di] || {};
+  showPage('submit', document.getElementById('nav-new-submission'));
+  resetSubmitForm();
+  selAction = 'docs';
+  if (doc.caseNumber) {
+    document.getElementById('inp-case').value = 'ת״א ' + doc.caseNumber + (doc.caseName ? ' ' + doc.caseName : '');
   }
-  const di = resubmitDocIndex;
-  document.getElementById('resubmit-modal').style.display = 'none';
-  resubmitDocIndex = null;
-  if (di === null || di === undefined) return;
-
-  const doc = rtDocState[di];
-  doc.curStage = -1; doc.done = false; doc.failed = false; delete doc.failAt;
-  buildStageTrack(di);
-  const badge = document.getElementById('rtb-'+di);
-  badge.className = 'rt-badge rtb-wait'; badge.textContent = 'בתהליך';
-  document.getElementById('rterr-'+di).classList.remove('show');
-  const card = document.getElementById('rtc-'+di);
-  card.style.borderColor = '';
-  card.dataset.rtStatus = 'wait';
-  if (!rtRunning) { rtRunning = true; rtTimer = setInterval(doTick, 1000); }
-
-  showSuccessToast('ההגשה החוזרת נשלחה בהצלחה!', doc.ref);
-  setTimeout(() => document.getElementById('success-toast').classList.remove('show'), 5000);
+  goTo(2);
+  const disc = document.getElementById('resubmit-disclaimer');
+  if (disc) disc.style.display = 'block';
+  window.scrollTo(0, 0);
 }
 function showSuccessToast(message, ref) {
   document.querySelector('#success-toast .toast-text').innerHTML = `${message} מספר אסמכתא: <span class="toast-ref" id="toast-ref">${ref}</span> — יש לשמור את מספר האסמכתא.`;
@@ -1123,12 +1368,15 @@ function calcFeeFromModal() {
   let fee;
   if (proc === 'small_claims') {
     const claim = parseFloat((claimInp.value || '0').replace(/[^0-9.]/g, '')) || 0;
-    fee = Math.round(claim * 0.01);
+    fee = claim * 0.01;
   } else {
     fee = Math.floor(Math.random() * 421) + 30;
   }
-  document.getElementById('fee-amount').textContent = '₪' + fee.toLocaleString();
-  closeFeeCalcModal();
+  setFeeAmount(fee);
+  const amt = document.getElementById('fc-result-amount');
+  if (amt) amt.textContent = '₪' + (Number(fee) || 0).toFixed(2);
+  const res = document.getElementById('fc-result');
+  if (res) res.style.display = 'flex';
 }
 
 // ===== MULTI-CASE UPLOAD =====
@@ -1145,13 +1393,14 @@ function addCaseBlock(prefill) {
     <div class="cb-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div>
-          <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px">מסמך עיקרי</div>
-          <div class="upload-zone sm" onclick="addFileTo('m${id}')">
+          <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px">מסמך עיקרי <span style="color:var(--red)">*</span></div>
+          <div class="upload-zone sm" id="mz${id}" onclick="addFileTo('m${id}')">
             <div class="upload-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
             <div class="upload-label" style="font-size:13px">לחץ לבחירת קובץ</div>
             <div class="upload-hint">ניתן לצרף קבצי pdf בלבד<br>עד 50 MB</div>
           </div>
           <div class="file-list" id="m${id}"></div>
+          <div class="primary-doc-error" id="me${id}">חובה להעלות מסמך עיקרי כדי להמשיך</div>
         </div>
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:7px">נספחים <span style="font-weight:400;color:var(--gray-400)">(אופציונלי)</span></div>
@@ -1178,6 +1427,13 @@ function addFileTo(listId) {
   const size = (Math.random()*4+.5).toFixed(1)+' MB';
   const list = document.getElementById(listId);
   if (!list) return;
+  // uploading a primary document clears its "required" error state
+  if (/^m/.test(listId)) {
+    const cbId = listId.slice(1);
+    document.getElementById('mz' + cbId)?.classList.remove('invalid');
+    const err = document.getElementById('me' + cbId);
+    if (err) err.style.display = 'none';
+  }
   const item = document.createElement('div'); item.className = 'file-item';
   item.innerHTML = `<div class="file-badge" title="צפייה במסמך" onclick="viewFilePdf('${name.replace(/'/g,"")}')"><svg class="icon-doc" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><svg class="icon-view" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="file-name">${name}</div><div class="file-size">${size}</div><button class="file-remove" onclick="this.parentNode.remove()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
   list.appendChild(item);
@@ -1210,21 +1466,27 @@ function viewFilePdf(name) {
 // ===== SUBMIT =====
 let subCount = 3;
 function submitForm() {
-  const ref = (selAction === 'file' && currentRef) ? currentRef : ('153' + Math.floor(1000+Math.random()*9000));
+  const ref = finalRef || ((selAction === 'file' && currentRef) ? currentRef : ('153' + Math.floor(1000+Math.random()*9000)));
 
   if (selAction === 'docs') {
-    const caseNumber = document.getElementById('inp-case')?.value || '';
+    const caseRaw = document.getElementById('inp-case')?.value?.trim() || '';
+    const caseNumber = caseRaw.match(/\d+-\d+-\d+/)?.[0] || caseRaw;
+    const caseName = caseRaw.replace(/^ת״א\s*/, '').replace(caseNumber, '').trim();
     addTrackedSubmission({
       name: 'הגשת מסמכים לתיק', ref, scenario: 'success', delay: 0, type: 'הגשת מסמכים לתיק',
-      submissionType: 'הגשת מסמכים לתיק', caseName: '', caseNumber,
+      submissionType: 'הגשת מסמכים לתיק', caseName, caseNumber,
       submitterName: 'את/ה', submitterRole: 'מגיש/ה', submittedAt: new Date(),
-      files: [], nonParty: !!document.getElementById('chk-non-party')?.checked
+      files: []
     });
   }
 
-  if (hasFeeStep()) {
-    document.getElementById('modal-ref').textContent = ref;
-    document.getElementById('payment-modal').style.display = 'flex';
+  if (feeStepActive()) {
+    subCount++;
+    const rc = document.getElementById('receipts-count');
+    if (rc) rc.textContent = subCount;
+    goToPaymentReturn();
+    goTo(1);
+    resetSubmitForm();
     return;
   }
 
@@ -1255,11 +1517,11 @@ const DOCS = [
     submissionType:'הגשת מסמך לתיק', caseName:'מיכל אברהמי נ\' עיריית תל אביב', caseNumber:'22841-04-26',
     submitterName:'יוני דויד', submitterRole:'בא כוח התובע',
     files:['אישור תשלום.pdf','קבלת תשלום מקורית.pdf']},
-  {name:'חשבונית נספח ב.pdf', ref:'1533231', scenario:'error', failAt:2, delay:1, type:'הגשת מסמכים לתיק',
+  {name:'כתב תביעה.pdf', ref:'1533231', scenario:'error', failAt:3, delay:1, type:'הגשת מסמכים לתיק',
     submissionType:'הגשת מסמכים לתיק', caseName:'עיריית חיפה נ\' חברת בינוי בע"מ', caseNumber:'41287-09-25',
     submitterName:'עו"ד מיכל לוי', submitterRole:'באת כוח הנתבעת',
     submittedAt: new Date(Date.now() - 24*60*60*1000),
-    files:['חשבונית נספח ב.pdf','אסמכתא העברה בנקאית.pdf'],
+    files:['כתב תביעה.pdf','ייפוי כוח.pdf'],
     errTitle:'נדחה מהמרשם: בקשתך לפתיחת תיק נדחתה',
     errHtml:`<div class="rt-err-intro">הסיבות לדחיית הבקשה להלן:</div>
       <div class="rt-err-sub">אי עמידה בתקנות סדר דין אזרחי:</div>
@@ -1290,7 +1552,7 @@ function openDocPreview(name) {
 
 let rtTimer = null, rtTick = 0, rtRunning = false;
 let rtDocState = [];
-let rtTypeFilter = 'all', rtDateFilter = 'today', rtSearchTerm = '';
+let rtTypeFilter = 'all', rtDateFilter = 'none', rtSearchTerm = '';
 let rtDateRangeFrom = null, rtDateRangeTo = null;
 
 function toggleRtCard(i) {
@@ -1476,7 +1738,7 @@ function createRtCardEl(d, i) {
   el.innerHTML = `
     <div class="rt-card-header" onclick="toggleRtCard(${i})">
       <div class="rt-card-info">
-        <div class="rt-card-name">${d.submissionType} [אסמכתא: ${d.ref}]${d.nonParty ? '<span class="np-badge">מגיש שאינו גורם בתיק</span>' : ''}</div>
+        <div class="rt-card-name">${d.submissionType} [אסמכתא: ${d.ref}]</div>
         <div class="rt-card-case">${d.type === 'פתיחת תיק' ? d.filesNote : `<span class="case-link" onclick="event.stopPropagation()">${d.caseName} [תיק: ${d.caseNumber}]</span>`}</div>
       </div>
       <span class="rt-badge rtb-wait" id="rtb-${i}">בתהליך</span>
@@ -1590,7 +1852,7 @@ function doTick() {
       else { errTitleEl.style.display='none'; }
       errBodyEl.innerHTML = doc.errHtml || `<div class="rt-err-reason">${doc.errReason}</div><div class="rt-err-action">${doc.errAction}</div>`;
       if (doc.errBtn) {
-        const errAction = doc.errBtn === 'להגשה חוזרת' ? `openResubmitModal(${di})` : `alert('פעולה זו תמומש בהמשך')`;
+        const errAction = doc.errBtn === 'להגשה חוזרת' ? `startResubmit(${di})` : `alert('פעולה זו תמומש בהמשך')`;
         document.getElementById('rterrbtn-'+di).innerHTML = `<button class="btn btn-primary" style="white-space:nowrap;font-size:13px;padding:8px 14px" onclick="${errAction}">${doc.errBtn}</button>`;
       }
       stagesDone += next;
