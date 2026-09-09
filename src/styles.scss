@@ -1,0 +1,31 @@
+/* Fonts are loaded via <link> in src/index.html (see also README for the widget build). */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans Hebrew', 'Assistant', Arial, sans-serif;
+  color: #111827;
+  background: #f8fafc;
+}
+
+/* Consistent, subtle scrollbars to match the portal mockup */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+:focus-visible {
+  outline: 2px solid #1b5bbe;
+  outline-offset: 1px;
+}
