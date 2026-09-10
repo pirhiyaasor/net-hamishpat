@@ -4,6 +4,9 @@
 רספונסיבי מדסקטופ ועד רוחב טאבלט. נכתב ב‑**Angular 22** (standalone, zoneless, signals)
 עם **Tailwind CSS**.
 
+> **להטמעה בפורטל האמיתי — ראו [`INTEGRATION.md`](INTEGRATION.md).**
+> הדגמה חיה: https://judges-portal-ai-chat-33246a.vercel.app
+
 שתי הצגות:
 
 - **`/`** – "סצנת דסקטופ": צילום מסך הפורטל (`assets/desktop.png`) כרקע מלא, הצ׳אט מעוגן
