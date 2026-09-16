@@ -1,0 +1,797 @@
+/* ========================================================================
+   Chat-Monday — Colors & Type
+   ----------------------------------------------------------------------
+   Chat-Monday is a Hebrew-first messaging surface for the Israeli courts
+   (נט המשפט / הרשות השופטת), built on top of monday.com's Vibe design
+   system. This file is the single source of truth for color & typography
+   tokens. The semantic layer (--fg-1, --bg-1, --h1…) maps directly onto
+   Vibe primitives so anything wired against either layer stays consistent.
+   ======================================================================== */
+
+/* ─────────  Web fonts  ───────────────────────────────────────────────── */
+
+
+
+
+
+/* ─────────  Base color primitives (Vibe Light theme)  ────────────────── */
+:root {
+  /* ---- Vibe brand & primary (kept for prototype interop) ---- */
+  --vibe-primary:                 #0073ea;
+  --vibe-primary-hover:           #0060b9;
+  --vibe-primary-selected:        #cce5ff;
+  --vibe-primary-selected-hover:  #aed4fc;
+  --vibe-primary-highlighted:     #f0f7ff;
+
+  /* ---- Chat-Monday brand override ----
+     The judiciary logo uses a deeper, more institutional navy than
+     Vibe's bright #0073ea. We layer it on top so any --primary-*
+     consumer renders with the brand voice, while leaving Vibe's
+     variable names intact for component-level compatibility.        */
+  --brand-navy:                   #0a3b8f;   /* "נט המשפט" headline */
+  --brand-navy-hover:             #082e6f;
+  --brand-navy-deep:              #062356;   /* Menorah seal navy   */
+  --brand-azure:                  #2a6fdb;   /* hyperlink / accent  */
+  --brand-azure-hover:            #1f5cba;
+  --brand-tint:                   #e8eff9;   /* surface wash        */
+  --brand-tint-strong:            #cfdcf0;
+  --brand-gold:                   #c8a24a;   /* seal highlight      */
+
+  /* Final --primary that the UI kit & components consume */
+  --primary-color:                var(--brand-navy);
+  --primary-hover-color:          var(--brand-navy-hover);
+  --primary-selected-color:       var(--brand-tint-strong);
+  --primary-selected-hover-color: #b8cdec;
+  --primary-highlighted-color:    var(--brand-tint);
+  --primary-surface-color:        #f3f5fb;
+  --text-color-on-primary:        #ffffff;
+  --text-color-on-brand:          #ffffff;
+  --link-color:                   var(--brand-azure);
+
+  /* ---- Text colors ---- */
+  --primary-text-color:           #323338;  /* color-mud_black */
+  --secondary-text-color:         #676879;  /* color-asphalt   */
+  --tertiary-text-color:          #9699a6;
+  --disabled-text-color:          rgba(50, 51, 56, 0.4);
+  --text-color-on-inverted:       #ffffff;
+  --inverted-color-background:    #323338;
+  --fixed-dark-color:             #323338;
+  --fixed-light-color:            #ffffff;
+
+  /* ---- Backgrounds ---- */
+  --primary-background-color:     #ffffff;
+  --primary-background-hover-color: rgba(103, 104, 121, 0.1);
+  --secondary-background-color:   #ffffff;
+  --allgrey-background-color:     #f6f7fb; /* color-riverstone_gray */
+  --grey-background-color:        #f6f7fb;
+  --dialog-background-color:      #ffffff;
+  --modal-background-color:       #ffffff;
+  --dark-background-color:        #f6f7fb;
+  --backdrop-color:                rgba(41, 47, 76, 0.7);
+
+  /* ---- UI surfaces / borders ---- */
+  --ui-background-color:          #e7e9ef;
+  --ui-background-hover-color:    #d8d9e0;
+  --ui-border-color:              #c3c6d4;  /* color-wolf_gray  */
+  --layout-border-color:          #d0d4e4;
+  --icon-color:                   #676879;
+  --placeholder-color:            #676879;
+  --disabled-background-color:    #ecedf5;
+
+  /* ---- Semantic state colors ---- */
+  --positive-color:               #00854d;
+  --positive-color-hover:         #007038;
+  --positive-color-selected:      #bbdbc9;
+  --negative-color:               #d83a52;
+  --negative-color-hover:         #b63546;
+  --negative-color-selected:      #f4c3cb;
+  --warning-color:                #fdab3d;
+  --warning-color-hover:          #c0873c;
+  --warning-color-selected:       #fed59e;
+
+  /* ---- Vibe Working palette (subset, used by avatars/labels) ---- */
+  --color-grass-green:            #037f4c;
+  --color-done-green:             #00c875;
+  --color-bright-green:           #9cd326;
+  --color-egg-yolk:               #ffcb00;
+  --color-working-orange:         #fdab3d;
+  --color-dark-orange:            #ff6d3b;
+  --color-stuck-red:              #df2f4a;
+  --color-sofia-pink:             #e50073;
+  --color-purple:                 #9d50dd;
+  --color-indigo:                 #5559df;
+  --color-navy-label:             #225091;
+  --color-bright-blue:            #579bfc;
+  --color-dark-blue:              #007eb5;
+  --color-aquamarine:             #4eccc6;
+
+  /* ---- Semantic for chat product specifically ---- */
+  --chat-bubble-self-bg:          var(--brand-navy);
+  --chat-bubble-self-fg:          #ffffff;
+  --chat-bubble-other-bg:         #f0f1f5;
+  --chat-bubble-other-fg:         var(--primary-text-color);
+  --chat-bubble-system-bg:        #fff8e6;
+  --chat-bubble-system-fg:        #6b5300;
+  --chat-mention:                 var(--brand-azure);
+  --chat-classified-band:         #062356;   /* "מסווג" badge       */
+  --chat-link-internal:           var(--brand-azure);
+
+  /* ---- Shadows ---- */
+  --box-shadow-xs:     0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --box-shadow-small:  0 4px 8px rgba(0, 0, 0, 0.12);
+  --box-shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.15);
+  --box-shadow-large:  0 15px 50px rgba(0, 0, 0, 0.22);
+  --box-shadow-focus:  0 0 0 2px var(--brand-tint), 0 0 0 4px var(--brand-azure);
+
+  /* ─────────  Typography primitives (Vibe)  ───────────────────────── */
+
+  /* Family — Rubik carries both Hebrew and Latin glyphs in one family, so a
+     mixed Hebrew/Latin line renders consistently. */
+  --font-family:        "Rubik", "Segoe UI", Roboto, sans-serif;
+  --title-font-family:  "Rubik", "Segoe UI", Roboto, sans-serif;
+  --mono-font-family:   ui-monospace, "SF Mono", "Menlo", Consolas, monospace;
+
+  --font-weight-very-light: 200;
+  --font-weight-light:      300;
+  --font-weight-normal:     400;
+  --font-weight-medium:     500;
+  --font-weight-bold:       600;
+  --font-weight-heavy:      700;
+
+  /* Scale (Vibe values) */
+  --font-size-10: 12px;
+  --font-size-20: 14px;
+  --font-size-30: 16px;
+  --font-size-40: 18px;
+  --font-size-50: 24px;
+  --font-size-60: 30px;
+  --font-size-70: 40px;
+
+  --font-line-height-10: 16px;
+  --font-line-height-20: 20px;
+  --font-line-height-30: 22px;
+  --font-line-height-40: 26px;
+  --font-line-height-50: 32px;
+  --font-line-height-60: 42px;
+  --font-line-height-70: 52px;
+
+  /* ─────────  Spacing & shape (Vibe)  ─────────────────────────────── */
+  --space-2:  2px;
+  --space-4:  4px;
+  --space-8:  8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;
+
+  --border-radius-small:  4px;
+  --border-radius-medium: 8px;
+  --border-radius-big:    16px;
+  --border-radius-pill:   999px;
+
+  --border-width: 1px;
+  --border-style: solid;
+
+  /* ─────────  Motion (Vibe)  ─────────────────────────────────────── */
+  --motion-productive-short:  70ms;
+  --motion-productive-medium: 100ms;
+  --motion-productive-long:   150ms;
+  --motion-expressive-short:  250ms;
+  --motion-expressive-long:   400ms;
+  --motion-timing-enter:      cubic-bezier(0, 0, 0.35, 1);
+  --motion-timing-exit:       cubic-bezier(0.4, 0, 1, 1);
+  --motion-timing-transition: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-timing-emphasize:  cubic-bezier(0, 0, 0.2, 1.4);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SEMANTIC LAYER
+   Short aliases used directly inside markup. Prefer these over primitives.
+   ──────────────────────────────────────────────────────────────────── */
+:root {
+  /* Foreground */
+  --fg-1:   var(--primary-text-color);
+  --fg-2:   var(--secondary-text-color);
+  --fg-3:   var(--tertiary-text-color);
+  --fg-link:var(--link-color);
+  --fg-on-brand: var(--text-color-on-primary);
+  --fg-on-dark:  #ffffff;
+
+  /* Background */
+  --bg-1:    var(--primary-background-color);
+  --bg-2:    var(--allgrey-background-color);
+  --bg-3:    var(--ui-background-color);
+  --bg-app:  #f6f7fb;
+  --bg-panel:#ffffff;
+  --bg-brand:var(--primary-color);
+
+  /* Borders */
+  --border-1: var(--ui-border-color);
+  --border-2: var(--layout-border-color);
+
+  /* Type role tokens — paired font-shorthands so you can do
+        font: var(--h1);  to lay down a heading in one declaration. */
+  --display: var(--font-weight-bold)   40px / 52px var(--title-font-family);
+  --h1: var(--font-weight-bold)   30px / 42px var(--title-font-family);
+  --h2: var(--font-weight-bold)   24px / 32px var(--title-font-family);
+  --h3: var(--font-weight-bold)   18px / 26px var(--title-font-family);
+  --h4: var(--font-weight-bold)   16px / 22px var(--font-family);
+  --h5: var(--font-weight-bold)   14px / 20px var(--font-family);
+  --body-lg:  var(--font-weight-normal) 16px / 24px var(--font-family);
+  --body:     var(--font-weight-normal) 14px / 20px var(--font-family);
+  --body-sm:  var(--font-weight-normal) 12px / 16px var(--font-family);
+  --label:    var(--font-weight-medium) 13px / 18px var(--font-family);
+  --button:   var(--font-weight-medium) 14px / 20px var(--font-family);
+  --code:     var(--font-weight-normal) 13px / 20px var(--mono-font-family);
+
+  /* Letter-spacing tightenings used on the Hebrew/title pairing */
+  --tracking-tight: -0.2px;
+  --tracking-normal: 0;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   Element resets — gentle, only the bits used by previews / kit
+   ──────────────────────────────────────────────────────────────────── */
+html, body { background: var(--bg-app); color: var(--fg-1); }
+body { font: var(--body); font-family: var(--font-family); }
+h1 { font: var(--h1); letter-spacing: var(--tracking-tight); margin: 0; }
+h2 { font: var(--h2); letter-spacing: var(--tracking-tight); margin: 0; }
+h3 { font: var(--h3); margin: 0; }
+h4 { font: var(--h4); margin: 0; }
+h5 { font: var(--h5); margin: 0; }
+p  { font: var(--body); margin: 0; }
+code, pre { font: var(--code); }
+a  { color: var(--fg-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Hebrew root — flip directionality globally when applied to <html> or a wrap */
+[dir="rtl"] {
+  text-align: right;
+}
+
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/2cd501bd-cee1-444d-9e5c-fa4f68df68c9.woff2") format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/e934b22f-7063-495d-9eaa-3ea4a4cf1bd3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/db4e5946-9eac-4bbb-a44c-caa1fbf3b560.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/2cd501bd-cee1-444d-9e5c-fa4f68df68c9.woff2") format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/e934b22f-7063-495d-9eaa-3ea4a4cf1bd3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/db4e5946-9eac-4bbb-a44c-caa1fbf3b560.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/2cd501bd-cee1-444d-9e5c-fa4f68df68c9.woff2") format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/e934b22f-7063-495d-9eaa-3ea4a4cf1bd3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/db4e5946-9eac-4bbb-a44c-caa1fbf3b560.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/2cd501bd-cee1-444d-9e5c-fa4f68df68c9.woff2") format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/e934b22f-7063-495d-9eaa-3ea4a4cf1bd3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/db4e5946-9eac-4bbb-a44c-caa1fbf3b560.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("assets/2cd501bd-cee1-444d-9e5c-fa4f68df68c9.woff2") format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("assets/e934b22f-7063-495d-9eaa-3ea4a4cf1bd3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("assets/db4e5946-9eac-4bbb-a44c-caa1fbf3b560.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #f4f8fc; font-family: "Rubik", sans-serif; }
+  summary::-webkit-details-marker { display: none; }
+  select.cvs-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; padding-left: 26px !important; }
+
+  /* ── Vibe interaction states ─────────────────────────────── */
+  input, select, button { font-family: var(--font-family); }
+  input, select, button, summary, a {
+    transition: background-color var(--motion-productive-medium) var(--motion-timing-transition),
+                border-color var(--motion-productive-medium) var(--motion-timing-transition),
+                color var(--motion-productive-medium) var(--motion-timing-transition);
+  }
+  input:focus, select:focus { outline: none; border-color: var(--vibe-primary) !important; }
+  input:hover:not(:focus), select:hover:not(:focus) { border-color: var(--secondary-text-color) !important; }
+  nav summary:hover, nav > div:hover { background: var(--primary-background-hover-color); }
+  nav details > div > div:hover { background: var(--primary-background-hover-color); }
+  .cvs-btn:hover { background: var(--primary-selected-hover-color) !important; border-color: var(--primary-selected-hover-color) !important; }
+  .cvs-oldcase > summary:hover { color: var(--vibe-primary) !important; text-decoration: underline; }
+
+
+/* Shared hover tint across the whole in-case menu — a light azure, distinct
+   from the brand-tint used for the active row so the two never clash. */
+:root { --cvs-hover: #d6e6fa; }
+.cvs-docrow{cursor:pointer;transition:background .12s ease}
+/* hover fill on the cells — square corners (no rounding) */
+.cvs-docrow:hover td{background:var(--cvs-hover)}
+.cvs-docrow:hover .cvs-docname{color:var(--brand-navy)}
+/* the currently-open document stays highlighted so its row reads as "selected" */
+.cvs-docrow.cvs-docactive{background:var(--brand-tint)}
+.cvs-docrow.cvs-docactive .cvs-docname{color:var(--brand-navy);font-weight:500}
+
+/* top (פרטי תיק) rows — icon turns navy when the row is hovered, tying the
+   two together. */
+#cvsPanelDetails > div > details > summary:hover svg[stroke="var(--icon-color)"],
+#cvsPanelDetails > div > div:hover svg[stroke="var(--icon-color)"] { stroke: var(--brand-navy); }
+
+/* Right icon-rail — restore the hover feedback that was lost when the rail
+   was narrowed. Both the flyout-bearing items (details>summary) and the
+   plain items (div) light up on hover. */
+.cvs-railInner > details > summary,
+.cvs-railInner > div { transition: background .12s ease; border-radius: 4px !important; }
+.cvs-railInner > details > summary:hover,
+.cvs-railInner > div:not(.cvs-raildash):hover { background: var(--cvs-hover); }
+
+/* Rail prominence: brand-navy icons + labels on the soft band (the dashboard
+   entry is excluded — it carries its own filled treatment below). */
+.cvs-railInner > details > summary,
+.cvs-railInner > div:not(.cvs-raildash) { color: var(--brand-navy) !important; }
+.cvs-railInner > details > summary > span,
+.cvs-railInner > div:not(.cvs-raildash) > span { color: var(--brand-navy) !important; }
+
+/* Dashboard entry — a plain navy rail item set apart by a divider beneath it,
+   plus a small parenthetical note. No fill/badge, so it never reads as selected. */
+.cvs-railInner > .cvs-raildash {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: 100%; padding: 11px 4px 6px; margin-top: auto; cursor: pointer;
+  background: transparent; border-radius: 4px !important; transition: background .12s ease;
+}
+/* short, centred blue divider sitting above the item — placed OUTSIDE the padding
+   box (negative top) so the hover fill starts below it, not behind it */
+.cvs-railInner > .cvs-raildash::before {
+  content: ''; position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 2px; border-radius: 1px; background: var(--brand-navy);
+}
+.cvs-railInner > .cvs-raildash:hover { background: var(--cvs-hover); }
+.cvs-raildash svg { stroke: var(--brand-navy); }
+.cvs-raildash .cvs-dashmain { color: var(--brand-navy); font: 500 11px 'Rubik'; text-align: center; line-height: 1.2; }
+.cvs-raildash .cvs-dashsub { color: var(--fg-3); font: 400 9px 'Rubik'; text-align: center; line-height: 1.15; }
+
+/* Trying the in-case menu WITHOUT row dividers — lean on hover + the active
+   pill alone. (The active row keeps its navy right-border indicator.) */
+.cvs-topmenu > div > div,
+.cvs-topmenu > div > details > summary,
+.cvs-topmenu > div > details[open] { border-bottom: 0 !important; }
+/* ...and the same subtle hover inside the rail's fly-out sub-menus. */
+.cvs-railnav > div > div { transition: background .12s ease; }
+.cvs-railnav > div > div:hover { background: var(--cvs-hover); }
+
+/* The "תיק ישן" link inside the search card is a link, not a menu row — no grey hover fill. */
+#cvsSidebarCol .cvs-oldcase > summary:hover { background: transparent; }
+
+/* Sidebar — subtle grey hover on every accordion row, folder header and
+   document category (the active "פרטים כלליים" chip keeps its own tint). */
+.cvs-topmenu > div > div:not(:first-child):hover,
+#cvsSidebarCol summary:hover { background: var(--cvs-hover); }
+
+/* An open folder's divider is on its summary, which then sits *above* the
+   sub-rows — leaving the expanded group with no line under it. Give the open
+   <details> its own bottom border so every menu entry closes with a divider,
+   open or shut. */
+.cvs-topmenu details[open] { border-bottom: 1px solid #eceef2; }
+
+/* Open folders flip their chevron so the open state reads clearly. */
+#cvsSidebarCol details > summary > svg:last-child { transition: transform .15s ease; }
+#cvsSidebarCol details[open] > summary > svg:last-child { transform: rotate(180deg); }
+
+/* Keep the top-menu the same width when a folder opens: reserve the scrollbar
+   gutter (on the right) so the rows never shift inward when the bar appears. */
+.cvs-topmenu { scrollbar-gutter: stable; margin-right: -4px; }
+/* Subtle hover on the accordion sub-rows (צדדים, מצב חשבון …) shown when a folder opens.
+   #cvsDocCats is excluded: it is a wrapper holding the category rows, so letting it
+   match would tint all of them at once instead of the one under the cursor. */
+.cvs-topmenu details > div:not(#cvsDocCats):hover { background: var(--cvs-hover); }
+
+/* Category / chronological view toggle — a soft grey "track" (no hard border);
+   the selected segment lifts to white with a subtle shadow, like a native
+   segmented control, so it groups without protruding. */
+.cvs-toggle-group {
+  display: flex; gap: 2px; background: var(--bg-2); border-radius: 7px; padding: 2px;
+}
+.cvs-icontoggle {
+  width: 28px; height: 24px; display: flex; align-items: center; justify-content: center;
+  border: 0; padding: 0; border-radius: 5px; background: transparent; color: var(--fg-2); cursor: pointer;
+}
+.cvs-icontoggle.active { background: #fff; box-shadow: var(--box-shadow-xs); color: var(--brand-navy); }
+.cvs-icontoggle:hover:not(.active) { background: rgba(255,255,255,.55); }
+
+/* SCROLLBARS — legacy webkit model, document-wide.
+   CRITICAL: do NOT set `scrollbar-width` or `scrollbar-color` ANYWHERE. In
+   Chrome 121+ a single use of either standard property switches the whole
+   document to the standard scrollbar model and makes Chrome ignore every
+   ::-webkit-scrollbar rule — which brings back the fat native bar WITH arrows.
+   Keeping to ::-webkit-* only gives us a thin, arrow-less, custom bar. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-button { display: none !important; height: 0 !important; width: 0 !important; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #dfe3ec; border-radius: 5px; }
+/* the in-case menu scrollbars are a touch thinner */
+.cvs-docscroll::-webkit-scrollbar, .cvs-thinscroll::-webkit-scrollbar { width: 6px; }
+.cvs-docscroll::-webkit-scrollbar-thumb, .cvs-thinscroll::-webkit-scrollbar-thumb { background: #dfe3ec; border-radius: 4px; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Documents as a menu row + an expanding card
+   "מסמכים" swaps the main-content card in place, same as any other nav row.
+   The expand button then grows THAT SAME CARD to fill the viewport — it is a
+   zoom, not a drawer, so nothing needs to be visually reconnected to its
+   trigger. Extra columns, extra filters and the side-by-side PDF appear only
+   in the expanded state, where there is finally room for them.
+   ──────────────────────────────────────────────────────────────────── */
+
+/* Same box as every other row in the menu. The active row trades 3px of its
+   start padding for the navy indicator border, so 13 + 3 lands back on 16 and
+   the label stays on the exact same baseline as its neighbours. */
+.cvs-navrow { padding: 10px 16px; border-bottom: 1px solid #eceef2; }
+.cvs-navrow:last-child { border-bottom: 0; }
+/* Full-width case strip — one low row spanning menu + content. Kept slim to
+   spend minimal vertical space; the long case title is the only flexible cell,
+   everything else holds its size and the status + next-hearing sit at the far end. */
+/* No card chrome — a bare header line on the page. The pills (num / status /
+   next-hearing) keep their own fills so they still anchor the two grid edges;
+   zero horizontal padding pulls them flush to the grid's right and left. */
+.cvs-casestrip {
+  display: flex; flex-direction: row; align-items: stretch; gap: 16px;
+  background: #fff; border: 1px solid var(--border-1); border-radius: 8px;
+  padding: 12px 18px; margin: 28px 0 16px;
+}
+.cvs-caseinfo { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+.cvs-caserow { display: flex; align-items: center; gap: 12px; }
+/* prominent next-hearing box on the left, matching the old hero's date tile */
+.cvs-casehearingbox {
+  flex-shrink: 0; align-self: stretch; min-width: 132px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--brand-tint); border-radius: 8px; padding: 8px 18px;
+}
+.cvs-hearing-label { font: 400 12px 'Rubik'; color: var(--brand-navy-hover); }
+.cvs-hearing-value { font: 700 18px 'Rubik'; color: var(--brand-navy); margin-top: 3px; }
+/* the case title is the anchor of the whole screen's hierarchy — large + bold */
+.cvs-casetitle { min-width: 60px; font: 700 21px/1.3 'Rubik'; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cvs-casestrip .num { flex-shrink: 0; font: 600 13px/1 'Rubik'; color: var(--brand-navy); background: var(--brand-tint); padding: 4px 10px; border-radius: 999px; }
+.cvs-casestrip .meta { flex-shrink: 0; font: 400 14px 'Rubik'; color: var(--fg-2); white-space: nowrap; }
+.cvs-casestrip .sep { flex-shrink: 0; width: 1px; height: 15px; background: var(--border-1); }
+.cvs-casestrip .status { flex-shrink: 0; font: 600 12px 'Rubik'; color: #c2410c; background: #ffe4d9; padding: 4px 12px; border-radius: 999px; }
+/* top-left cluster: hearing box (inward) + status pill (corner), both top-aligned */
+.cvs-caseleft { display: flex; align-items: flex-start; gap: 10px; align-self: flex-start; margin-top: 3px; flex-shrink: 0; }
+.cvs-caseleft .cvs-status-end { margin-top: 2px; }
+.cvs-caseleft .cvs-hearingbox { display: flex; flex-direction: row; align-items: center; gap: 7px; background: var(--brand-tint); border-radius: 7px; padding: 4px 22px; }
+.cvs-caseleft .cvs-hearing-label { font: 400 13px/1 'Rubik'; color: var(--brand-navy-hover); white-space: nowrap; }
+.cvs-caseleft .cvs-hearing-value { font: 700 15px/1 'Rubik'; color: var(--brand-navy); }
+/* middle-dot separator between the court and the judge — visibly different from
+   the "|" inside the court label, so the two levels read as distinct */
+.cvs-metadot { color: var(--fg-3); font-weight: 700; padding: 0 2px; margin: 0 -5px; }
+.cvs-casestrip .hearing { flex-shrink: 0; display: flex; align-items: baseline; gap: 6px; font: 400 13px 'Rubik'; color: var(--brand-navy-hover); background: var(--brand-tint); padding: 5px 12px; border-radius: 8px; }
+.cvs-casestrip .hearing b { font: 700 14px 'Rubik'; color: var(--brand-navy); }
+.cvs-casestrip .spacer { margin-inline-start: auto; }
+
+/* User-menu rows (switch account, exit) — subtle hover, no auto rule reaches
+   here since the avatar menu lives outside <nav>. */
+.cvs-menuitem { border-radius: 4px; cursor: pointer; }
+.cvs-menuitem:hover { background: var(--primary-background-hover-color); }
+/* the currently-active account keeps a steady tint (it is a state, not a hover) */
+.cvs-acctactive, .cvs-acctactive:hover { background: var(--brand-tint); }
+
+/* Notifications bell — given the weight of a real control: a round tinted
+   button plus a count badge, so it reads as actionable rather than a bare glyph. */
+/* Same footprint as the avatar circle (34px), but outlined rather than filled
+   so the two read as different controls sitting side by side. */
+.cvs-bellbtn {
+  position: relative; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border-1); cursor: pointer; padding: 0; flex-shrink: 0;
+  background: #fff; color: var(--brand-navy);
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--motion-productive-medium) var(--motion-timing-transition),
+              border-color var(--motion-productive-medium) var(--motion-timing-transition);
+}
+.cvs-bellbtn:hover { background: var(--brand-tint); border-color: var(--brand-tint-strong); }
+.cvs-bellbadge {
+  position: absolute; top: -8px; left: -3px; width: 16px; height: 16px;
+  border-radius: 50%; background: var(--negative-color); color: #fff;
+  font: 400 10px/16px 'Rubik'; text-align: center;
+}
+
+/* category folders revealed under מסמכים */
+.cvs-doccat {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 43px 8px 16px; font: 400 15px 'Rubik'; color: #001E40; cursor: pointer;
+}
+.cvs-doccat:hover { background: var(--cvs-hover); }
+/* active category = bold navy only (no tint) so it doesn't merge into the
+   tinted "מסמכים" parent row above it into one blue blob */
+.cvs-doccat.cvs-catactive { color: var(--brand-navy); font-weight: 600; }
+/* counts sit right next to the category name everywhere (leaf + folder), so the
+   number is always in the same place relative to the label */
+.cvs-catcount { font-size: 13px; color: var(--fg-3); margin-inline-start: 5px; }
+
+/* categories that hold sub-folders — the summary expands, the sub-rows filter */
+.cvs-catfolder > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  list-style: none; cursor: pointer;
+  padding: 8px 43px 8px 16px; font: 400 15px 'Rubik'; color: #001E40;
+}
+.cvs-catfolder > summary::-webkit-details-marker { display: none; }
+.cvs-catfolder > summary:hover { background: var(--cvs-hover); }
+.cvs-catfolder > summary > svg { transition: transform .15s ease; flex-shrink: 0; }
+.cvs-catfolder[open] > summary > svg { transform: rotate(180deg); }
+/* sub-rows sit one indent deeper than their parent category */
+.cvs-doccat.cvs-docsubcat { padding-right: 58px; font-size: 14px; }
+.cvs-navrow.cvs-navactive {
+  border-right: 3px solid #001E40;
+  border-radius: 4px 0 0 4px;
+  /* box-shadow fill (not `background`): a <summary> in this engine refuses to
+     paint a background, but honours an inset shadow — so the tint fills reliably
+     whether the active row is a div (פרטים כלליים) or a summary (מסמכים). */
+  background: var(--brand-tint);
+  box-shadow: inset 0 0 0 100px var(--brand-tint);
+  padding-inline-start: 13px;
+}
+/* the active row's icon turns navy; inactive rows keep the grey icon color */
+.cvs-navrow.cvs-navactive svg { stroke: var(--brand-navy); }
+
+.cvs-expandbtn {
+  width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border-1);
+  background: #fff; color: var(--fg-2); cursor: pointer; padding: 0;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background var(--motion-productive-medium) var(--motion-timing-transition),
+              border-color var(--motion-productive-medium) var(--motion-timing-transition),
+              color var(--motion-productive-medium) var(--motion-timing-transition);
+}
+.cvs-expandbtn:hover { background: var(--brand-navy); border-color: var(--brand-navy); color: #fff; }
+.cvs-expandbtn svg { width: 14px; height: 14px; display: block; }
+.cvs-expandbtn .cvs-ico-collapse { display: none; }
+.cvs-docsexpanded .cvs-expandbtn { background: var(--brand-navy); border-color: var(--brand-navy); color: #fff; }
+.cvs-docsexpanded .cvs-expandbtn .cvs-ico-expand { display: none; }
+.cvs-docsexpanded .cvs-expandbtn .cvs-ico-collapse { display: block; }
+
+.cvs-typepill { display: inline-block; font: 400 12px 'Rubik'; padding: 2px 9px; border-radius: 999px; background: var(--brand-tint); color: var(--brand-navy); white-space: nowrap; }
+.cvs-typepill-court { background: #e7edfb; color: #225091; }
+.cvs-typepill-def { background: #f3f0fb; color: #5b3fa0; }
+
+/* ── the card in its two states ── */
+#docsTablePanel {
+  transition: top .38s var(--motion-timing-transition), left .38s var(--motion-timing-transition),
+              width .38s var(--motion-timing-transition), height .38s var(--motion-timing-transition),
+              box-shadow .38s ease, border-color .38s ease;
+}
+.cvs-docspinned { position: fixed; margin: 0; z-index: 45; }
+.cvs-docsexpanded { box-shadow: var(--box-shadow-large); border-color: var(--ui-border-color); }
+
+/* header row holds the title, the inline filter bar, and the expand button —
+   the filters live here (not on their own line) to save vertical space. */
+.cvs-docshead { display: flex; align-items: center; gap: 12px; padding: 14px 22px 12px; flex-shrink: 0; flex-wrap: wrap; }
+.cvs-docstitle { font: 600 18px 'Rubik'; color: #1a1a1a; flex-shrink: 0; }
+/* filter bar sits under the card title, revealed by the toggle */
+.cvs-docsfilterbar { display: none; gap: 8px; padding: 2px 22px 12px; flex-wrap: wrap; align-items: center; }
+#docsTablePanel.cvs-filters-open .cvs-docsfilterbar { display: flex; }
+.cvs-filt { height: 34px; font: 400 14px 'Rubik'; color: var(--fg-1); background: #fff; border: 1px solid var(--border-1); border-radius: 6px; padding: 2px 11px; }
+.cvs-filt[type="text"] { width: 124px; }
+select.cvs-filt {
+  appearance: none; -webkit-appearance: none; cursor: pointer; padding-inline-end: 27px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235B6472' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat: no-repeat; background-position: left 9px center;
+}
+.cvs-filt:hover { border-color: var(--secondary-text-color); }
+
+/* table cells (built in JS) */
+#cvsDocsTable th { text-align: start; font: 500 14px 'Rubik'; color: var(--fg-2); padding: 7px 6px; border-bottom: 1px solid var(--border-1); white-space: nowrap; }
+#cvsDocsTable th.cvs-th-sort { cursor: pointer; }
+#cvsDocsTable th.cvs-th-sort:hover { color: var(--brand-navy); }
+#cvsDocsTable .cvs-sortind { width: 12px; height: 12px; color: var(--brand-navy); vertical-align: -2px; }
+#cvsDocsTable .cvs-sortind.cvs-sortup { transform: rotate(180deg); }
+#cvsDocsTable td { padding: 6px 6px; font: 400 15px 'Rubik'; color: #001E40; vertical-align: middle; }
+.cvs-tdmuted { font: 400 14px 'Rubik'; color: #323338; }
+.cvs-tdplain { font: 400 14px 'Rubik'; color: #323338; }
+#cvsDocsTable .cvs-docname { font-weight: 500; }
+/* the document-type tag (the only colored cell now) — lighter weight, snug padding */
+.cvs-typetag { display: inline-block; font: 400 13px 'Rubik'; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+/* filter row: one control beneath each column header, revealed by the funnel */
+.cvs-filtrow th { padding: 0 6px 9px; vertical-align: top; }
+.cvs-filtrow .cvs-filt { width: 100%; min-width: 74px; height: 32px; }
+.cvs-filtrow th:first-child { padding-inline-start: 0; }
+.cvs-filtrow th:last-child { padding-inline-end: 0; }
+#docsTablePanel:not(.cvs-filters-open) .cvs-filtrow { display: none; }
+
+/* funnel toggle in the header — pushed to the left, next to the expand button */
+.cvs-filtertoggle {
+  margin-inline-start: auto; width: 30px; height: 30px; flex-shrink: 0;
+  border: 1px solid var(--border-1); border-radius: 8px; background: #fff; color: var(--fg-2);
+  cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;
+  transition: background var(--motion-productive-medium) var(--motion-timing-transition),
+              border-color var(--motion-productive-medium) var(--motion-timing-transition),
+              color var(--motion-productive-medium) var(--motion-timing-transition);
+}
+.cvs-filtertoggle svg { width: 15px; height: 15px; display: block; }
+.cvs-filtertoggle:hover { border-color: var(--brand-navy); color: var(--brand-navy); }
+.cvs-filtertoggle.cvs-toggle-on { background: var(--brand-tint); border-color: var(--brand-tint); color: var(--brand-navy); }
+.cvs-docsempty { text-align: center; color: var(--fg-3); font: 400 14px 'Rubik'; padding: 28px 6px !important; }
+
+/* status pill */
+.cvs-statuspill { display: inline-block; font: 500 12px 'Rubik'; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.cvs-statusdone { background: #ffe4d9; color: #c2410c; }
+.cvs-statuswait { background: #fdeeda; color: #854f0b; }
+.cvs-statusprog { background: var(--brand-tint); color: var(--brand-navy); }
+.cvs-scanyes { font: 400 14px 'Rubik'; color: #c2410c; }
+.cvs-scanno { font: 400 14px 'Rubik'; color: #323338; }
+
+/* row action icons (views + עיון trio) */
+.cvs-col-icon, .cvs-col-view { width: 1%; white-space: nowrap; text-align: center; }
+.cvs-viewicons { display: inline-flex; gap: 0; }
+.cvs-iconbtn { width: 28px; height: 28px; border: 0; border-radius: 6px; padding: 0; background: none; color: var(--fg-3); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.cvs-iconbtn svg { width: 16px; height: 16px; display: block; }
+.cvs-iconbtn:hover { background: var(--bg-2); color: var(--brand-navy); }
+
+/* left column: title, filters and table. Sibling of the PDF pane, so the
+   document beside it runs the full height of the card. */
+.cvs-docsmain { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+/* the table is inset from the card edges, so its header rule sits open at the
+   ends rather than choking the card border */
+.cvs-docstable { flex: 1; min-width: 0; overflow: auto; padding: 0 22px 18px; }
+
+/* columns that only earn their place once the card is big */
+.cvs-col-extra { display: none; }
+.cvs-docsexpanded .cvs-col-extra { display: table-cell; }
+
+/* ↗ opens the document in its own window — the collapsed card's only way in.
+   Expanded, the PDF opens beside the table instead, so the column retires. */
+.cvs-col-open { width: 1%; padding: 9px 6px; text-align: center; }
+.cvs-docsexpanded .cvs-col-open { display: none; }
+.cvs-openbtn {
+  width: 26px; height: 26px; border: 0; border-radius: 6px; padding: 0;
+  background: none; color: var(--fg-3); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cvs-openbtn svg { width: 15px; height: 15px; display: block; }
+.cvs-docrow:hover .cvs-openbtn { color: var(--brand-navy); }
+.cvs-openbtn:hover { background: #fff; color: var(--brand-navy); }
+
+/* ── side-by-side PDF, expanded state only ── */
+.cvs-docspdf {
+  position: relative;
+  width: 0; opacity: 0; overflow: hidden; flex-shrink: 0; align-self: stretch;
+  border-inline-start: 1px solid var(--border-1); background: var(--bg-2);
+  display: flex; flex-direction: column; gap: 10px;
+  transition: width .34s var(--motion-timing-transition), opacity .26s ease, padding .34s ease;
+}
+.cvs-docsexpanded.cvs-withpdf .cvs-docspdf { width: 46%; max-width: 720px; opacity: 1; padding: 16px; }
+
+.cvs-ovclose { border: none; background: none; font-size: 18px; color: var(--fg-2); cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 6px; flex-shrink: 0; }
+.cvs-ovclose:hover { background: #fff; color: var(--fg-1); }
+/* the close X sits ON the document, in its top-left corner (no header row above it) */
+.cvs-pdfclose {
+  position: absolute; top: 26px; left: 26px; z-index: 2;
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  background: var(--brand-tint); box-shadow: var(--box-shadow-xs); color: var(--brand-navy);
+}
+.cvs-pdfclose:hover { background: var(--brand-tint-strong); color: var(--brand-navy); }
+
+.cvs-docspdfpage { background: #fff; border: 1px solid var(--border-1); border-radius: 4px; padding: 32px 34px; display: flex; flex-direction: column; gap: 10px; flex: 1; overflow: hidden; }
+.cvs-ovline { height: 5px; border-radius: 2px; background: var(--ui-background-color); flex-shrink: 0; }
+.cvs-docspdfpageno { font: 400 13px 'Rubik'; color: var(--fg-2); text-align: center; flex-shrink: 0; }
+
+/* ── floating PDF control panel (visual mock, ported from studioOS/mishpat/lab) ──
+   Vertically centred on the pane's left edge; rotate / page-nav / zoom / grip.
+   Reference-only — not wired to a real PDF engine. */
+.cvs-pdftool {
+  position: absolute; top: 50%; left: 24px; transform: translateY(-50%); z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px;
+  border-radius: 8px; background: rgba(255,255,255,.92); border: 1px solid var(--border-1);
+  box-shadow: 0 4px 16px rgba(0,0,0,.18); backdrop-filter: blur(4px);
+}
+.cvs-pdftool-group { display: flex; flex-direction: column; align-items: center; }
+.cvs-pdftool button { border: none; background: none; cursor: pointer; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; color: var(--fg-2); transition: background .15s ease; }
+.cvs-pdftool button:hover { background: rgba(0,0,0,.05); }
+.cvs-pdftool-group button { width: 32px; height: 32px; }
+.cvs-pdftool > button { width: 36px; height: 36px; }
+.cvs-pdftool-pagenum { display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 24px; margin-top: 4px; box-sizing: border-box;
+  border: 1px solid var(--border-1); border-radius: 4px; font: 500 15px/1 'Rubik'; color: var(--fg-1); }
+.cvs-pdftool-pagetotal { margin-top: 8px; font: 400 15px/1 'Rubik'; color: var(--fg-3); }
+.cvs-pdftool-div { width: 20px; border-top: 1px solid var(--border-1); margin: 2px 0; }
+.cvs-pdftool-zoom { font: 400 12px 'Rubik'; color: var(--fg-3); }
+.cvs-pdftool-grip { width: 100%; display: flex; align-items: center; justify-content: center;
+  padding-top: 4px; color: var(--fg-3); cursor: grab; }
+
+@media (prefers-reduced-motion: reduce) {
+  #docsTablePanel, .cvs-docspdf { transition: none; }
+}

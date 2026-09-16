@@ -6,12 +6,14 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <title>נט המשפט – מסך הגשות</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.383.0/umd/lucide.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#1A56DB;--blue-light:#EBF5FF;--blue-mid:#93C5FD;
+  /* Brand — aligned to styles.css (Chat-Monday / Vibe) navy, 2026-09-16 */
+  --blue:#0A3B8F;--blue-light:#E8EFF9;--blue-mid:#CFDCF0;--blue-hover:#082E6F;
   --green:#057A55;--green-light:#DEF7EC;
   --red:#C81E1E;--red-light:#FDE8E8;
   --yellow:#8E4B10;--yellow-light:#FDF6B2;
@@ -19,22 +21,33 @@
   --gray-300:#D1D5DB;--gray-400:#9CA3AF;--gray-500:#6B7280;
   --gray-600:#4B5563;--gray-700:#374151;--gray-800:#1F2937;--gray-900:#111827;
   --radius:10px;--radius-sm:6px;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow:0 1px 2px rgba(16,24,40,0.04),0 1px 1px rgba(16,24,40,0.03);
 }
-body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:var(--gray-900);min-height:100vh;font-size:15px;line-height:1.6}
+body{font-family:'Rubik','Segoe UI',Roboto,sans-serif;background:#F5F8FC;color:var(--gray-900);min-height:100vh;font-size:15px;line-height:1.6;padding-right:78px}
+body.gov-external{padding-right:0}
 
-.topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 2rem;display:flex;align-items:center;height:60px;gap:1.5rem;position:sticky;top:0;z-index:100}
-.topbar-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--blue);text-decoration:none}
-.topbar-logo-icon{width:34px;height:34px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.topbar-logo-icon svg{width:18px;height:18px;fill:white}
-.topbar-divider{width:1px;height:24px;background:var(--gray-200)}
-.topbar-subtitle{font-size:13px;color:var(--gray-500)}
-.topbar-nav{display:flex;gap:4px;margin-right:auto}
-.nav-btn{padding:6px 16px;border-radius:99px;border:none;font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;cursor:pointer;background:transparent;color:var(--gray-500);font-weight:500;transition:all .15s;display:flex;align-items:center;gap:5px}
+.gov-topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
+.gov-topbar-brand{display:flex;align-items:center;gap:12px}
+.gov-topbar-logo{height:36px;width:auto;display:block}
+.gov-topbar-actions{display:flex;align-items:center;gap:18px}
+.gov-topbar-link{font-size:13px;color:var(--gray-600);text-decoration:none;cursor:pointer;white-space:nowrap}
+.gov-topbar-link:hover{color:var(--blue)}
+.gov-login-btn{display:flex;align-items:center;gap:6px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-family:'Rubik',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.gov-login-btn:hover{background:var(--blue-hover)}
+
+.subnav{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 2rem;display:flex;align-items:center;height:52px}
+.topbar-nav{display:flex;gap:4px}
+.nav-btn{padding:6px 16px;border-radius:99px;border:none;font-family:'Rubik',sans-serif;font-size:14px;cursor:pointer;background:transparent;color:var(--gray-500);font-weight:500;transition:all .15s;display:flex;align-items:center;gap:5px}
 .nav-btn:hover{background:var(--gray-100);color:var(--gray-700)}
 .nav-btn.active{background:var(--blue-light);color:var(--blue)}
 .nav-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--blue);color:white;border-radius:99px;font-size:11px;width:18px;height:18px}
 .live-dot-sm{width:7px;height:7px;border-radius:50%;background:#10B981;animation:pulse 1.5s infinite}
+
+.side-rail{position:fixed;top:0;right:0;bottom:0;width:78px;background:#fff;border-left:1px solid var(--gray-200);display:flex;flex-direction:column;align-items:center;padding:14px 0;z-index:90;overflow-y:auto}
+.side-rail-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:10px 4px;color:var(--gray-600);text-decoration:none;cursor:pointer;font-size:10.5px;text-align:center;line-height:1.25;border-radius:8px;width:62px;flex-shrink:0}
+.side-rail-item:hover{background:var(--blue-light);color:var(--blue)}
+.side-rail-item svg{width:20px;height:20px}
+.side-rail-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding-top:12px;border-top:1px solid var(--gray-100)}
 
 .page{display:none}.page.active{display:block}
 .container{max-width:780px;margin:0 auto;padding:2rem 1rem}
@@ -55,7 +68,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .action-tile{border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:1.2rem 1rem;cursor:pointer;transition:all .15s;text-align:center;background:white}
 .action-tile:hover{border-color:var(--blue-mid);background:var(--blue-light)}
-.action-tile.selected{border-color:var(--blue);background:var(--blue-light);box-shadow:0 0 0 3px rgba(26,86,219,.12)}
+.action-tile.selected{border-color:var(--blue);background:var(--blue-light);box-shadow:0 0 0 3px rgba(10,59,143,.12)}
 .tile-icon{font-size:26px;margin-bottom:8px;display:flex;justify-content:center}
 .tile-icon svg{width:28px;height:28px;stroke:var(--blue);stroke-width:1.5}
 .tile-label{font-size:14px;font-weight:600;color:var(--gray-800)}
@@ -104,10 +117,10 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .field label{font-size:13px;font-weight:600;color:var(--gray-700)}
-.field input,.field select,.field textarea{padding:9px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;color:var(--gray-900);background:white;transition:border .15s;width:100%}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+.field input,.field select,.field textarea{padding:9px 13px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:'Rubik',sans-serif;font-size:14px;color:var(--gray-900);background:white;transition:border .15s;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,59,143,.1)}
 .field input::placeholder,.field textarea::placeholder{color:var(--gray-400)}
-.field textarea{resize:vertical;min-height:80px;font-family:'Noto Sans Hebrew',sans-serif}
+.field textarea{resize:vertical;min-height:80px;font-family:'Rubik',sans-serif}
 .field input.field-invalid,.field textarea.field-invalid{border-color:var(--red)}
 .field input.field-invalid:focus,.field textarea.field-invalid:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,30,30,.1)}
 
@@ -144,8 +157,8 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .upload-label{font-size:13px;font-weight:600;color:var(--gray-700)}
 .upload-hint{font-size:11px;color:var(--gray-400);margin-top:3px}
 
-.add-case-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border:1.5px dashed var(--blue-mid);border-radius:var(--radius);background:var(--blue-light);color:var(--blue);font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;width:100%}
-.add-case-btn:hover{background:#dbeafe;border-color:var(--blue)}
+.add-case-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border:1.5px dashed var(--blue-mid);border-radius:var(--radius);background:var(--blue-light);color:var(--blue);font-family:'Rubik',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;width:100%}
+.add-case-btn:hover{background:var(--blue-mid);border-color:var(--blue)}
 
 .file-list{display:flex;flex-direction:column;gap:7px}
 .file-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius-sm)}
@@ -159,9 +172,9 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .file-remove{width:22px;height:22px;border-radius:50%;background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .12s}
 .file-remove:hover{background:var(--red-light);color:var(--red)}
 
-.btn{padding:10px 22px;border-radius:var(--radius-sm);font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn{padding:10px 22px;border-radius:var(--radius-sm);font-family:'Rubik',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
 .btn-ghost{background:white;color:var(--gray-600);border:1.5px solid var(--gray-200)}.btn-ghost:hover{background:var(--gray-100)}
-.btn-primary{background:var(--blue);color:white}.btn-primary:hover{background:#1645b5}
+.btn-primary{background:var(--blue);color:white}.btn-primary:hover{background:var(--blue-hover)}
 .btn-success{background:var(--green);color:white}.btn-success:hover{background:#045c40}
 .form-footer{display:flex;justify-content:flex-end;gap:10px;padding-top:1.2rem;border-top:1px solid var(--gray-100);margin-top:.5rem}
 
@@ -241,7 +254,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 .rt-search-wrap{position:relative;flex:1;min-width:220px;max-width:320px}
 .rt-search-input{width:100%;padding:6px 32px 6px 12px;border:1px solid var(--gray-200);border-radius:99px;font-size:12px;font-family:inherit;color:var(--gray-900);background:white;transition:border .15s}
-.rt-search-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
+.rt-search-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,59,143,.1)}
 .rt-search-input::placeholder{color:var(--gray-400)}
 .rt-search-icon{position:absolute;top:50%;transform:translateY(-50%);right:12px;width:14px;height:14px;color:var(--gray-400);pointer-events:none}
 
@@ -302,6 +315,8 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .receipt-date{font-size:12px;color:var(--gray-400);flex-shrink:0}
 .chev{width:28px;height:28px;border-radius:50%;border:1px solid var(--gray-200);background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gray-400);transition:transform .3s,background .2s}.chev.open{transform:rotate(180deg);background:var(--gray-50)}
 .r-body{display:none;border-top:1px solid var(--gray-100)}.r-body.open{display:block}
+.fee-calc-header:hover{background:var(--gray-50)}
+.fee-calc-body{display:none;border-top:1px solid var(--gray-100)}.fee-calc-body.open{display:block}
 .r-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px 18px;background:var(--gray-50);border-bottom:1px solid var(--gray-100)}
 .s-lbl{font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em}
 .s-val{font-size:13px;font-weight:600;color:var(--gray-800);margin-top:2px}
@@ -324,8 +339,15 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 
 @media(max-width:620px){
   .action-grid,.two-col{grid-template-columns:1fr}
-  .topbar{padding:0 1rem}
-  .topbar-subtitle{display:none}
+  .gov-topbar{padding:0 1rem}
+  .gov-topbar-logo{height:30px}
+  .gov-topbar-link{display:none}
+  .subnav{padding:0 1rem}
+  .side-rail{width:52px}
+  .side-rail-item{font-size:0;width:44px;padding:8px 2px}
+  .side-rail-item svg{width:20px;height:20px}
+  body{padding-right:52px}
+  .wizard{overflow-x:auto;-webkit-overflow-scrolling:touch}
 }
 
 /* ===== gov.il mock payment screen ===== */
@@ -366,7 +388,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .gov-field{display:flex;flex-direction:column;gap:6px}
 .gov-field label{font-size:12.5px;color:#333;text-align:right}
 .gov-field label b{color:#c81e1e;font-weight:700}
-.gov-field input,.gov-field select,.gov-expiry select{height:38px;border:1px solid #c3ccd6;border-radius:4px;padding:0 10px;font-family:'Noto Sans Hebrew',sans-serif;font-size:14px;background:#fff;width:100%}
+.gov-field input,.gov-field select,.gov-expiry select{height:38px;border:1px solid #c3ccd6;border-radius:4px;padding:0 10px;font-family:'Rubik',sans-serif;font-size:14px;background:#fff;width:100%}
 .gov-expiry{display:flex;gap:10px}
 .gov-radio-row{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:32px;flex-wrap:wrap}
 .gov-radio{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#333;cursor:pointer}
@@ -374,7 +396,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 .gov-terms{display:flex;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:8px;font-size:12.5px;color:#333;margin-top:22px;cursor:pointer}
 .gov-terms input{width:15px;height:15px}
 .gov-footer{display:flex;justify-content:center;margin-top:26px}
-.gov-paybtn{min-width:230px;padding:13px 20px;background:#d3d7dd;color:#7b828b;border:none;border-radius:4px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s}
+.gov-paybtn{min-width:230px;padding:13px 20px;background:#d3d7dd;color:#7b828b;border:none;border-radius:4px;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s}
 .gov-paybtn:hover{background:#c4c9d0}
 @media(max-width:760px){
   .gov-grid3,.gov-grid2{grid-template-columns:1fr}
@@ -386,20 +408,39 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 <body>
 
 <div class="topbar" data-area="topbar" data-src="index.html">
-  <a class="topbar-logo" href="#" onclick="event.preventDefault();startNewSubmission()">
-    <div class="topbar-logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5L12 1z"/></svg>
+  <div class="gov-topbar">
+    <div class="gov-topbar-brand">
+      <img class="gov-topbar-logo" src="assets/logo.png" alt="הרשות השופטת - מדינת ישראל">
     </div>
-    נט המשפט
-  </a>
-  <div class="topbar-divider"></div>
-  <span class="topbar-subtitle">פורטל הגשות דיגיטלי</span>
-  <nav class="topbar-nav">
-    <button class="nav-btn active" id="nav-new-submission" onclick="startNewSubmission()">הגשה חדשה</button>
-    <button class="nav-btn" onclick="showPage('history',this)">
-      <div class="live-dot-sm"></div> מעקב והגשות
-    </button>
-  </nav>
+    <div class="gov-topbar-actions">
+      <a class="gov-topbar-link" href="#" onclick="event.preventDefault()">למה להתחבר?</a>
+      <a class="gov-topbar-link" href="#" onclick="event.preventDefault()">רישום עו"ד חדש</a>
+      <button class="gov-login-btn" onclick="event.preventDefault()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        התחברות
+      </button>
+    </div>
+  </div>
+  <div class="subnav">
+    <nav class="topbar-nav">
+      <button class="nav-btn active" id="nav-new-submission" onclick="startNewSubmission()">הגשה חדשה</button>
+      <button class="nav-btn" onclick="showPage('history',this)">
+        <div class="live-dot-sm"></div> מעקב והגשות
+      </button>
+    </nav>
+  </div>
+  <div class="side-rail" aria-hidden="false">
+    <a class="side-rail-item" href="#" onclick="event.preventDefault()"><i data-lucide="search"></i>איתור תיקים</a>
+    <a class="side-rail-item" href="#" onclick="event.preventDefault();startNewSubmission()"><i data-lucide="file-plus-2"></i>פתיחת תיק</a>
+    <a class="side-rail-item" href="#" onclick="event.preventDefault();showPage('history',document.getElementById('nav-new-submission').nextElementSibling)"><i data-lucide="download"></i>הגשות</a>
+    <a class="side-rail-item" href="#" onclick="event.preventDefault()"><i data-lucide="calendar"></i>יומן דיונים</a>
+    <a class="side-rail-item" href="#" onclick="event.preventDefault()"><i data-lucide="file-check-2"></i>איתור החלטות</a>
+    <a class="side-rail-item" href="#" onclick="event.preventDefault()"><i data-lucide="credit-card"></i>תשלומים</a>
+    <div class="side-rail-bottom">
+      <a class="side-rail-item" href="#" onclick="event.preventDefault()"><i data-lucide="layout-grid"></i>סקירה כללית</a>
+      <a class="side-rail-item" href="#" onclick="event.preventDefault()"><i data-lucide="user"></i>אזור אישי</a>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SUBMIT ===== -->
@@ -517,13 +558,13 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
         <div id="credit-info" style="display:none;margin:2px 24px 4px;padding:12px 14px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm)">
           <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px">תהליך התשלום באשראי - איך זה עובד?</div>
           <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
-            בסיום התהליך תועברו לאתר התשלומים הממשלתי לתשלום האגרה שחושבה עבור הבקשה.
+            בסיום התהליך תועברו לאתר התשלומים הממשלתי לתשלום האגרה שחושבה עבור המסמך שהוגש.
           </p>
           <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
-            <b>חשוב לדעת:</b> כרטיס האשראי לא יחויב בשלב זה. הבקשה והתשלום יעברו לבדיקה, והחיוב יתבצע רק אם הבקשה תאושר.
+            <b>חשוב לדעת:</b> כרטיס האשראי לא יחויב בשלב זה. המסמך שהוגש והתשלום יעברו לבדיקה, והחיוב יתבצע רק אם ההגשה תאושר.
           </p>
           <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 8px">
-            אם הבקשה תידחה, לא תחויבו. סיבת הדחייה תוצג לכם.
+            אם הגשת המסמך תידחה על ידי מזכירות בית המשפט, לא תחויבו. סיבת הדחייה תוצג לכם.
           </p>
           <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 4px">
             <b>אם סכום האגרה ישתנה לאחר הבדיקה –</b>
@@ -532,7 +573,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
             אם יתברר שהאגרה נמוכה יותר – תחויבו בסכום הנמוך.
           </p>
           <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:0 0 10px">
-            אם יתברר שיש להוסיף עד 100 ₪ לאגרה, בחרו כיצד לפעול:
+            אם יתברר שיש להוסיף עד 10 ₪ לאגרה, בחרו כיצד לפעול:
           </p>
           <label class="case-checkbox-opt" style="align-items:flex-start;margin-bottom:10px">
             <input type="checkbox" id="chk-credit-delta-up" onchange="creditDeltaPick(this)">
@@ -543,7 +584,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
             <span style="font-size:12.5px;color:var(--gray-800)"><b>לא, אני לא מאשר/ת חיוב נוסף</b><br>אם יהיה צורך להוסיף סכום כלשהו לאגרה, הבקשה תידחה ולא תחויבו.</span>
           </label>
           <p style="font-size:12.5px;color:var(--gray-700);line-height:1.7;margin:10px 0 0">
-            אם יהיה צורך להוסיף יותר מ־100 ₪, הבקשה תידחה בכל מקרה ולא תחויבו.
+            אם יהיה צורך להוסיף יותר מ־10 ₪, הבקשה תידחה בכל מקרה ולא תחויבו.
           </p>
           <div id="credit-delta-error" style="display:none;margin-top:8px;font-size:12px;color:var(--red)">יש לבחור אחת מהאפשרויות כדי להמשיך</div>
         </div>
@@ -604,97 +645,106 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
             <span style="font-size:24px;font-weight:700;color:var(--blue)">₪</span>
             <input type="text" id="fee-amount" inputmode="decimal" dir="ltr" value="0.00"
               onfocus="this.select()" oninput="onFeeAmountInput(this)" onblur="formatFeeAmount(this)"
-              style="width:108px;font-size:24px;font-weight:700;color:var(--blue);background:white;border:1.5px solid var(--blue-mid);border-radius:var(--radius-sm);padding:3px 8px;text-align:left;font-family:'Noto Sans Hebrew',sans-serif">
+              style="width:108px;font-size:24px;font-weight:700;color:var(--blue);background:white;border:1.5px solid var(--blue-mid);border-radius:var(--radius-sm);padding:3px 8px;text-align:left;font-family:'Rubik',sans-serif">
           </div>
           <span style="font-size:11px;color:var(--blue);opacity:.8">ניתן ללחוץ על הסכום ולהקליד סכום אחר</span>
         </div>
       </div>
     </div>
-    <div class="card" id="fee-calc-card" style="display:none">
-      <div class="card-title" style="margin-bottom:4px">מחשבון אגרה</div>
-      <div class="card-desc" style="margin-bottom:1rem">מילוי הפרמטרים יעדכן את סכום האגרה שלמעלה</div>
-      <div class="two-col">
-        <div class="field">
-          <label for="fc-city">עיר</label>
-          <div class="case-combo" id="city-combo">
-            <input type="text" id="fc-city" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="city-combo-menu" aria-autocomplete="list"
-              placeholder="הזן עיר"
-              oninput="onCityInput()" onfocus="openCityMenu()" onkeydown="onCityKeydown(event)">
-            <svg class="case-combo-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            <div class="case-combo-menu" id="city-combo-menu" role="listbox"></div>
+    <div class="card" id="fee-calc-card" style="display:none;padding:0;overflow:hidden">
+      <div class="fee-calc-header" onclick="toggleFeeCalc()" style="display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;padding:1.5rem">
+        <div>
+          <div class="card-title" style="margin-bottom:4px">מחשבון אגרה</div>
+          <div class="card-desc" style="margin:0">מילוי הפרמטרים יעדכן את סכום האגרה שלמעלה</div>
+        </div>
+        <span class="chev" id="fee-calc-chev"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="fee-calc-body" id="fee-calc-body">
+        <div style="padding:0 1.5rem 1.5rem">
+          <div class="two-col">
+            <div class="field">
+              <label for="fc-city">עיר</label>
+              <div class="case-combo" id="city-combo">
+                <input type="text" id="fc-city" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="city-combo-menu" aria-autocomplete="list"
+                  placeholder="הזן עיר"
+                  oninput="onCityInput()" onfocus="openCityMenu()" onkeydown="onCityKeydown(event)">
+                <svg class="case-combo-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                <div class="case-combo-menu" id="city-combo-menu" role="listbox"></div>
+              </div>
+            </div>
+            <div class="field">
+              <label>בית משפט</label>
+              <select id="fc-court">
+                <option value="">בחר בית משפט...</option>
+                <option value="shalom">בית משפט השלום</option>
+                <option value="mechozi">בית המשפט המחוזי</option>
+                <option value="elyon">בית המשפט העליון</option>
+                <option value="labor">בית הדין לעבודה</option>
+                <option value="family">בית המשפט לענייני משפחה</option>
+                <option value="small_claims">בית משפט לתביעות קטנות</option>
+              </select>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label>הליך</label>
+              <select id="fc-proc" onchange="const c=document.getElementById('fc-claim');c.disabled=this.value!=='small_claims';c.style.opacity=this.value==='small_claims'?'1':'.45';c.style.cursor=this.value==='small_claims'?'text':'not-allowed';if(this.value!=='small_claims')c.value='';">
+                <option value="">בחר הליך...</option>
+                <option value="civil">תביעה אזרחית</option>
+                <option value="small_claims">תביעות קטנות</option>
+                <option value="family">ענייני משפחה</option>
+                <option value="labor">דיני עבודה</option>
+                <option value="admin">עתירה מנהלית</option>
+                <option value="commercial">סכסוך מסחרי</option>
+                <option value="bankruptcy">פשיטת רגל</option>
+                <option value="land">מקרקעין</option>
+                <option value="criminal">פלילי</option>
+                <option value="appeal">ערעור</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>סוג תיק</label>
+              <select id="fc-case-type">
+                <option value="">בחר סוג תיק...</option>
+                <option value="civil">אזרחי</option>
+                <option value="criminal">פלילי</option>
+                <option value="admin">מנהלי</option>
+                <option value="family">משפחה</option>
+                <option value="appeal">ערעור</option>
+                <option value="interim">ביניים</option>
+              </select>
+            </div>
+          </div>
+          <div class="two-col" style="margin-bottom:1.2rem">
+            <div class="field" style="margin-bottom:0">
+              <label>סוג עניין</label>
+              <select id="fc-matter-type">
+                <option value="">בחר סוג עניין...</option>
+                <option value="financial">כספי</option>
+                <option value="realestate">מקרקעין</option>
+                <option value="contracts">חוזים</option>
+                <option value="torts">נזיקין</option>
+                <option value="family">משפחה</option>
+                <option value="labor">עבודה</option>
+                <option value="criminal">פלילי</option>
+                <option value="admin">מנהלי</option>
+                <option value="other">אחר</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label>סכום תביעה</label>
+              <input type="text" id="fc-claim" placeholder="₪" disabled style="opacity:.45;cursor:not-allowed">
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:1rem">
+            <a href="#" onclick="event.preventDefault()" style="color:var(--blue);font-weight:600;font-size:13px;cursor:pointer">לכל המחשבונים ›</a>
+            <button onclick="calcFeeFromModal()" style="padding:10px 20px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap">עדכון סכום אגרה</button>
+          </div>
+          <div id="fc-result" style="display:none;margin-top:1rem;padding:12px 16px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm);align-items:center;justify-content:space-between">
+            <span style="font-size:13px;font-weight:600;color:var(--blue)">סכום האגרה שחושב</span>
+            <span id="fc-result-amount" style="font-size:20px;font-weight:700;color:var(--blue)"></span>
           </div>
         </div>
-        <div class="field">
-          <label>בית משפט</label>
-          <select id="fc-court">
-            <option value="">בחר בית משפט...</option>
-            <option value="shalom">בית משפט השלום</option>
-            <option value="mechozi">בית המשפט המחוזי</option>
-            <option value="elyon">בית המשפט העליון</option>
-            <option value="labor">בית הדין לעבודה</option>
-            <option value="family">בית המשפט לענייני משפחה</option>
-            <option value="small_claims">בית משפט לתביעות קטנות</option>
-          </select>
-        </div>
-      </div>
-      <div class="two-col">
-        <div class="field">
-          <label>הליך</label>
-          <select id="fc-proc" onchange="const c=document.getElementById('fc-claim');c.disabled=this.value!=='small_claims';c.style.opacity=this.value==='small_claims'?'1':'.45';c.style.cursor=this.value==='small_claims'?'text':'not-allowed';if(this.value!=='small_claims')c.value='';">
-            <option value="">בחר הליך...</option>
-            <option value="civil">תביעה אזרחית</option>
-            <option value="small_claims">תביעות קטנות</option>
-            <option value="family">ענייני משפחה</option>
-            <option value="labor">דיני עבודה</option>
-            <option value="admin">עתירה מנהלית</option>
-            <option value="commercial">סכסוך מסחרי</option>
-            <option value="bankruptcy">פשיטת רגל</option>
-            <option value="land">מקרקעין</option>
-            <option value="criminal">פלילי</option>
-            <option value="appeal">ערעור</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>סוג תיק</label>
-          <select id="fc-case-type">
-            <option value="">בחר סוג תיק...</option>
-            <option value="civil">אזרחי</option>
-            <option value="criminal">פלילי</option>
-            <option value="admin">מנהלי</option>
-            <option value="family">משפחה</option>
-            <option value="appeal">ערעור</option>
-            <option value="interim">ביניים</option>
-          </select>
-        </div>
-      </div>
-      <div class="two-col" style="margin-bottom:1.2rem">
-        <div class="field" style="margin-bottom:0">
-          <label>סוג עניין</label>
-          <select id="fc-matter-type">
-            <option value="">בחר סוג עניין...</option>
-            <option value="financial">כספי</option>
-            <option value="realestate">מקרקעין</option>
-            <option value="contracts">חוזים</option>
-            <option value="torts">נזיקין</option>
-            <option value="family">משפחה</option>
-            <option value="labor">עבודה</option>
-            <option value="criminal">פלילי</option>
-            <option value="admin">מנהלי</option>
-            <option value="other">אחר</option>
-          </select>
-        </div>
-        <div class="field" style="margin-bottom:0">
-          <label>סכום תביעה</label>
-          <input type="text" id="fc-claim" placeholder="₪" disabled style="opacity:.45;cursor:not-allowed">
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:1rem">
-        <a href="#" onclick="event.preventDefault()" style="color:var(--blue);font-weight:600;font-size:13px;cursor:pointer">לכל המחשבונים ›</a>
-        <button onclick="calcFeeFromModal()" style="padding:10px 20px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap">עדכון סכום אגרה</button>
-      </div>
-      <div id="fc-result" style="display:none;margin-top:1rem;padding:12px 16px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--radius-sm);align-items:center;justify-content:space-between">
-        <span style="font-size:13px;font-weight:600;color:var(--blue)">סכום האגרה שחושב</span>
-        <span id="fc-result-amount" style="font-size:20px;font-weight:700;color:var(--blue)"></span>
       </div>
     </div>
     <div class="form-footer">
@@ -746,7 +796,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
     <div style="font-size:22px;font-weight:700;color:var(--gray-900);margin-bottom:8px">המסמכים נקלטו בהצלחה!</div>
   </div>
   <div style="text-align:center">
-    <button onclick="goToHistory()" style="padding:12px 24px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Noto Sans Hebrew',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px">
+    <button onclick="goToHistory()" style="padding:12px 24px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Rubik',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       למעקב הגשות
     </button>
@@ -1113,6 +1163,7 @@ body{font-family:'Noto Sans Hebrew',sans-serif;background:var(--gray-50);color:v
 // ===== NAV =====
 function goToPaymentReturn() {
   const tb = document.querySelector('.topbar'); if (tb) tb.style.display = '';
+  document.body.classList.remove('gov-external');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-payment').classList.add('active');
@@ -1121,6 +1172,7 @@ function goToPaymentReturn() {
 // ===== gov.il mock payment screen =====
 function goToGovPay() {
   const tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'none';
+  document.body.classList.add('gov-external');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-govpay').classList.add('active');
@@ -1141,6 +1193,7 @@ function goToHistory() {
 }
 function showPage(id, btn) {
   const tb = document.querySelector('.topbar'); if (tb) tb.style.display = '';
+  document.body.classList.remove('gov-external');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
@@ -1738,6 +1791,13 @@ function submitForm() {
 function toggleR(row) {
   const body = row.nextElementSibling;
   const chev = row.querySelector('.chev');
+  body.classList.toggle('open');
+  chev.classList.toggle('open', body.classList.contains('open'));
+}
+
+function toggleFeeCalc() {
+  const body = document.getElementById('fee-calc-body');
+  const chev = document.getElementById('fee-calc-chev');
   body.classList.toggle('open');
   chev.classList.toggle('open', body.classList.contains('open'));
 }
